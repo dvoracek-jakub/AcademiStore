@@ -1,0 +1,13 @@
+services:
+  phpserver:
+    build:
+      context: .
+      dockerfile: docker/dockerfile-phpserver
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/var/www/html
+
+networks:
+  academi-net:
+    driver: bridge
