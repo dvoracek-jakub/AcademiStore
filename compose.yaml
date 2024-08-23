@@ -1,13 +1,26 @@
 services:
   phpserver:
     build:
-      context: .
-      dockerfile: docker/dockerfile-phpserver
+      context: ./docker
+      dockerfile: php/Dockerfile
     ports:
       - "80:80"
     volumes:
       - ./src:/var/www/html
 
+  postgres:
+    image: postgres:16.3
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=secret456
+    volumes:
+     - db:/var/lib/postgresql/data
+
 networks:
   academi-net:
     driver: bridge
+
+volumes:
+  db:
