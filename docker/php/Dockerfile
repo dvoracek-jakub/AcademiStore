@@ -13,4 +13,15 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install curl
 
+# Copy the wait-for-it.sh script into the container
+COPY wait-for-it.sh /usr/local/bin/wait-for-it.sh
+RUN chmod +x /usr/local/bin/wait-for-it.sh
+COPY postgres/dbevo.php /usr/local/bin/
+
+RUN mkdir /tmp/store-init-sql/
+COPY postgres/sql/ /tmp/store-init-sql/
+
 RUN a2enmod rewrite
+
+# Use wait-for-it.sh to wait for PostgreSQL to be ready, then start the PHP script and Apache
+CMD ["sh", "-c", "/usr/local/bin/wait-for-it.sh postgres:5432 -- php /usr/local/bin/dbevo.php && apache2-foreground"]

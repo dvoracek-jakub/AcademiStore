@@ -3,18 +3,23 @@ services:
     build:
       context: ./docker
       dockerfile: php/Dockerfile
+    depends_on:
+      - postgres
     ports:
       - "80:80"
     volumes:
       - ./src:/var/www/html
+    env_file:
+      - .env
+      - .env-local
 
   postgres:
     image: postgres:16.3
     ports:
       - "5432:5432"
-    environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=secret456
+    env_file:
+      - .env
+      - .env-local
     volumes:
      - db:/var/lib/postgresql/data
 
