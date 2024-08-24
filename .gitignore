@@ -1,1 +1,5 @@
 .env-local
+src/log/
+src/temp/
+src/vendor/
+*.log
