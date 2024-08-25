@@ -1,9 +1,9 @@
-CREATE TABLE alfaRed (
-  order_id INT NOT NULL, 
-  item_no SERIAL, 
-  PRIMARY KEY (order_id, item_no)   /* Můžeš vytvořit nad párem sloupců, ale už ne nad 2 sloupci zvlášť */
+CREATE TABLE "user" (
+	id SERIAL PRIMARY KEY NOT NULL,
+	username VARCHAR(50) NOT NULL CHECK(LENGTH(username) > 2),
+	password VARCHAR(100) NOT NULL CHECK(LENGTH(password) > 7),
+	firstname VARCHAR(50),
+	lastname VARCHAR(50)
 );
 
-CREATE TABLE alfaBlue (
-    id SERIAL PRIMARY KEY
-);
+UPDATE system.db SET version = 1;

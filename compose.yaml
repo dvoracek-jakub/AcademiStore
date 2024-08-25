@@ -1,14 +1,15 @@
 services:
   phpserver:
     build:
-      context: ./docker
-      dockerfile: php/Dockerfile
+      context: .
+      dockerfile: docker/php/Dockerfile
     depends_on:
       - postgres
     ports:
       - "80:80"
     volumes:
       - ./src:/var/www/html
+      - vendor_volume:/var/www/html/vendor
     env_file:
       - .env
       - .env-local
@@ -29,3 +30,4 @@ networks:
 
 volumes:
   db:
+  vendor_volume:

@@ -14,6 +14,7 @@ $dbconn = pg_connect("host=postgres port=5432 dbname=postgres user=$rootUser pas
 $checkDbQuery = "SELECT 1 FROM pg_database WHERE datname = '$storeDb'";
 $result = pg_query($dbconn, $checkDbQuery);
 
+
 // Database initialization
 if (pg_num_rows($result) == 0) {
 
@@ -32,12 +33,14 @@ if (pg_num_rows($result) == 0) {
 		$result = pg_query(
 			$dbconn, "
 			CREATE USER $storeUser WITH ENCRYPTED PASSWORD '$storePass';
-			GRANT ALL ON ALL TABLES IN SCHEMA public TO $storeUser;"
+			ALTER DATABASE $storeDb OWNER TO $storeUser;"
 		);
 	}
-} else {
-
-	// @TODO logika pro iteraci sql scriptu
 }
+
+
+// @TODO logika pro iteraci sql scriptu
+// Ano, opravdu tady. Bude se tudiz provadet i pri uplne prvnim spusteni  - po initu db
+
 
 pg_close($dbconn);
