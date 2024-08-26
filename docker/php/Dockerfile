@@ -14,14 +14,19 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install curl
 
-# The wait-for-it.sh script 
+# The wait-for-it script
 COPY docker/wait-for-it.sh /usr/local/bin/wait-for-it.sh
 RUN chmod +x /usr/local/bin/wait-for-it.sh
 
 # DB Evolution script/s
-COPY docker/postgres/dbevo.php /usr/local/bin/
-RUN mkdir /tmp/store-init-sql/
-COPY docker/postgres/sql/ /tmp/dbevo-sql/
+ARG DBEVO_LOG
+ARG DBEVO_SQL_PATH
+ARG DBEVO_LOGFILE
+COPY docker/postgres/dbevo.php /tmp/
+RUN mkdir ${DBEVO_SQL_PATH}
+COPY docker/postgres/sql/ ${DBEVO_SQL_PATH}
+
+RUN if [ "$DBEVO_LOG" = "true" ]; then touch ${DBEVO_LOGFILE} && chmod 0777 ${DBEVO_LOGFILE} ; fi
 
 # Get Composer
 ENV COMPOSER_ROOT_VERSION=1.0.0
@@ -38,4 +43,4 @@ COPY docker/apache/academistore.conf /etc/apache2/sites-available/000-default.co
 WORKDIR /var/www/html/
 
 # Use wait-for-it.sh to wait for PostgreSQL to be ready, then start the PHP script and Apache
-CMD ["sh", "-c", "/usr/local/bin/wait-for-it.sh postgres:5432 -- php /usr/local/bin/dbevo.php && apache2-foreground"]
+CMD ["sh", "-c", "/usr/local/bin/wait-for-it.sh postgres:5432 -- php /tmp/dbevo.php && apache2-foreground"]
