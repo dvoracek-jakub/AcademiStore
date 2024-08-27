@@ -4,6 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
 	<title>{ifset title}{include title|stripHtml} | {/ifset}Academi Store</title>
+	<link href="/assets/css/public.css" rel="stylesheet">  <!-- Tailwind compiled output -->
 </head>
 
 <body>
@@ -13,6 +14,7 @@
 
 	{block scripts}
 		<script src="https://unpkg.com/nette-forms@3"></script>
+		<script src="https://cdn.tailwindcss.com"></script> <!-- Dev purpose only -->
 	{/block}
 </body>
 </html>

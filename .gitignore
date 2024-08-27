@@ -4,3 +4,4 @@ src/log/
 src/temp/
 src/vendor/
 *.log
+node_modules

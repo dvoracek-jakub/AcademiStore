@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.custom-class-tw {
+	@apply text-center text-lg text-blue-500;
+}
+
+.custom-class-raw {
+	border: 5px solid red;
+}
