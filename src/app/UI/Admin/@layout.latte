@@ -5,16 +5,61 @@
 	<meta name="viewport" content="width=device-width">
 	<title>{ifset title}{include title|stripHtml} | {/ifset}Academi Store</title>
 	<link href="/assets/css/public.css" rel="stylesheet">  <!-- Tailwind compiled output -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+	{block scripts}
+		<script src="https://cdn.tailwindcss.com"></script> <!-- Dev purpose only -->
+	{/block}
+
 </head>
 
-<body>
-	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+<body class="bg-gray-800 font-sans leading-normal tracking-normal mt-12">
+	<header>
+		{include dropdownNav from 'navigation.latte'}
+	</header>
 	
-	{include content}
-
-	{block scripts}
+	<main>
+		<div class="flex flex-col md:flex-row">
+			{include sidebarNav from 'navigation.latte'}
+			
+			<section class="flex-1">
+				<div id="main" class="main-content min-h-screen flex-1 bg-gray-100 mt-12 md:mt-2 pb-24 md:pb-5 w-full">
+					<div class="bg-gray-100 pt-3">
+						<div class="bg-gradient-to-r p-4 shadow text-lg">
+							<h1 class="font-bold pl-2">{block sectionTitle /}</h1>
+						</div>
+					</div>
+					
+					<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+					<div class=" ml-6 mt-8">
+						{include content}
+					</div>
+				</div>
+			</section>
+		</div>
+	</main>
+	
+	{block lazyLoadScripts}
 		<script src="https://unpkg.com/nette-forms@3"></script>
-		<script src="https://cdn.tailwindcss.com"></script> <!-- Dev purpose only -->
+		
+		<script>
+			/*Toggle dropdown list*/
+			function toggleDD(myDropMenu) {
+				document.getElementById(myDropMenu).classList.toggle('invisible');
+			}
+
+			// Close the dropdown menu if the user clicks outside of it
+			window.onclick = function (event) {
+				if (!event.target.matches('.drop-button') && !event.target.matches('.drop-search')) {
+					var dropdowns = document.getElementsByClassName('dropdownlist');
+					for (var i = 0; i < dropdowns.length; i++) {
+						var openDropdown = dropdowns[i];
+						if (!openDropdown.classList.contains('invisible')) {
+							openDropdown.classList.add('invisible');
+						}
+					}
+				}
+			};
+		</script>
 	{/block}
 </body>
 </html>
