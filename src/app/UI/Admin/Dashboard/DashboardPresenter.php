@@ -6,8 +6,7 @@ namespace App\UI\Admin\Dashboard;
 
 use Nette;
 
-final class DashboardPresenter extends Nette\Application\UI\Presenter
+final class DashboardPresenter extends \App\UI\Admin\BasePresenter
 {
-
 
 }

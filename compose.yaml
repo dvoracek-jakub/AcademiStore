@@ -14,6 +14,7 @@ services:
     volumes:
       - ./src:/var/www/html
       - vendor_volume:/var/www/html/vendor
+      - nettemp_volume:/var/www/html/temp
     env_file:
       - .env
       - .env-local
@@ -35,3 +36,4 @@ networks:
 volumes:
   db:
   vendor_volume:
+  nettemp_volume:

@@ -6,7 +6,7 @@ namespace App\UI\Admin\Product;
 
 use Nette;
 
-final class ProductPresenter extends Nette\Application\UI\Presenter
+final class ProductPresenter extends \App\UI\Admin\BasePresenter
 {
 
 
