@@ -1,17 +1,17 @@
 parameters:
-
+    database:
+        driver: pdo_pgsql
+        host: postgres
+        dbname: academistore
+        port: 5432
+        user: academi
+        password: changeMe!
 
 application:
 	errorPresenter:
-		4xx: Error:Error4xx
-		5xx: Error:Error5xx
-	mapping: App\UI\*\**Presenter
-
-
-database:
-	dsn: 'sqlite::memory:'
-	user:
-	password:
+		4xx: Front:Error:Error4xx
+		5xx: Front:Error:Error5xx
+	mapping: App\Module\*\**Presenter
 
 
 latte:
@@ -24,3 +24,6 @@ di:
 	export:
 		parameters: no
 		tags: no
+
+includes:
+	- doctrine.neon

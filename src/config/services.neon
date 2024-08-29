@@ -1,6 +1,6 @@
 services:
 	- App\Core\RouterFactory::createRouter
-	- App\UI\Admin\Accesorry\AdminAuthenticator
+	- App\Module\Admin\Accessory\AdminAuthenticator
 
 search:
 	-	in: %appDir%

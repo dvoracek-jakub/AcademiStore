@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Front\Home;
+namespace App\Module\Front\Home;
 
 use Nette;
 

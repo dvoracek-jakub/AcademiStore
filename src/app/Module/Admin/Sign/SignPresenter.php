@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Admin\Sign;
+namespace App\Module\Admin\Sign;
 
-use App\UI\Accessory\FormFactory;
+use App\Module\Admin\Accessory\FormFactory;
+use App\UI\Admin\Sign\Nette;
 use Nette\Application\UI\Form;
 
 final class SignPresenter extends \Nette\Application\UI\Presenter
