@@ -2,12 +2,11 @@
 
 namespace App\DB\Entity;
 
-use App\DB\Entity\AbstractEntity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Domain\Database\UserRepository")
+ * @ORM\Entity(repositoryClass="App\DB\Repository\UserRepository")
  * @ORM\Table(name="`user`")
  */
 class User extends AbstractEntity
@@ -32,7 +31,7 @@ class User extends AbstractEntity
 	{
 		return $this->username;
 	}
-
+/*
 	public function setUsername(string $username): void
 	{
 		$this->username = $username;
@@ -56,6 +55,6 @@ class User extends AbstractEntity
 	public function setUpdatedAt(?DateTime $updatedAt): void
 	{
 		$this->updatedAt = $updatedAt;
-	}
+	}*/
 
 }
