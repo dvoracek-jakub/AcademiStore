@@ -16,15 +16,15 @@ class User extends AbstractEntity
 	private string $username;
 
 	/** @ORM\Column(type="datetime") */
-	private DateTime $createdAt;
+	//private DateTime $createdAt;
 
 	/** @ORM\Column(type="datetime", nullable=true) */
-	private ?DateTime $updatedAt = null;
+	//private ?DateTime $updatedAt = null;
 
 	public function __construct(string $username)
 	{
 		$this->username = $username;
-		$this->createdAt = new DateTime();
+		//$this->createdAt = new DateTime();
 	}
 
 	public function getUsername(): string

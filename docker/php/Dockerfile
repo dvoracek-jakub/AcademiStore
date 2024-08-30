@@ -42,7 +42,7 @@ COPY docker/apache/academistore.conf /etc/apache2/sites-available/000-default.co
 
 # Misc
 RUN if [ "$DBEVO_LOG" = "true" ]; then touch ${DBEVO_LOGFILE} && chmod 0777 ${DBEVO_LOGFILE} ; fi
-#RUN chmod -R 777 /var/www/html/temp
+RUN mkdir -p /var/www/html/temp && chmod -R 777 /var/www/html/temp
 
 # Use wait-for-it.sh to wait for PostgreSQL to be ready, then start the PHP script and Apache
 CMD ["sh", "-c", "/usr/local/bin/wait-for-it.sh postgres:5432 -- php /tmp/dbevo.php && apache2-foreground"]

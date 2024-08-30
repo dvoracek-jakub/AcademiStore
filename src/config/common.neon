@@ -2,10 +2,10 @@ parameters:
     database:
         driver: pdo_pgsql
         host: postgres
-        dbname: academistore
+        dbname: ::getenv('POSTGRES_STORE_DBNAME')
         port: 5432
-        user: academi
-        password: changeMe!
+        user: ::getenv('POSTGRES_STORE_USER')
+        password: ::getenv('POSTGRES_STORE_PASSWORD')
 
 application:
 	errorPresenter:

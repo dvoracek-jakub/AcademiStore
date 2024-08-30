@@ -19,7 +19,10 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 	public function actionDefault()
 	{
 		$this->template->users = $this->em->getRepository(\App\DB\Entity\User::class)->findAll();
-		die("<br>\n" . time() . ' LINE ' . __LINE__ . " dies ");
+		foreach ($this->template->users as $user) {
+			echo $user->getUsername();
+		}
+		die("<br>\n".time().' ['.__LINE__."] ");
 	}
 
 }
