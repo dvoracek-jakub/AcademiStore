@@ -6,13 +6,17 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
+    libicu-dev \
     libpng-dev \
     libcurl4-openssl-dev \
     && docker-php-ext-install pdo pdo_pgsql pgsql \
     && docker-php-ext-install iconv \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install curl
+    && docker-php-ext-install curl \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install intl \
+    && docker-php-ext-enable intl
 
 # The wait-for-it script
 COPY docker/wait-for-it.sh /usr/local/bin/wait-for-it.sh

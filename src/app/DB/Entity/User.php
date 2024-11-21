@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\DB\Entity;
 
@@ -15,46 +15,60 @@ class User extends AbstractEntity
 	/** @ORM\Column(type="string") */
 	private string $username;
 
+	/** @ORM\Column(type="string") */
+	private string $password;
+
+	/** @ORM\Column(type="string") */
+	private string $firstname = '';
+
+	/** @ORM\Column(type="string") */
+	private string $lastname = '';
+
 	/** @ORM\Column(type="datetime") */
 	//private DateTime $createdAt;
 
 	/** @ORM\Column(type="datetime", nullable=true) */
 	//private ?DateTime $updatedAt = null;
 
-	public function __construct(string $username)
+	/*public function __construct(string $username)
 	{
 		$this->username = $username;
 		//$this->createdAt = new DateTime();
-	}
+	}*/
 
 	public function getUsername(): string
 	{
 		return $this->username;
 	}
-/*
+
 	public function setUsername(string $username): void
 	{
 		$this->username = $username;
 	}
 
-	public function getCreatedAt(): DateTime
+	public function setPassword(string $password): void
 	{
-		return $this->createdAt;
+		$this->password = $password;
 	}
 
-	public function setCreatedAt(DateTime $createdAt): void
+	public function getFirstname(): string
 	{
-		$this->createdAt = $createdAt;
+		return $this->firstname;
 	}
 
-	public function getUpdatedAt(): ?DateTime
+	public function setFirstname(string $firstname): void
 	{
-		return $this->updatedAt;
+		$this->firstname = $firstname;
 	}
 
-	public function setUpdatedAt(?DateTime $updatedAt): void
+	public function getLastname(): string
 	{
-		$this->updatedAt = $updatedAt;
-	}*/
+		return $this->lastname;
+	}
+
+	public function setLastname(string $lastname): void
+	{
+		$this->lastname = $lastname;
+	}
 
 }
