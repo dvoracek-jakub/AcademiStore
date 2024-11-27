@@ -44,4 +44,4 @@ nettrine.orm:
 
 nettrine.orm.annotations:
 	mapping:
-		App\DB\Entity: %appDir%/Model
+		App\Model: %appDir%/Model

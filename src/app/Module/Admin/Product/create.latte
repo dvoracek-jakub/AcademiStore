@@ -1,0 +1,33 @@
+{block sectionTitle}New Product{/block}
+{block content}
+
+
+<form n:name=productForm>
+	
+	{* @TODO Ostylovat labely, odstranit <br> *}
+	
+	<div class="mt-4">
+		{label name /}<br>
+		<input n:name=name size=20 autofocus class="w-80">
+	</div>
+	
+	<div class="mt-4">
+		{label description_short /}<br>
+		<textarea n:name=description_short />
+	</div>
+	
+	<div class="mt-4">
+		{label description_long /}<br>
+		<textarea n:name=description_long />
+	</div>
+	
+	<div class="mt-4">
+		{label price /}<br>
+		<input n:name=price>
+	</div>
+	
+	<div class="mt-4">
+		<input n:name=submit class="bg-blue-200 px-4">
+	</div>
+	
+</form>
