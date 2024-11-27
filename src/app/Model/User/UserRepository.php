@@ -1,11 +1,11 @@
 <?php declare(strict_types = 1);
 
-namespace App\DB\Repository;
+namespace App\Model\User;
 
 use Nettrine\Extra\Repository\AbstractRepository;
 
 /**
- * @extends AbstractRepository<\App\DB\Entity\User>
+ * @extends AbstractRepository<\App\Model\User\User>
  * @method User|null find($id, ?int $lockMode = null, ?int $lockVersion = null)
  * @method User|null findOneBy(array $criteria, array $orderBy = null)
  * @method User|null findOneById(int $id)

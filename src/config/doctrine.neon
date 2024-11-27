@@ -37,11 +37,11 @@ nettrine.fixtures:
 
 nettrine.migrations:
 	directory: %appDir%/../db/Migrations
-	namespace: DB\Migrations
+	namespace: Model\Migrations
 
 nettrine.orm:
-	entityManagerDecoratorClass: App\DB\EntityManagerDecorator
+	entityManagerDecoratorClass: App\Model\EntityManagerDecorator
 
 nettrine.orm.annotations:
 	mapping:
-		App\DB\Entity: %appDir%/DB/Entity
+		App\DB\Entity: %appDir%/Model

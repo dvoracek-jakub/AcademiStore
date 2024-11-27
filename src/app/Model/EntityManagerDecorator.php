@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace App\DB;
+namespace App\Model;
 
 use Doctrine\ORM\Decorator\EntityManagerDecorator as DoctrineEntityManagerDecorator;
 
