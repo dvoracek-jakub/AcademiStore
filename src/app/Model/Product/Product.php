@@ -15,6 +15,7 @@ class Product extends AbstractEntity
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="IDENTITY")
 	 */
 	protected int $id;
 

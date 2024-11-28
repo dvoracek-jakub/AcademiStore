@@ -2,10 +2,12 @@
 
 namespace App\Module\Admin\Accessory\Form;
 
+use App\Model\Product\ProductFacade;
 use \Nette\Application\UI\Form;
 
-class ProductForm
+class ProductFormFactory
 {
+
 
 	public function createProductForm(): Form
 	{
@@ -13,12 +15,16 @@ class ProductForm
 		$form->addText('name', 'Název')
 			->setRequired('Zadejte název');
 
+		$form->addText('sku', 'SKU')
+			->setRequired('Zadejte SKU')
+			->addRule($form::MinLength, 'SKU musí obsahovat alespoň %d znaků', 5);
+
 		$form->addTextArea('description_long', 'Dlouhý popis', 80, 18)
 			->setRequired('Zadejte dlouhý popis')
-			->addRule($form::MinLength, 'Dlouhý popis musí mít alespoň %d znaků', 300);
+			->addRule($form::MinLength, 'Dlouhý popis musí mít alespoň %d znaků', 3); // 300
 
 		$form->addTextArea('description_short', 'Krátký popis', 80, 5)
-			->addConditionOn($form['description_long'], $form::MaxLength, 100)
+			->addConditionOn($form['description_long'], $form::MaxLength, 1) // 100
 			->setRequired('Nezadal jsi dlouhý popis, zadej krátký');
 
 		$form->addFloat('price', 'Cena')
@@ -28,13 +34,8 @@ class ProductForm
 		/** @TODO image upload */
 
 		$form->addSubmit('submit', 'Odeslat');
-		$form->onSuccess[] = [$this, 'formSubmitted'];
 		return $form;
 	}
 
-	public function formSubmitted(Form $form, $data)
-	{
-		bdump($form->getHttpData()); // Very RAW style
-	}
 
 }

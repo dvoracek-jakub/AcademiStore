@@ -1,7 +1,7 @@
 services:
 	- App\Core\RouterFactory::createRouter
 	- App\Module\Admin\Accessory\AdminAuthenticator
-	- App\Module\Admin\Accessory\Form\ProductForm
+	- App\Module\Admin\Accessory\Form\ProductFormFactory
 
 search:
 	-	in: %appDir%
