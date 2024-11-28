@@ -60,10 +60,23 @@ class Product extends AbstractEntity
 	private $active;
 
 	/**
+	 * @ORM\Column(type="string", name="image_name")
+	 */
+	private $imageName;
+
+	/**
 	 * @ORM\Column(type="datetime", name="created_at")
 	 */
 	private $createdAt;
 
+	public function __construct()
+	{
+		/* Default values */
+		$this->active = 1;
+		$this->stock = 0;
+		$this->createdAt = new \DateTime();
+		$this->imageName = '';
+	}
 
 	/**
 	 * @return mixed
@@ -207,6 +220,22 @@ class Product extends AbstractEntity
 	public function setCreatedAt($createdAt): void
 	{
 		$this->createdAt = $createdAt;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getImageName(): ?string
+	{
+		return $this->imageName;
+	}
+
+	/**
+	 * @param  mixed  $imageName
+	 */
+	public function setImageName($imageName): void
+	{
+		$this->imageName = $imageName;
 	}
 
 }

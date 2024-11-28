@@ -6,6 +6,10 @@
 	
 	{* @TODO Ostylovat labely, odstranit <br> *}
 	
+	<ul n:if="$form->hasErrors()" n:inner-foreach="$form->getOwnErrors() as $error">
+		<li>{$error}</li>
+	</ul>
+	
 	<div class="mt-4">
 		{label name /}<br>
 		<input n:name=name size=20 autofocus class="w-80">
@@ -29,6 +33,11 @@
 	<div class="mt-4">
 		{label price /}<br>
 		<input n:name=price>
+	</div>
+	
+	<div class="mt-4">
+		{label image /}<br>
+		<input n:name=image>
 	</div>
 	
 	<div class="mt-4">

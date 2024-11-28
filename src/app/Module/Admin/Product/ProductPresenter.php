@@ -18,11 +18,13 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 	/** @var ProductFacade */
 	private $productFacade;
 
-	public function injectProductForm(ProductFormFactory $productFormFactory) {
+	public function injectProductForm(ProductFormFactory $productFormFactory)
+	{
 		$this->productFormFactory = $productFormFactory;
 	}
 
-	public function injectProductFacade(ProductFacade $productFacade) {
+	public function injectProductFacade(ProductFacade $productFacade)
+	{
 		$this->productFacade = $productFacade;
 	}
 
@@ -33,20 +35,17 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 		foreach ($this->template->products as $product) {
 			echo $product->getUrlSlug() . "...";
 			print_r($product->getCreatedAt());
-			bdump($product->getCreatedAt());
+			bdump($product);
 		}
 	}
 
-	public function actionCreate()
-	{
-	}
+	public function actionCreate() {}
 
 	public function createComponentProductForm(): Form
 	{
-		$form = $this->productFormFactory->createProductForm($this->em);
-		$form->onSuccess[] = function (Form $form, \Nette\Utils\ArrayHash $data) {
-			$this->productFacade->createProduct($data);
-			$this->flashMessage('Produkt byl úspěšně vytvořen');
+		$form = $this->productFormFactory->createProductForm();
+		$form->onSuccess[] = function(): void {
+			$this->flashMessage('Produkt byl úspěšně uložen.');
 			$this->redirect('this');
 		};
 		return $form;

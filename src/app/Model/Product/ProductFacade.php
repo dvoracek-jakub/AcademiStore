@@ -3,29 +3,79 @@
 namespace App\Model\Product;
 
 
-
 use App\Model\Product\Product as ProductEntity;
+use Nette\Application\UI\Form;
 
 class ProductFacade
 {
 
+	/** @var \App\Model\Product\Product|\Doctrine\ORM\EntityRepository */
+	private $productRepository;
+
 	public function __construct(public \App\Model\EntityManagerDecorator $em)
 	{
+		$this->productRepository = $this->em->getRepository(ProductEntity::class);
 	}
 
 	public function createProduct($data): ProductEntity
 	{
 		$product = new ProductEntity();
 		$product->setName($data->name);
-		$product->setSku($data->sku);
 		$product->setPrice($data->price);
 		$product->setDescShort($data->description_short);
 		$product->setDescLong($data->description_long);
+		$product->setImageName($data->imageName);
+		$product->setUrlSlug($this->generateUrlSlug($data->name));
+
+		if (empty($data->sku)) {
+			$data->sku = $this->generateSku($data->name);
+		}
+
+		$product->setSku($data->sku);
 
 		$this->em->persist($product);
 		$this->em->flush();
 
 		return $product;
+	}
+
+	public function generateUrlSlug(string $name): string
+	{
+		$urlSlug = \Nette\Utils\Strings::webalize($name);
+
+		// Check if the slug already exists. If so, modify it a bit.
+		$product = $this->productRepository->findBy(['urlSlug' => $urlSlug]);
+		if (isset($product[0])) {
+			$urlSlug = $this->generateUrlSlug($name . '-' . rand(1, 999));
+		}
+		return $urlSlug;
+	}
+
+	public function generateSku(string $name, array $variants = []): string
+	{
+		// Normalize symbols
+		$clean = iconv('UTF-8', 'ASCII//TRANSLIT', $name);
+		$clean = preg_replace('/[^a-zA-Z0-9]+/', '-', $clean);
+
+		// First-letterize & append random number
+		$parts = array_map(function($word) {
+			return strtoupper(substr($word, 0, 3));
+		}, explode('-', $clean));
+		$sku = implode('-', array_slice($parts, 0, 3)) . '-' . rand(100, 999);
+
+		// Possible variants
+		if (!empty($variants)) {
+			foreach ($variants as $key => $value) {
+				$sku .= '-' . strtoupper(substr($key, 0, 1) . substr($value, 0, 2));
+			}
+		}
+		return $sku;
+	}
+
+	public function skuExists(string $sku): bool
+	{
+		$product = $this->productRepository->findBy(['sku' => $sku]);
+		return isset($product[0]);
 	}
 
 }
