@@ -1,6 +1,8 @@
 services:
 	- App\Core\RouterFactory::createRouter
 	- App\Module\Admin\Accessory\AdminAuthenticator
+	- App\Module\Admin\Accessory\Form\ProductFormFactory
+	- App\Core\Settings(%academi%, %debugMode%, %appDir%)
 
 search:
 	-	in: %appDir%

@@ -3,6 +3,7 @@
 src/log/
 src/temp/
 src/vendor/
+src/www/images/
 *.log
 node_modules
 notes.txt

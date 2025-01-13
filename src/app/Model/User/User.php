@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace App\DB\Entity;
+namespace App\Model\User;
 
-use DateTime;
+use App\Model\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\DB\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="App\Model\User\UserRepository")
  * @ORM\Table(name="`user`")
  */
 class User extends AbstractEntity
