@@ -6,4 +6,6 @@ CREATE TABLE "user" (
 	lastname VARCHAR(50)
 );
 
+CREATE UNIQUE INDEX "uq_username" ON "user" (username);
+
 UPDATE system.db SET version = 1;
