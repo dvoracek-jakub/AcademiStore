@@ -2,6 +2,7 @@
 
 namespace App\Model\Product;
 
+use Doctrine\DBAL\Connection;
 use Nettrine\Extra\Repository\AbstractRepository;
 
 /**
@@ -14,5 +15,21 @@ use Nettrine\Extra\Repository\AbstractRepository;
  */
 final class ProductRepository extends AbstractRepository
 {
+
+	private Connection $connection;
+
+	public function __construct(private \Doctrine\ORM\EntityManager $em, private \Doctrine\ORM\Mapping\ClassMetadata $class)
+	{
+		parent::__construct($em, $class);
+		$this->connection = $em->getConnection();
+	}
+
+	public function getProducts()
+	{
+		$sql = "SELECT * FROM product";
+		$stmt = $this->connection->prepare($sql);
+		return $stmt->executeQuery()->fetchAllAssociative();   // fetchAssociative() ...
+
+	}
 
 }

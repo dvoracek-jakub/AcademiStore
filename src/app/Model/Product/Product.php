@@ -161,7 +161,7 @@ class Product extends AbstractEntity
 	/**
 	 * @return mixed
 	 */
-	public function getPrice(): float
+	public function getPrice()
 	{
 		return $this->price;
 	}
