@@ -2,6 +2,8 @@ parameters:
     academi:
         product_image_max_size_kb: 1024
         product_image_path: '/images/product/'
+        product_image_medium: 500x500
+        product_image_small: 200x200
     database:
         driver: pdo_pgsql
         host: postgres

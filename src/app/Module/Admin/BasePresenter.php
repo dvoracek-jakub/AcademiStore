@@ -8,7 +8,7 @@ use Nette;
 class BasePresenter extends Nette\Application\UI\Presenter
 {
 
-	public function __construct(public \App\Model\EntityManagerDecorator $em)
+	public function __construct(protected \App\Model\EntityManagerDecorator $em, protected \App\Core\Settings $settings)
 	{
 	}
 
@@ -18,6 +18,11 @@ class BasePresenter extends Nette\Application\UI\Presenter
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in');
 		}
+	}
+
+	public function beforeRender()
+	{
+		$this->template->product_image_path = $this->settings->store->product_image_path;
 	}
 
 }

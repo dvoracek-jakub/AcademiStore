@@ -1,0 +1,33 @@
+{extends $originalTemplate}
+
+{block tfoot}
+	<tfoot n:snippet="pagination">
+	{if $control->isPaginated() || $filter_active}
+		<tr n:block="pagination">
+			<td colspan="{$control->getColumnsCount()}" n:if="!$control->isTreeView()" class="row-grid-bottom">
+				<div class="col-items">
+					<small class="text-muted" n:if="$control->isPaginated()">
+						({var $paginator = $control['paginator']->getPaginator()}
+						{if $control->getPerPage() === 'all'}
+							{='contributte_datagrid.items'|translate}: {='contributte_datagrid.all'|translate}
+						{else}
+							{='contributte_datagrid.items'|translate}: {$paginator->getOffset() > 0 ? $paginator->getOffset() + 1 : ($paginator->getItemCount() > 0 ? 1 : 0)} - {count($rows) + $paginator->getOffset()}
+							{='contributte_datagrid.from'|translate} {$paginator->getItemCount()}
+						{/if})
+					</small>
+				</div>
+				<div class="col-pagination text-center">
+					{control paginator}
+				</div>
+				<div class="col-per-page text-end py-3">
+					<a n:if="$filter_active" n:href="resetFilter!" class="ajax btn btn-danger btn-sm reset-filter">{='contributte_datagrid.reset_filter'|translate}</a>
+					{if $control->isPaginated()}
+						{input $filter['perPage'], data-autosubmit-per-page => TRUE, class => 'form-select form-select-sm'}
+						{input $filter['perPage_submit'], class => 'datagrid-per-page-submit mx-5 border px-2 py-1 border-gray-400', value => 'Změnit'}
+					{/if}
+				</div>
+			</td>
+		</tr>
+	{/if}
+	</tfoot>
+{/block}

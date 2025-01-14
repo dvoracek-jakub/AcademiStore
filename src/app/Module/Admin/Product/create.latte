@@ -2,46 +2,55 @@
 {block content}
 
 
-<form n:name=productForm>
-	
-	{* @TODO Ostylovat labely, odstranit <br> *}
+<form n:name=productForm class="form">
 	
 	<ul n:if="$form->hasErrors()" n:inner-foreach="$form->getOwnErrors() as $error">
 		<li>{$error}</li>
 	</ul>
 	
 	<div class="mt-4">
-		{label name /}<br>
+		{label name, class=>'block' /}
 		<input n:name=name size=20 autofocus class="w-80">
 	</div>
 	
 	<div class="mt-4">
-		{label sku /}<br>
+		{label sku, class=>'block' /}
 		<input n:name=sku>
 	</div>
 	
 	<div class="mt-4">
-		{label description_short /}<br>
-		<textarea n:name=description_short />
+		{label descShort, class=>'block' /}
+		<textarea n:name=descShort />
 	</div>
 	
 	<div class="mt-4">
-		{label description_long /}<br>
-		<textarea n:name=description_long />
+		{label descLong, class=>'block' /}
+		<textarea n:name=descLong  />
 	</div>
 	
 	<div class="mt-4">
-		{label price /}<br>
+		{label price, class=>'block' /}
 		<input n:name=price>
 	</div>
 	
 	<div class="mt-4">
-		{label image /}<br>
+		{label image, class=>'block' /}
 		<input n:name=image>
 	</div>
 	
+	{if $action == 'edit' && !empty($imageName)}
+		<div class="mt-2">
+			<img src="{$imageName}">
+		</div>
+		<div class="mt-2">
+			<input n:name=deleteImage>
+			{label deleteImage :/}
+		</div>
+	{/if}
 	<div class="mt-4">
 		<input n:name=submit class="bg-blue-200 px-4">
 	</div>
+	
+
 	
 </form>

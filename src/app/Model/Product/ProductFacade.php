@@ -2,9 +2,9 @@
 
 namespace App\Model\Product;
 
-
 use App\Model\Product\Product as ProductEntity;
 use Nette\Application\UI\Form;
+use App\Model\Product\ProductImage;
 
 class ProductFacade
 {
@@ -12,30 +12,37 @@ class ProductFacade
 	/** @var \App\Model\Product\Product|\Doctrine\ORM\EntityRepository */
 	private $productRepository;
 
-	public function __construct(public \App\Model\EntityManagerDecorator $em)
+
+	public function __construct(public \App\Model\EntityManagerDecorator $em, private ProductImage $productImage)
 	{
 		$this->productRepository = $this->em->getRepository(ProductEntity::class);
 	}
 
-	public function createProduct($data): ProductEntity
+	public function saveProduct($data, int $id = null): ProductEntity
 	{
-		$product = new ProductEntity();
+		if ($id) {
+			$product = $this->productRepository->findOneById($id);
+		} else {
+			$product = new ProductEntity();
+		}
+
 		$product->setName($data->name);
 		$product->setPrice($data->price);
-		$product->setDescShort($data->description_short);
-		$product->setDescLong($data->description_long);
-		$product->setImageName($data->imageName);
+		$product->setDescShort($data->descShort);
+		$product->setDescLong($data->descLong);
 		$product->setUrlSlug($this->generateUrlSlug($data->name));
+
+		if (!empty($data->imageName) || $data->deleteImage) {
+			$product->setImageName($data->imageName);
+		}
 
 		if (empty($data->sku)) {
 			$data->sku = $this->generateSku($data->name);
 		}
-
 		$product->setSku($data->sku);
 
 		$this->em->persist($product);
 		$this->em->flush();
-
 		return $product;
 	}
 
@@ -76,6 +83,15 @@ class ProductFacade
 	{
 		$product = $this->productRepository->findBy(['sku' => $sku]);
 		return isset($product[0]);
+	}
+
+	public function deleteImage(int $id)
+	{
+		$product = $this->productRepository->findOneById($id);
+
+		if (!empty($product->getImageName())) {
+			$this->productImage->deleteImage($product->getImageName());
+		}
 	}
 
 }
