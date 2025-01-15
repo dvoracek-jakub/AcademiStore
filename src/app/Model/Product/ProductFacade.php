@@ -9,7 +9,7 @@ use App\Model\Product\ProductImage;
 class ProductFacade
 {
 
-	/** @var \App\Model\Product\Product|\Doctrine\ORM\EntityRepository */
+	/** @var \App\Model\Product\ProductRepository|\Doctrine\ORM\EntityRepository */
 	private $productRepository;
 
 
@@ -30,6 +30,7 @@ class ProductFacade
 		$product->setPrice($data->price);
 		$product->setDescShort($data->descShort);
 		$product->setDescLong($data->descLong);
+		$product->setActive($data->active);
 		$product->setUrlSlug($this->generateUrlSlug($data->name));
 
 		if (!empty($data->imageName) || $data->deleteImage) {

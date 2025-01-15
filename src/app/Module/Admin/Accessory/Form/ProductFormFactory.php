@@ -3,8 +3,9 @@
 namespace App\Module\Admin\Accessory\Form;
 
 use App\Model\Product\ProductFacade;
-use \Nette\Application\UI\Form;
+use Nette\Application\UI\Form;
 use App\Model\Product\ProductImage;
+use App\Model\Product\Product;
 
 class ProductFormFactory
 {
@@ -14,10 +15,10 @@ class ProductFormFactory
 
 	public function __construct(public ProductFacade $productFacade, private \App\Core\Settings $settings, private ProductImage $productImage) {}
 
-	public function createProductForm(string $action, ?int $id = null): Form
+	public function createProductForm(string $action, ?Product $product = null): Form
 	{
 		$this->action = $action;
-		$this->id = $id;
+		$this->id = $product ? $product->getId() : null;
 
 		$form = new Form();
 		$form->addText('name', 'Název')
@@ -43,6 +44,18 @@ class ProductFormFactory
 			->addRule($form::MaxFileSize, "Maximální velikost je $max_imgage_size kB.", $max_imgage_size * 1024);
 
 		$form->addCheckbox('deleteImage', 'Smazat obrázek?');
+
+		$form->addCheckbox('active', 'Aktivní');
+
+		if ($this->action == 'edit') {
+			//$form->setDefaults($product); ⛔
+			$form['name']->setDefaultValue($product->getName());
+			$form['sku']->setDefaultValue($product->getSku());
+			$form['price']->setDefaultValue($product->getPrice());
+			$form['descShort']->setDefaultValue($product->getDescShort());
+			$form['descLong']->setDefaultValue($product->getDescLong());
+			$form['active']->setDefaultValue($product->getActive());
+		}
 
 		$form->onSuccess[] = [$this, 'formSubmitted'];
 		$form->addSubmit('submit', 'Odeslat');

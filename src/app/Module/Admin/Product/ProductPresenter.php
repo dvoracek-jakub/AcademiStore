@@ -10,7 +10,6 @@ use \App\Module\Admin\Accessory\Form\ProductFormFactory;
 use \Nette\Application\UI\Form;
 use \Contributte\Datagrid\Datagrid;
 use App\Model\Product\ProductImage;
-use function Symfony\Component\String\b;
 
 final class ProductPresenter extends \App\Module\Admin\BasePresenter
 {
@@ -90,35 +89,22 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 
 	public function createComponentProductForm(): Form
 	{
-		$form = $this->productFormFactory->createProductForm($this->action, $this->product ? $this->product->getId() : null);
-
-		if ($this->action == 'edit') {
-			//$form->setDefaults($product); ⛔
-			$form['name']->setDefaultValue($this->product->getName());
-			$form['sku']->setDefaultValue($this->product->getSku());
-			$form['price']->setDefaultValue($this->product->getPrice());
-			$form['descShort']->setDefaultValue($this->product->getDescShort());
-			$form['descLong']->setDefaultValue($this->product->getDescLong());
-		}
+		$form = $this->productFormFactory->createProductForm($this->action, $this->product ?? null);
 
 		$form->onSuccess[] = function(): void {
-			$this->flashMessage('Produkt byl úspěšně uložen.');
+			$this->flashMessage('Produkt byl úspěšně uložen');
 
 			if ($this->action == 'create') {
-				// @TODO Get last product id and redirect there
 				$lastProduct = $this->productRepository->findBy([], ['id' => 'DESC'], 1);
 				$this->redirect('Product:edit', $lastProduct[0]->getId());
-				exit;
 			} else {
 				$this->redirect('this');
 			}
-
 		};
-
 		return $form;
 	}
 
-	public function createComponentProductsList($name)
+	public function createComponentProductsDatagrid($name)
 	{
 		$grid = new Datagrid($this, $name);
 		$grid->setTemplateFile(__DIR__ . '/../datagrid_override.latte');
@@ -128,7 +114,7 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 		$grid->setDefaultSort(['name' => 'ASC']);
 		$grid->setDefaultPerPage(20);
 
-		$grid->addColumnLink('name', 'Name', 'edit')->setSortable();
+		$grid->addColumnLink('name', 'Name', 'edit')->setClass('block hover:text-pink-600')->setSortable();
 
 		$grid->addColumnText('url', 'URL', 'url_slug')->setRenderer(function($item) {
 			return '/' . $item->getUrlSlug();

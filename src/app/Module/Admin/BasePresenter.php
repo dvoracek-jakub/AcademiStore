@@ -8,9 +8,7 @@ use Nette;
 class BasePresenter extends Nette\Application\UI\Presenter
 {
 
-	public function __construct(protected \App\Model\EntityManagerDecorator $em, protected \App\Core\Settings $settings)
-	{
-	}
+	public function __construct(protected \App\Model\EntityManagerDecorator $em, protected \App\Core\Settings $settings) {}
 
 	public function startup()
 	{
