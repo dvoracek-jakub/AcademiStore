@@ -29,6 +29,9 @@
 	</div>
 	
 	<div class="mt-4">
+		{if $action == 'edit'}
+			<a n:href="Category:delete $category->getId()" class="mr-3 confirm" data-confirm="Remove category?">Remove</a>
+		{/if}
 		<input n:name=submit class="bg-blue-200 px-4">
 	</div>
 

@@ -14,6 +14,7 @@
 	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 	
+	<script src="/assets/js/common.js"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
 	{block scripts}
 		<script src="https://cdn.tailwindcss.com"></script> <!-- Dev purpose only -->
@@ -48,17 +49,7 @@
 	</main>
 	
 	{block lazyLoadScripts}
-		<script>
-		/*	tailwind.config = {
-				prefix: "tw-",
-				corePlugins: {
-					preflight: false,
-				}
-			}*/
-		</script>
-		
 		<script src="https://unpkg.com/nette-forms@3"></script>
-		
 		<script>
 			document.addEventListener('DOMContentLoaded', function() {
 				naja.initialize();
@@ -81,22 +72,7 @@
 					}
 				}
 			};
-
-			/** @TODO Move somewhere else */
-			$(document).ready(function() {
-				$('.select2').select2({
-					/*theme: "classic",*/
-					width: '90%'
-				});
-				$('.select2').on('select2:select', function (e) {
-					var data = e.params.data;
-					var sortBySelect = document.querySelector("select.select2");
-					sortBySelect.value = data.id;
-					sortBySelect.dispatchEvent(new Event("change"));
-				});
-			});
 		</script>
-		
 		<script src="/assets/js/datagrid.js"></script>
 	{/block}
 </body>

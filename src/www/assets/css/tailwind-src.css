@@ -2,7 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@layer base {
+	.main-content a:hover {
+		@apply text-pink-600;
+	}
+}
+
 @layer components {
+
 	.menu-item {
 		@apply p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block;
 	}
@@ -22,6 +30,8 @@
 		@apply bg-gradient-to-b border-b-4 rounded-lg shadow-xl p-5;
 	}
 }
+
+
 
 /* Custom Plain CSS */
 .flash {

@@ -4,7 +4,8 @@ namespace App\Model\Category;
 
 use App\Model\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
-
+use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\JoinColumn;
 /**
  * @ORM\Entity(repositoryClass="App\Model\Category\CategoryRepository")
  * @ORM\Table(name="`category`")
@@ -20,7 +21,13 @@ class Category extends AbstractEntity
 	protected int $id;
 
 	/**
-	 * @ORM\Column(type="integer", name="parent_id")
+	 * @OneToOne(targetEntity="App\Model\Category\Category")
+	 * @JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+	 */
+	private $parent;
+
+	/**
+	 * @ORM\Column(type="integer", name="parent_id", nullable=true, options={"default": null})
 	 */
 	private $parentId;
 
@@ -48,6 +55,7 @@ class Category extends AbstractEntity
 	{
 		/* Default values */
 		$this->active = 1;
+		$this->parentId = null;
 	}
 
 	/**
@@ -117,7 +125,7 @@ class Category extends AbstractEntity
 	/**
 	 * @return mixed
 	 */
-	public function getParentId(): int
+	public function getParentId(): ?int
 	{
 		return $this->parentId;
 	}
@@ -128,6 +136,23 @@ class Category extends AbstractEntity
 	public function setParentId($parentId): void
 	{
 		$this->parentId = $parentId;
+		bdump("ENT: " . $this->parentId);
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getParent()
+	{
+		return $this->parent;
+	}
+
+	/**
+	 * @param  mixed  $parent
+	 */
+	public function setParent($parent): void
+	{
+		$this->parent = $parent;
 	}
 
 }

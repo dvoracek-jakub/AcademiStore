@@ -10,6 +10,7 @@ use App\Model\Category\CategoryFacade;
 use App\Module\Admin\Accessory\Form\CategoryFormFactory;
 use Nette\Application\UI\Form;
 use Contributte\Datagrid\Datagrid;
+use function Symfony\Component\String\b;
 
 final class CategoryPresenter extends \App\Module\Admin\BasePresenter
 {
@@ -37,6 +38,11 @@ final class CategoryPresenter extends \App\Module\Admin\BasePresenter
 		$this->categoryFacade = $categoryFacade;
 	}
 
+	public function actionCreate()
+	{
+		$this->template->action = 'create';
+	}
+
 	public function actionEdit(int $id)
 	{
 		$this->category = $this->categoryRepository->findOneById($id);
@@ -48,6 +54,7 @@ final class CategoryPresenter extends \App\Module\Admin\BasePresenter
 		$tpl = $this->getTemplate();
 		$tpl->setFile(__DIR__ . '/create.latte');
 		$tpl->action = 'edit';
+		$tpl->category = $this->category;
 	}
 
 	public function createComponentCategoryForm(): Form
@@ -70,21 +77,45 @@ final class CategoryPresenter extends \App\Module\Admin\BasePresenter
 	public function createComponentCategoryDatagrid($name)
 	{
 		$grid = new Datagrid($this, $name);
-		$grid->setAutoSubmit(true); // Should be by default
+		$grid->setAutoSubmit(true);
 		$grid->setTemplateFile(__DIR__ . '/../datagrid_override.latte');
 
-		$grid->setDataSource($this->categoryRepository->createQueryBuilder('c'));
+		$qb = $this->categoryRepository->createQueryBuilder('c');
+		$grid->setDataSource($qb);
+
 		$grid->setDefaultSort(['name' => 'ASC']);
 		$grid->setDefaultPerPage(20);
 
 		$grid->addColumnLink('name', 'Name', 'edit')->setClass('block hover:text-pink-600')->setSortable();
-		$grid->addColumnText('parentId', 'Nadřazené kategorie');
+
+		$grid->addColumnText('parentId', 'Nadřazené kategorie')->setRenderer(function($item) {
+			if ($item->getParentId() > 0) {
+				echo $item->getParent()->getName();
+			} else {
+				echo '---';
+			}
+		});
+
 		$grid->addColumnText('active', 'Aktivní')->setRenderer(function($item) {
 			return $item->getActive() == 1 ? '✔️' : '❌';
 		});
 		$grid->addFilterText('name', 'Name')->setPlaceholder('Hledat dle názvu');
 
-		$grid->addFilterSelect('parentId', '..', $this->categoryFacade->getAssociative())->setAttribute('class', 'select2');
+		$grid->addFilterSelect('parentId', '..', $this->categoryFacade->getAssociative())->setAttribute('class', 'select2')
+			->setCondition(function($qb, $value) {
+				if ($value !== 0) {
+					$qb->andWhere('c.parentId = :parent_id')
+						->setParameter('parent_id', $value);
+				}
+				return $qb;
+			});
+	}
+
+	public function actionDelete(int $id)
+	{
+		$this->categoryFacade->delete($id);
+		$this->redirect('Category:list');
+		exit;
 	}
 
 }

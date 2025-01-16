@@ -11,7 +11,7 @@ class CategoryFacade
 	/** @var \App\Model\Category\CategoryRepository|\Doctrine\ORM\EntityRepository */
 	private $categoryRepository;
 
-	public function __construct(public \App\Model\EntityManagerDecorator $em)
+	public function __construct(private \App\Model\EntityManagerDecorator $em)
 	{
 		$this->categoryRepository = $this->em->getRepository(CategoryEntity::class);
 	}
@@ -24,8 +24,13 @@ class CategoryFacade
 			$category = new CategoryEntity();
 		}
 
+		if ((int) $data->parentId > 0) {
+			$category->setParent($this->categoryRepository->findOneById($data->parentId));
+		} else {
+			$category->setParent(null);
+		}
+
 		$category->setName($data->name);
-		$category->setParentId($data->parentId);
 		$category->setDescription($data->description);
 		$category->setActive($data->active);
 		$category->setUrlSlug($this->generateUrlSlug($data->name));
@@ -50,13 +55,20 @@ class CategoryFacade
 	public function getAssociative()
 	{
 		$categories = $this->categoryRepository->findAll();
-		$cats = [0 => '---'];
+		$cats = [null => '---'];
 		if (!empty($categories)) {
 			foreach ($categories as $cat) {
 				$cats[$cat->getId()] = $cat->getName();
 			}
 		}
 		return $cats;
+	}
+
+	public function delete(int $id)
+	{
+	    $category = $this->categoryRepository->findOneById($id);
+		$this->em->remove($category);
+		$this->em->flush();
 	}
 
 }

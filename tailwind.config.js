@@ -6,10 +6,10 @@ module.exports = {
         '!./src/vendor',
     ],
 	safelist: [
-	  'hover:text-pink-600'
+	  'hover:text-pink-600',
 	],
     theme: {
         extend: {},
     },
-    plugins: [],
+    plugins: []
 }

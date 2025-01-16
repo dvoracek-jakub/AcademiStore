@@ -19,7 +19,6 @@ class CategoryFormFactory
 		$this->action = $action;
 		$this->id = $category ? $category->getId() : null;
 
-
 		$form = new Form();
 		$form->addText('name', 'Název')
 			->setRequired('Zadejte název');
@@ -30,6 +29,8 @@ class CategoryFormFactory
 
 		$form->addCheckbox('active', 'Aktivní');
 
+		$form->addButton('delete', 'Remove');
+
 		if ($this->action == 'edit') {
 			$form['name']->setDefaultValue($category->getName());
 			$form['description']->setDefaultValue($category->getDescription());
@@ -38,13 +39,12 @@ class CategoryFormFactory
 		}
 
 		$form->onSuccess[] = [$this, 'formSubmitted'];
-		$form->addSubmit('submit', 'Odeslat');
+		$form->addSubmit('submit', 'Save Category');
 		return $form;
 	}
 
 	public function formSubmitted(Form $form, $data)
 	{
-		//bdump($data);exit;
 		if (!$form->hasErrors()) {
 			$this->categoryFacade->saveCategory($data, $this->id);
 		}
