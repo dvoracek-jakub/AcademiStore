@@ -44,3 +44,7 @@
 form label {
 	font-weight: bold;
 }
+
+.select2-results, .select2-results__options {
+	min-height: 400px;
+}

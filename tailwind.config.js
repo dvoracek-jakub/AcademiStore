@@ -5,6 +5,9 @@ module.exports = {
         './src/app/**/*.latte',
         '!./src/vendor',
     ],
+	safelist: [
+	  'hover:text-pink-600'
+	],
     theme: {
         extend: {},
     },

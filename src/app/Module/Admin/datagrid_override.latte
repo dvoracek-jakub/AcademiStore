@@ -1,5 +1,9 @@
 {extends $originalTemplate}
 
+{block datagrid-class}datagrid datagrid-{$control->getFullName()}{/block}
+{block table-class}table table-hovertable-condensed table-striped table-bordered table-sm{/block}
+
+
 {block tfoot}
 	<tfoot n:snippet="pagination">
 	{if $control->isPaginated() || $filter_active}
@@ -22,8 +26,8 @@
 				<div class="col-per-page text-end py-3">
 					<a n:if="$filter_active" n:href="resetFilter!" class="ajax btn btn-danger btn-sm reset-filter">{='contributte_datagrid.reset_filter'|translate}</a>
 					{if $control->isPaginated()}
-						{input $filter['perPage'], data-autosubmit-per-page => TRUE, class => 'form-select form-select-sm'}
-						{input $filter['perPage_submit'], class => 'datagrid-per-page-submit mx-5 border px-2 py-1 border-gray-400', value => 'Změnit'}
+						{input $filter['perPage'], data-autosubmit-per-page => true, class => 'form-select form-select-sm'}
+						{input $filter['perPage_submit'], class => 'datagrid-per-page-submit mx-5 border px-2 py-1 border-gray-400', value => 'Change'}
 					{/if}
 				</div>
 			</td>
