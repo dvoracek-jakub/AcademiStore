@@ -80,8 +80,42 @@ final class CategoryPresenter extends \App\Module\Admin\BasePresenter
 		$grid->setAutoSubmit(true);
 		$grid->setTemplateFile(__DIR__ . '/../datagrid_override.latte');
 
-		$qb = $this->categoryRepository->createQueryBuilder('c');
-		$grid->setDataSource($qb);
+//		$qb = $this->categoryRepository->createQueryBuilder('c');
+
+		$conn = $this->em->getConnection();
+		$stmt = $conn->prepare("
+			 WITH RECURSIVE category_hierarchy AS (
+			    SELECT
+			        id,
+			        name,
+			        parent_id,
+			        active,
+			        name::text AS full_path 
+			    FROM category
+			    WHERE parent_id IS NULL  -- Kořenové kategorie
+			    UNION ALL
+			    SELECT
+			        c.id,
+			        c.name,
+			        c.parent_id,
+			        c.active,
+			        (ch.full_path || ' > ' || c.name)::text  
+			    FROM category c
+			    INNER JOIN category_hierarchy ch ON ch.id = c.parent_id
+			)
+			SELECT
+			    c.id,
+			    c.name,
+			    c.parent_id,
+			    c.active,
+			    ch.full_path AS parents_name
+			FROM category c
+			LEFT JOIN category_hierarchy ch ON c.id = ch.id;
+		 ");
+		$result = $stmt->executeQuery()->fetchAllAssociative();
+
+
+		$grid->setDataSource($result);
 
 		$grid->setDefaultSort(['name' => 'ASC']);
 		$grid->setDefaultPerPage(20);
@@ -89,25 +123,27 @@ final class CategoryPresenter extends \App\Module\Admin\BasePresenter
 		$grid->addColumnLink('name', 'Name', 'edit')->setClass('block hover:text-pink-600')->setSortable();
 
 		$grid->addColumnText('parentId', 'Nadřazené kategorie')->setRenderer(function($item) {
-			if ($item->getParentId() > 0) {
-				echo $item->getParent()->getName();
+			if ($item['parent_id'] > 0) {
+				echo $item['parents_name'];
 			} else {
 				echo '---';
 			}
 		});
 
 		$grid->addColumnText('active', 'Aktivní')->setRenderer(function($item) {
-			return $item->getActive() == 1 ? '✔️' : '❌';
+			return $item['active'] == 1 ? '✔️' : '❌';
 		});
 		$grid->addFilterText('name', 'Name')->setPlaceholder('Hledat dle názvu');
 
 		$grid->addFilterSelect('parentId', '..', $this->categoryFacade->getAssociative())->setAttribute('class', 'select2')
-			->setCondition(function($qb, $value) {
-				if ($value !== 0) {
+			->setCondition(function($result, $value) {
+
+				return $result;
+				/*if ($value !== 0) {
 					$qb->andWhere('c.parentId = :parent_id')
 						->setParameter('parent_id', $value);
 				}
-				return $qb;
+				return $qb;*/
 			});
 	}
 
