@@ -13,7 +13,11 @@ class ProductFormFactory
 	private string $action;
 	private ?int $id;
 
-	public function __construct(public ProductFacade $productFacade, private \App\Core\Settings $settings, private ProductImage $productImage) {}
+	public function __construct(
+		public ProductFacade $productFacade,
+		private \App\Core\Settings $settings,
+		private ProductImage $productImage
+	) {}
 
 	public function createProductForm(string $action, ?Product $product = null): Form
 	{
@@ -76,9 +80,10 @@ class ProductFormFactory
 		}
 
 		$data->imageName = $this->processImage($form, $data->image);
+		$categories = $form->getHttpData()['categories'] ?? [];
 
 		if (!$form->hasErrors()) {
-			$this->productFacade->saveProduct($data, $this->id);
+			$this->productFacade->saveProduct($data, $categories, $this->id);
 		}
 	}
 

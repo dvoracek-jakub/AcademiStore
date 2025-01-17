@@ -7,6 +7,7 @@ module.exports = {
     ],
 	safelist: [
 	  'hover:text-pink-600',
+	  'w-24'
 	],
     theme: {
         extend: {},

@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Module\Admin\Product;
 
+use App\Model\Category\Category;
 use App\Model\Product\ProductFacade;
 use Nette;
-use \App\Module\Admin\Accessory\Form\ProductFormFactory;
-use \Nette\Application\UI\Form;
-use \Contributte\Datagrid\Datagrid;
+use App\Module\Admin\Accessory\Form\ProductFormFactory;
+use Nette\Application\UI\Form;
+use Contributte\Datagrid\Datagrid;
 use App\Model\Product\ProductImage;
+
 
 final class ProductPresenter extends \App\Module\Admin\BasePresenter
 {
@@ -45,33 +47,21 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 		$this->productFacade = $productFacade;
 	}
 
-	public function actionList()
-	{
-		// ORM STYLE
-		/*$this->template->products = $this->productRepository->findAll();
-		foreach ($this->template->products as $product) {
-			//echo $product->getUrlSlug() . "...";
-			//print_r($product->getCreatedAt());
-			//bdump($product);
-		}
-
-		// DBAL PS
-		$this->template->products = $this->productRepository->getProducts();
-		foreach ($this->template->products as $product) {
-			//print_r($product);
-			//print_r($product->getCreatedAt());
-			//bdump($product);
-		}*/
-	}
-
 	public function actionCreate()
 	{
-		$this->template->action = 'create';
+		$tpl = $this->getTemplate();
+		$tpl->action = 'create';
+		$tpl->categoryTree = $this->em->getRepository(Category::class)->getForTreeView();
 	}
 
 	public function actionEdit(int $id)
 	{
 		$this->product = $this->productRepository->findOneById($id);
+
+		$relatedCategories = [];
+		foreach ($this->product->getCategories() as $category) {
+			$relatedCategories[] = $category->getId();
+		}
 
 		if (!$this->product) {
 			throw new \Exception('Product not found');
@@ -80,10 +70,15 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 		$tpl = $this->getTemplate();
 		$tpl->setFile(__DIR__ . '/create.latte');
 		$tpl->action = 'edit';
+		$tpl->categoryTree = $this->em->getRepository(Category::class)->getForTreeView();
+		$tpl->relatedCategories = $relatedCategories;
 
 		$tpl->imageName = '';
 		if (!empty($this->product->getImageName())) {
-			$tpl->imageName = $this->productImage->getImage($this->product->getImageName(), $this->settings->store->product_image_medium);
+			$tpl->imageName = $this->productImage->getImage(
+				$this->product->getImageName(),
+				$this->settings->store->product_image_medium
+			);
 		}
 	}
 
@@ -109,19 +104,42 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 		$grid = new Datagrid($this, $name);
 		$grid->setTemplateFile(__DIR__ . '/../datagrid_override.latte');
 
-		//$grid->setDataSource($this->productRepository->getProducts());
-		$grid->setDataSource($this->productRepository->createQueryBuilder('p'));
+		$queryBuilder = $this->productRepository->createQueryBuilder('p')
+			->select('p', 'c')
+			->leftJoin('p.categories', 'c');
+		$grid->setDataSource($queryBuilder);
 		$grid->setDefaultSort(['name' => 'ASC']);
 		$grid->setDefaultPerPage(20);
 
+		$grid->addColumnText('id', 'ID');
 		$grid->addColumnLink('name', 'Name', 'edit')->setClass('block hover:text-pink-600')->setSortable();
 
 		$grid->addColumnText('url', 'URL', 'url_slug')->setRenderer(function($item) {
 			return '/' . $item->getUrlSlug();
 		});
 
+		$grid->addColumnText('categories', 'Kategorie')->setRenderer(function($product) {
+
+			$cats = $product->getCategories();
+			if (!empty($cats)) {
+				$catArray = [];
+				foreach ($cats as $cat) {
+					$catArray[] = $cat->getName();
+				}
+				echo implode(', ', $catArray);
+			}
+			return ;
+		});
+
+		$grid->addFilterSelect('categories', '..', $this->categoryFacade->getAssociative())
+			->setAttribute('class', 'select2')
+			->setCondition(function($queryBuilder, $value) {
+				$queryBuilder->where('c.id = :catId')->setParameter('catId', $value);
+
+			});
+
 		$grid->addColumnNumber('price', 'Cena')->setSortable()
-			->setFilterRange('price', 'dfs')->setPlaceholders(['Cena od', 'Cena do']);
+			->setFilterRange('price', 'x')->setPlaceholders(['Od', 'Do']);
 
 		$grid->addColumnText('active', 'Aktivní')->setRenderer(function($item) {
 			return $item->getActive() == 1 ? '✔️' : '❌';

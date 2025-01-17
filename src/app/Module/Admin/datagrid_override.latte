@@ -36,17 +36,15 @@
 	</tfoot>
 	<script>
 		/** Prasarna, jenze kam to dat, aby se aplikovalo po filter snippet refreshi? */
-	
-			$('.select2').select2({
-				width: '90%'
-			});
-			$('.select2').on('select2:select', function (e) {
-				var data = e.params.data;
-				var s = document.querySelector("select.select2");
-				s.value = data.id;
-				s.dispatchEvent(new Event("change"));
-			});
-	
+		$('.select2').select2({
+			width: '90%'
+		});
+		$('.select2').on('select2:select', function (e) {
+			var data = e.params.data;
+			var s = document.querySelector("select.select2");
+			s.value = data.id;
+			s.dispatchEvent(new Event("change"));
+		});
 	</script>
 {/block}
 

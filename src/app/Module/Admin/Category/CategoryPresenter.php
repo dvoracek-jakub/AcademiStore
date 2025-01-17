@@ -24,18 +24,11 @@ final class CategoryPresenter extends \App\Module\Admin\BasePresenter
 	/** @var \App\Model\Category\CategoryRepository */
 	private $categoryRepository;
 
-	/** @var CategoryFacade */
-	private $categoryFacade;
 
 	public function injectCategoryForm(CategoryFormFactory $categoryFormFactory)
 	{
 		$this->categoryFormFactory = $categoryFormFactory;
 		$this->categoryRepository = $this->em->getRepository(\App\Model\Category\Category::class);
-	}
-
-	public function injectCategoryFacade(CategoryFacade $categoryFacade)
-	{
-		$this->categoryFacade = $categoryFacade;
 	}
 
 	public function actionCreate()
@@ -80,51 +73,19 @@ final class CategoryPresenter extends \App\Module\Admin\BasePresenter
 		$grid->setAutoSubmit(true);
 		$grid->setTemplateFile(__DIR__ . '/../datagrid_override.latte');
 
-//		$qb = $this->categoryRepository->createQueryBuilder('c');
-
 		$conn = $this->em->getConnection();
-		$stmt = $conn->prepare("
-			 WITH RECURSIVE category_hierarchy AS (
-			    SELECT
-			        id,
-			        name,
-			        parent_id,
-			        active,
-			        name::text AS full_path 
-			    FROM category
-			    WHERE parent_id IS NULL  -- Kořenové kategorie
-			    UNION ALL
-			    SELECT
-			        c.id,
-			        c.name,
-			        c.parent_id,
-			        c.active,
-			        (ch.full_path || ' > ' || c.name)::text  
-			    FROM category c
-			    INNER JOIN category_hierarchy ch ON ch.id = c.parent_id
-			)
-			SELECT
-			    c.id,
-			    c.name,
-			    c.parent_id,
-			    c.active,
-			    ch.full_path AS parents_name
-			FROM category c
-			LEFT JOIN category_hierarchy ch ON c.id = ch.id;
-		 ");
-		$result = $stmt->executeQuery()->fetchAllAssociative();
-
-
+		$result = $this->categoryRepository->getForListDatagrid();
 		$grid->setDataSource($result);
 
 		$grid->setDefaultSort(['name' => 'ASC']);
 		$grid->setDefaultPerPage(20);
 
+		$grid->addColumnText('id', 'ID');
 		$grid->addColumnLink('name', 'Name', 'edit')->setClass('block hover:text-pink-600')->setSortable();
-
 		$grid->addColumnText('parentId', 'Nadřazené kategorie')->setRenderer(function($item) {
 			if ($item['parent_id'] > 0) {
-				echo $item['parents_name'];
+				$s = str_replace(' > [' . $item['id'] . ']' . $item['name'], '', $item['parents_name']);
+				echo preg_replace('/\[\d+\]*/', '', $s);
 			} else {
 				echo '---';
 			}
@@ -135,15 +96,22 @@ final class CategoryPresenter extends \App\Module\Admin\BasePresenter
 		});
 		$grid->addFilterText('name', 'Name')->setPlaceholder('Hledat dle názvu');
 
-		$grid->addFilterSelect('parentId', '..', $this->categoryFacade->getAssociative())->setAttribute('class', 'select2')
+		$grid->addFilterSelect('parentId', '..', $this->categoryFacade->getAssociative())
+			->setAttribute('class', 'select2')
 			->setCondition(function($result, $value) {
-
-				return $result;
-				/*if ($value !== 0) {
-					$qb->andWhere('c.parentId = :parent_id')
-						->setParameter('parent_id', $value);
+				$out = [];
+				if (!empty($result)) {
+					foreach ($result as $row) {
+						$pname = $row['parents_name'];
+						if ($pname === null) {
+							continue;
+						}
+						if (preg_match('/\[' . $value . '\].*\[\d+\]/', $pname)) {
+							$out[] = $row;
+						}
+					}
 				}
-				return $qb;*/
+				return $out;
 			});
 	}
 

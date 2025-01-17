@@ -20,6 +20,13 @@ class Product extends AbstractEntity
 	protected int $id;
 
 	/**
+	 * Many Users have Many Teams.
+	 * @ORM\ManyToMany(targetEntity="\App\Model\Category\Category", inversedBy="products")
+	 * @ORM\JoinTable(name="product_category")
+	 */
+	private $categories;
+
+	/**
 	 * @ORM\Column(type="string")
 	 */
 	private $sku;
@@ -76,6 +83,35 @@ class Product extends AbstractEntity
 		$this->stock = 0;
 		$this->createdAt = new \DateTime();
 		$this->imageName = '';
+		$this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+	}
+
+	public function getCategories(): \Doctrine\Common\Collections\Collection
+	{
+		return $this->categories;
+	}
+
+	/**
+	 * @return self
+	 */
+	public function addCategory(\App\Model\Category\Category $category): self
+	{
+		if (!$this->categories->contains($category)) {
+			$this->categories[] = $category;
+			$category->addProduct($this);
+		}
+		return $this;
+	}
+
+	/**
+	 * @return self
+	 */
+	public function removeCategory(Category $category): self
+	{
+		if ($this->categories->removeElement($category)) {
+			$category->removeProduct($this);
+		}
+		return $this;
 	}
 
 	/**

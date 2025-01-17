@@ -2,37 +2,58 @@
 {block content}
 
 
-<form n:name=categoryForm class="form">
-	
-	<ul n:if="$form->hasErrors()" n:inner-foreach="$form->getOwnErrors() as $error">
-		<li>{$error}</li>
-	</ul>
-	
-	<div class="mt-4">
-		{label name, class=>'block' /}
-		<input n:name=name size=20 autofocus class="w-80">
-	</div>
-	
-	<div class="mt-4">
-		{label parentId, class=>'block' /}
-		<select n:name=parentId></select>
-	</div>
-	
-	<div class="mt-4">
-		{label description, class=>'block' /}
-		<textarea n:name=description />
-	</div>
-	
-	<div class="mt-4">
-		<input n:name="active">
-		{label active :/}
-	</div>
-	
-	<div class="mt-4">
-		{if $action == 'edit'}
-			<a n:href="Category:delete $category->getId()" class="mr-3 confirm" data-confirm="Remove category?">Remove</a>
-		{/if}
-		<input n:name=submit class="bg-blue-200 px-4">
-	</div>
 
+<form n:name=categoryForm class="form">
+	<div class="grid grid-cols-2 gap-4">
+		
+		<div>
+			<ul n:if="$form->hasErrors()" n:inner-foreach="$form->getOwnErrors() as $error">
+				<li>{$error}</li>
+			</ul>
+			
+			<div class="mt-4">
+				{label name, class=>'block' /}
+				<input n:name=name size=20 autofocus class="w-80">
+			</div>
+			
+			<div class="mt-4">
+				{label parentId, class=>'block' /}
+				<select n:name=parentId class="select2"></select>
+			</div>
+			
+			<div class="mt-4">
+				{label description, class=>'block' /}
+				<textarea n:name=description />
+			</div>
+			
+			<div class="mt-4">
+				<input n:name="active">
+				{label active :/}
+			</div>
+			
+			<div class="mt-4">
+				{if $action == 'edit'}
+					<a n:href="Category:delete $category->getId()" class="mr-3 confirm" data-confirm="Remove category?">Remove</a>
+				{/if}
+				<input n:name=submit class="bg-blue-200 px-4">
+			</div>
+		</div>
+		
+		<div>
+		
+		</div>
+		
+	</div>
 </form>
+
+<script>
+	$('.select2').select2({
+		width: '90%'
+	});
+	$('.select2').on('select2:select', function (e) {
+		var data = e.params.data;
+		var s = document.querySelector("select.select2");
+		s.value = data.id;
+		s.dispatchEvent(new Event("change"));
+	});
+</script>

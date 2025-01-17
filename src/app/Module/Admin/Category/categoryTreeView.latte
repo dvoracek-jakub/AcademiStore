@@ -1,0 +1,22 @@
+{php $form = $form ?? null}
+
+{if $categoryTree}
+	{foreach $categoryTree as $cat}
+		{php $cat = (object) $cat}
+		
+		<div class="mt-1  ml-{($cat->level - 1) * 4}">
+			{if $form}
+				<input name="categories[]" id="catbox-{$cat->id}" type="checkbox" value="{$cat->id}" {if isset($relatedCategories) && in_array($cat->id, $relatedCategories)}checked{/if}>
+			{/if}
+	
+			{if $form}
+				<label for="catbox-{$cat->id}" class="cursor-pointer">
+					{$cat->name}
+				</label>
+			{else}
+				{$cat->name}
+			{/if}
+		</div>
+		
+	{/foreach}
+{/if}

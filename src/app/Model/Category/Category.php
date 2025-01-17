@@ -6,6 +6,8 @@ use App\Model\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
+use App\Model\Product\Product;
+
 /**
  * @ORM\Entity(repositoryClass="App\Model\Category\CategoryRepository")
  * @ORM\Table(name="`category`")
@@ -21,7 +23,7 @@ class Category extends AbstractEntity
 	protected int $id;
 
 	/**
-	 * @OneToOne(targetEntity="App\Model\Category\Category")
+	 * @OneToOne(targetEntity="\App\Model\Category\Category")
 	 * @JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
 	 */
 	private $parent;
@@ -30,6 +32,11 @@ class Category extends AbstractEntity
 	 * @ORM\Column(type="integer", name="parent_id", nullable=true, options={"default": null})
 	 */
 	private $parentId;
+
+	/**
+	 * @ORM\ManyToMany(targetEntity="\App\Model\Product\Product", mappedBy="categories")
+	 */
+	private $products;
 
 	/**
 	 * @ORM\Column(type="string")
@@ -56,6 +63,34 @@ class Category extends AbstractEntity
 		/* Default values */
 		$this->active = 1;
 		$this->parentId = null;
+	}
+
+	public function getProducts(): \Doctrine\Common\Collections\Collection
+	{
+		return $this->products;
+	}
+
+	/**
+	 * @return self
+	 */
+	public function addProduct(Product $product): self
+	{
+		if (!$this->products->contains($product)) {
+			$this->products[] = $product;
+			$product->addCategory($this);
+		}
+		return $this;
+	}
+
+	/**
+	 * @return self
+	 */
+	public function removeProduct(Product $product): self
+	{
+		if ($this->products->removeElement($product)) {
+			$product->removeCategory($this);
+		}
+		return $this;
 	}
 
 	/**

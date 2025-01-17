@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Model\Product;
 
@@ -18,8 +18,10 @@ final class ProductRepository extends AbstractRepository
 
 	private Connection $connection;
 
-	public function __construct(private \Doctrine\ORM\EntityManager $em, private \Doctrine\ORM\Mapping\ClassMetadata $class)
-	{
+	public function __construct(
+		private \Doctrine\ORM\EntityManager $em,
+		private \Doctrine\ORM\Mapping\ClassMetadata $class
+	) {
 		parent::__construct($em, $class);
 		$this->connection = $em->getConnection();
 	}
@@ -29,7 +31,16 @@ final class ProductRepository extends AbstractRepository
 		$sql = "SELECT * FROM product";
 		$stmt = $this->connection->prepare($sql);
 		return $stmt->executeQuery()->fetchAllAssociative();   // fetchAssociative() ...
+	}
 
+	/**
+	 * Removes all product's category relations
+	 */
+	public function unwireCategories(int $productId)
+	{
+		$stmt = $this->connection->prepare("DELETE FROM product_category WHERE product_id = :productId");
+		$stmt->bindValue('productId', $productId);
+		$stmt->executeStatement();
 	}
 
 }

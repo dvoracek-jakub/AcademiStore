@@ -2,7 +2,8 @@
 
 namespace App\Model\Product;
 
-use App\Model\Product\Product as ProductEntity;
+use App\Model\Product\Product;
+use App\Model\Category\Category;
 use Nette\Application\UI\Form;
 use App\Model\Product\ProductImage;
 
@@ -11,19 +12,26 @@ class ProductFacade
 
 	/** @var \App\Model\Product\ProductRepository|\Doctrine\ORM\EntityRepository */
 	private $productRepository;
+	/**
+	 * @var \App\Model\Category\Category|\Doctrine\ORM\EntityRepository
+	 */
+	private $categoryRepository;
 
-
-	public function __construct(public \App\Model\EntityManagerDecorator $em, private ProductImage $productImage)
-	{
-		$this->productRepository = $this->em->getRepository(ProductEntity::class);
+	public function __construct(
+		public \App\Model\EntityManagerDecorator $em,
+		private ProductImage $productImage
+	) {
+		$this->productRepository = $this->em->getRepository(Product::class);
+		$this->categoryRepository = $this->em->getRepository(Category::class);
 	}
 
-	public function saveProduct($data, int $id = null): ProductEntity
+	public function saveProduct($data, array $categories, int $id = null): Product
 	{
 		if ($id) {
 			$product = $this->productRepository->findOneById($id);
+			$this->productRepository->unwireCategories($id);
 		} else {
-			$product = new ProductEntity();
+			$product = new Product();
 		}
 
 		$product->setName($data->name);
@@ -41,6 +49,15 @@ class ProductFacade
 			$data->sku = $this->generateSku($data->name);
 		}
 		$product->setSku($data->sku);
+
+		if (!empty($categories)) {
+			foreach ($categories as $catId) {
+				$category = $this->categoryRepository->find($catId);
+				if ($category) {
+					$product->addCategory($category);
+				}
+			}
+		}
 
 		$this->em->persist($product);
 		$this->em->flush();
