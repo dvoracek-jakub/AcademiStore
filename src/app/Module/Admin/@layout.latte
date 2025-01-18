@@ -4,20 +4,20 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
 	<title>{ifset title}{include title|stripHtml} | {/ifset}Academi Store</title>
-	<link href="/assets/css/public.css" rel="stylesheet">  <!-- Tailwind compiled output -->
-	<link href="/assets/css/datagrid/dg-bootstrap.css" rel="stylesheet">
-	<link href="/assets/css/datagrid/datagrid.css" rel="stylesheet">
-	<script src="https://unpkg.com/naja@2/dist/Naja.min.js"></script>
 	
-	{*Select2 test*}
-	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-	
-	<script src="/assets/js/common.js"></script>
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
-	{block scripts}
-		<script src="https://cdn.tailwindcss.com"></script> <!-- Dev purpose only -->
+	{block assets}
+		<link href="/assets/css/public.css" rel="stylesheet">  <!-- Tailwind compiled output -->
+		<link href="/assets/css/datagrid/dg-bootstrap.css" rel="stylesheet">
+		<link href="/assets/css/datagrid/datagrid.css" rel="stylesheet">
+		<script src="https://unpkg.com/naja@2/dist/Naja.min.js"></script>
+		
+		{*Select2 test*}
+		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+		
+		<script src="/assets/js/common.js"></script>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
 	{/block}
 
 </head>

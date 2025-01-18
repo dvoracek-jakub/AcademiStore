@@ -1,0 +1,12 @@
+{block sidebarNav}
+	{if $categoryTree}
+		<h3 class="font-bold">Kategorie</h3>
+		{foreach $categoryTree as $cat}
+			{php $cat = (object) $cat}
+			
+			<div class="mt-1 ml-{($cat->level - 1) * 4}">
+				<a n:href="Category:detail $cat->id">{$cat->name}</a>
+			</div>
+		{/foreach}
+	{/if}
+{/block}

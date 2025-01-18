@@ -57,6 +57,7 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 	public function actionEdit(int $id)
 	{
 		$this->product = $this->productRepository->findOneById($id);
+		bdump($this->product);
 
 		$relatedCategories = [];
 		foreach ($this->product->getCategories() as $category) {
@@ -76,7 +77,7 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 		$tpl->imageName = '';
 		if (!empty($this->product->getImageName())) {
 			$tpl->imageName = $this->productImage->getImage(
-				$this->product->getImageName(),
+				$this->product,
 				$this->settings->store->product_image_medium
 			);
 		}

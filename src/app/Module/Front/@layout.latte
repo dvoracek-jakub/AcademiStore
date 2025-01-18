@@ -3,15 +3,37 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-
-	<title>{ifset title}{include title|stripHtml} | {/ifset}Nette Web</title>
+	{block assets}
+		<link href="/assets/css/public.css" rel="stylesheet">  <!-- Tailwind compiled output -->
+	{/block}
+	<title>{ifset title}{include title|stripHtml} | {/ifset}AcademiStore</title>
 </head>
 
 <body>
 	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+	
+	<main class="mx-auto max-w-[1400px] border-x-2 border-gray-200 main-content min-h-screen flex-1  md:mb-10 w-full">
+		
+		<section id="header" class="m">
+			<div class="bg-gray-100 pt-3">
+				<div class="bg-gradient-to-r p-4 shadow text-lg">
+					<h1 class="font-bold pl-2">{block sectionTitle /}asdfs</h1>
+				</div>
+			</div>
+		</section>
 
-	{include content}
-
+		<section class="grid grid-cols-[300px_1fr]">
+			<div class="pt-8 pl-6 bg-blue-50 h-full min-h-screen">
+				{include sidebarNav from 'categoryTreeNav.latte'}
+			</div>
+			<div class="ml-6 mt-8">
+				<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+				
+				{include content}
+			</div>
+		</section>
+	</main>
+	
 	{block scripts}
 	<script src="https://unpkg.com/nette-forms@3"></script>
 	{/block}

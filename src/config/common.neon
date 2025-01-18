@@ -18,12 +18,10 @@ application:
 		5xx: Front:Error:Error5xx
 	mapping: App\Module\*\**Presenter
 
-
 latte:
 	strictTypes: yes
 	strictParsing: yes
 	extensions:
-
 
 di:
 	export:

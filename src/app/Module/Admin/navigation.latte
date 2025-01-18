@@ -1,5 +1,5 @@
 {block sidebarNav}
-	<nav aria-label="alternative nav">
+	<nav aria-label="menu nav">
 		<div class="bg-gray-800 shadow-xl h-20 fixed bottom-0 mt-12 md:relative md:h-screen z-10 w-full md:w-48 content-center">
 			<div class="md:mt-12 md:w-48 md:fixed md:left-0 md:top-0 content-center md:content-start text-left justify-between">
 				<ul class="list-reset flex flex-row md:flex-col pt-3 md:py-3 px-1 md:px-2 text-center md:text-left">
@@ -9,13 +9,13 @@
 							<span class="nav-text">Dashboard</span>
 						</a>
 					</li>
-					<li class="nav-item">
+					<li class="nav-item {if $presenter->name == 'Admin:Product'}active{/if}">
 						<a n:href="product:list" class="nav-link">
 							<i class="fa fa-shopping-bag pr-0 md:pr-3"></i>
 							<span class="nav-text">Products</span>
 						</a>
 					</li>
-					<li class="nav-item">
+					<li class="nav-item {if $presenter->name == 'Admin:Category'}active{/if}">
 						<a n:href="category:list" class="nav-link">
 							<i class="fa fa-list-alt pr-0 md:pr-3"></i>
 							<span class="nav-text">Categories</span>
@@ -24,13 +24,13 @@
 					<!--li class="nav-item">
 						<a href="" class="nav-link">
 							<i class="fa fa-envelope pr-0 md:pr-3"></i>
-							<span class="nav-text">Messages</span>
+							<span class="nav-text">Customers</span>
 						</a>
 					</li>
 					<li class="nav-item">
 						<a href="" class="nav-link">
 							<i class="fas fa-chart-area pr-0 md:pr-3"></i>
-							<span class="nav-text">Analytics</span>
+							<span class="nav-text">Orders</span>
 						</a>
 					</li>
 					<li class="nav-item">
@@ -46,7 +46,7 @@
 {/block}
 
 {block dropdownNav}
-<nav aria-label="menu nav" class="bg-gray-800 pt-2 md:pt-1 pb-1 px-1 mt-0 h-auto fixed w-full z-20 top-0 text-sm ">
+<nav aria-label="dropdown nav" class="bg-gray-800 pt-2 md:pt-1 pb-1 px-1 mt-0 h-auto fixed w-full z-20 top-0 text-sm ">
 	<div class="flex flex-wrap items-center">
 		<div class="flex flex-shrink md:w-1/3 justify-center md:justify-start text-white">
 			<a href="#" aria-label="Home">

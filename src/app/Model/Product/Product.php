@@ -4,6 +4,7 @@ namespace App\Model\Product;
 
 use App\Model\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
+use App\Model\Product\ProductImage;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Product\ProductRepository")
@@ -76,7 +77,19 @@ class Product extends AbstractEntity
 	 */
 	private $createdAt;
 
-	public function __construct()
+
+	/** @var ProductImage */
+	public $productImage;
+
+	/**
+	 * Called by \App\Model\Product\ProductEventSubscriber
+	 */
+	public function setProductImage(ProductImage $productImage)
+	{
+		$this->productImage = $productImage;
+	}
+
+	public function __construct(ProductImage $productImage)
 	{
 		/* Default values */
 		$this->active = 1;
@@ -84,6 +97,11 @@ class Product extends AbstractEntity
 		$this->createdAt = new \DateTime();
 		$this->imageName = '';
 		$this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+	}
+
+	public function getImage(string $dimensions = '')
+	{
+	    return $this->productImage->getImage($this, $dimensions);
 	}
 
 	public function getCategories(): \Doctrine\Common\Collections\Collection

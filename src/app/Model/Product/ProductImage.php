@@ -15,8 +15,12 @@ class ProductImage
 		$imageResource->save($folder . pathinfo($filename, PATHINFO_FILENAME) . '_' . $dimensions . '.' . pathinfo($filename, PATHINFO_EXTENSION));
 	}
 
-	public function getImage(string $filename, string $dimensions = '')
+	public function getImage(\App\Model\Product\Product $product, string $dimensions = ''): string
 	{
+		$filename = $product->getImageName();
+		if (empty($filename)) {
+			return '';
+		}
 		$folder = $this->settings->store->product_image_path;
 		if ($dimensions !== '') {
 			return $folder . pathinfo($filename, PATHINFO_FILENAME) . '_' . $dimensions . '.' . pathinfo($filename, PATHINFO_EXTENSION);
@@ -30,11 +34,6 @@ class ProductImage
 		$folder = $_SERVER['DOCUMENT_ROOT'] . $this->settings->store->product_image_path;
 		$rawFilename = pathinfo($filename, PATHINFO_FILENAME);
 		$extension = pathinfo($filename, PATHINFO_EXTENSION);
-
-		/*echo($folder . $filename) . '<br>';
-		echo($folder . $rawFilename . '_' . $this->settings->store->product_image_medium . '.' . $extension). '<br>';
-		echo($folder . $rawFilename . '_' . $this->settings->store->product_image_small . '.' . $extension). '<br>';
-		exit;*/
 		unlink($folder . $filename);
 		unlink($folder . $rawFilename . '_' . $this->settings->store->product_image_medium . '.' . $extension);
 		unlink($folder . $rawFilename . '_' . $this->settings->store->product_image_small . '.' . $extension);

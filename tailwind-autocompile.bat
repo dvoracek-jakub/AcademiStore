@@ -1,1 +1,1 @@
-npx tailwindcss -i ./src/www/assets/css/tailwind-src.css -o ./src/www/assets/css/public.css --watch
+npx tailwindcss --postcss -i ./src/www/assets/css/tailwind-src.css -o ./src/www/assets/css/public.css --watch --verbose

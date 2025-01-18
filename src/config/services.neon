@@ -4,7 +4,7 @@ services:
 	- App\Module\Admin\Accessory\Form\ProductFormFactory
 	- App\Model\Product\ProductImage
 	- App\Core\Settings(%academi%, %debugMode%, %appDir%)
-
+	- App\Model\Product\ProductEventSubscriber
 search:
 	-	in: %appDir%
 		classes:
