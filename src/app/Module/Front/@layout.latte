@@ -12,30 +12,35 @@
 <body>
 	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
 	
-	<main class="mx-auto max-w-[1400px] border-x-2 border-gray-200 main-content min-h-screen flex-1  md:mb-10 w-full">
+	<main class="{block pageType}home{/block} mx-auto max-w-[1400px] border-x-2 border-gray-200 main-content min-h-screen flex-1  md:mb-10 w-full">
 		
 		<section id="header" class="m">
 			<div class="bg-gray-100 pt-3">
 				<div class="bg-gradient-to-r p-4 shadow text-lg">
-					<h1 class="font-bold pl-2">{block sectionTitle /}asdfs</h1>
+					<h2 class="font-bold pl-2"><a n:href="Home:default">AcademiStore</a></h2>
 				</div>
 			</div>
 		</section>
-
+		
+		{block underHeader}{/block}
+		
 		<section class="grid grid-cols-[300px_1fr]">
 			<div class="pt-8 pl-6 bg-blue-50 h-full min-h-screen">
 				{include sidebarNav from 'categoryTreeNav.latte'}
 			</div>
-			<div class="ml-6 mt-8">
-				<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
-				
-				{include content}
+			<div class="content-area">
+				{block underHeaderRight}{/block}
+				<div class="mt-8">
+					<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+					
+					{include content}
+				</div>
 			</div>
 		</section>
 	</main>
 	
 	{block scripts}
-	<script src="https://unpkg.com/nette-forms@3"></script>
+		<script src="https://unpkg.com/nette-forms@3"></script>
 	{/block}
 </body>
 </html>

@@ -30,6 +30,7 @@ class ProductFacade
 		if ($id) {
 			$product = $this->productRepository->findOneById($id);
 			$this->productRepository->unwireCategories($id);
+			$product->getCategories()->clear();
 		} else {
 			$product = new Product();
 		}

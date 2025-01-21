@@ -21,7 +21,6 @@ class Product extends AbstractEntity
 	protected int $id;
 
 	/**
-	 * Many Users have Many Teams.
 	 * @ORM\ManyToMany(targetEntity="\App\Model\Category\Category", inversedBy="products")
 	 * @ORM\JoinTable(name="product_category")
 	 */
@@ -96,7 +95,6 @@ class Product extends AbstractEntity
 		$this->stock = 0;
 		$this->createdAt = new \DateTime();
 		$this->imageName = '';
-		$this->categories = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 
 	public function getImage(string $dimensions = '')

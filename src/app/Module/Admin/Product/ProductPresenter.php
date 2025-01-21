@@ -57,7 +57,6 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 	public function actionEdit(int $id)
 	{
 		$this->product = $this->productRepository->findOneById($id);
-		bdump($this->product);
 
 		$relatedCategories = [];
 		foreach ($this->product->getCategories() as $category) {

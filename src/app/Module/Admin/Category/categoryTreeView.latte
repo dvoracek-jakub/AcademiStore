@@ -6,7 +6,7 @@
 		
 		<div class="mt-1  ml-{($cat->level - 1) * 4}">
 			{if $form}
-				<input name="categories[]" id="catbox-{$cat->id}" type="checkbox" value="{$cat->id}" {if isset($relatedCategories) && in_array($cat->id, $relatedCategories)}checked{/if}>
+				<input name="categories[]" id="catbox-{$cat->id}" type="checkbox" value="{$cat->id}" {if isset($relatedCategories) && in_array($cat->id, $relatedCategories)}checked="checked"{/if}>
 			{/if}
 	
 			{if $form}

@@ -6,6 +6,7 @@ use App\Model\Product\ProductFacade;
 use Nette\Application\UI\Form;
 use App\Model\Product\ProductImage;
 use App\Model\Product\Product;
+use function Symfony\Component\String\b;
 
 class ProductFormFactory
 {

@@ -1,0 +1,30 @@
+{block title}{$product->getName()}{/block}
+{block pageType}product-detail{/block}
+{block underHeaderRight}
+	<section id="breadcrumbs">
+		drobek
+	</section>
+{/block}
+
+{block content}
+
+
+<div class="grid grid-cols-2 gap-8">
+	<div>
+		<img src="{$product->getImage($settings->store->product_image_medium)}" alt="">
+	</div>
+	<div>
+		<h1>{$product->getName()}</h1>
+		{$product->getDescShort()}
+	</div>
+
+</div>
+
+
+
+<div>
+	{$product->getDescLong()|paragraphize|noescape}
+</div>
+
+
+

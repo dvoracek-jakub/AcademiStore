@@ -171,7 +171,6 @@ class Category extends AbstractEntity
 	public function setParentId($parentId): void
 	{
 		$this->parentId = $parentId;
-		bdump("ENT: " . $this->parentId);
 	}
 
 	/**

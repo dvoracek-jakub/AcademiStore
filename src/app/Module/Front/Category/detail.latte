@@ -1,7 +1,8 @@
 {block title}{$category->getName()}{/block}
+{block pageType}category-detail{/block}
 {block content}
 
-<h1 class="font-bold text-xl mb-8">{$category->getName()}</h1>
+<h1>{$category->getName()}</h1>
 
 {var $products = $category->getProducts()}
 {if !empty($products)}
@@ -9,7 +10,7 @@
 	<div class="grid grid-cols-4 gap-4 product-list">
 		{foreach $category->getProducts() as $product}
 			{var $image = $product->getImage($settings->store->product_image_small)}
-			<a class="item">
+			<a class="item" n:href="Product:detail $product->getId()">
 				{if !empty($image)}
 					<img src="{$image}" alt="">
 				{/if}

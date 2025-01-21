@@ -5,6 +5,11 @@ services:
 	- App\Model\Product\ProductImage
 	- App\Core\Settings(%academi%, %debugMode%, %appDir%)
 	- App\Model\Product\ProductEventSubscriber
+
+latte:
+	extensions:
+		- App\Module\Front\Accessory\LatteExtension
+
 search:
 	-	in: %appDir%
 		classes:

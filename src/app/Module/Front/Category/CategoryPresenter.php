@@ -11,9 +11,9 @@ final class CategoryPresenter extends \App\Module\Front\BasePresenter
 {
 
 
-	public function renderDetail(int $categoryId)
+	public function renderDetail(int $id)
 	{
-		$category = $this->em->getRepository(Category::class)->find($categoryId);
+		$category = $this->em->getRepository(Category::class)->find($id);
 		$this->template->category = $category;
 	}
 }
