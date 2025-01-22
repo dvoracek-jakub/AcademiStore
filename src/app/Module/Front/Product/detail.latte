@@ -15,14 +15,17 @@
 	</div>
 	<div>
 		<h1>{$product->getName()}</h1>
-		{$product->getDescShort()}
+		<div class="desc-short">
+			{$product->getDescShort()}
+		</div>
+		<div class="price">
+			{$product->getPriceHtml(true, 'xl')|noescape}
+		</div>
 	</div>
-
 </div>
 
 
-
-<div>
+<div class="desc-long">
 	{$product->getDescLong()|paragraphize|noescape}
 </div>
 

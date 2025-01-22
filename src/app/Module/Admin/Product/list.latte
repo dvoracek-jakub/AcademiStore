@@ -2,3 +2,35 @@
 {block content}
 
 {control productsDatagrid}
+
+<script>
+	$(document).ready(function () {
+		$('img').hover(
+		  function (e) {
+			  const fullImg = $('<img>')
+				.attr('src', $(this).data('full'))
+				.css({
+					position: 'absolute',
+					top: e.pageY + 10,
+					left: e.pageX + 10,
+					maxWidth: '200px',
+					maxHeight: '200px',
+					zIndex: 1000,
+					border: '1px solid #ccc',
+					background: '#fff',
+					padding: '5px',
+				})
+				.addClass('hover-preview');
+			  $('body').append(fullImg);
+		  },
+		  function () {
+			  $('.hover-preview').remove();
+		  }
+		).mousemove(function (e) {
+			$('.hover-preview').css({
+				top: e.pageY + 10,
+				left: e.pageX + 10,
+			});
+		});
+	});
+</script>

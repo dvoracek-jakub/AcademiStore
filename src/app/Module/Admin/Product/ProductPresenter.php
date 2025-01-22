@@ -72,7 +72,7 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 		$tpl->action = 'edit';
 		$tpl->categoryTree = $this->em->getRepository(Category::class)->getForTreeView();
 		$tpl->relatedCategories = $relatedCategories;
-
+		$tpl->product = $this->product;
 		$tpl->imageName = '';
 		if (!empty($this->product->getImageName())) {
 			$tpl->imageName = $this->productImage->getImage(
@@ -87,7 +87,7 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 		$form = $this->productFormFactory->createProductForm($this->action, $this->product ?? null);
 
 		$form->onSuccess[] = function(): void {
-			$this->flashMessage('Produkt byl úspěšně uložen');
+			$this->flashMessage('Produkt byl úspěšně uložen', 'success');
 
 			if ($this->action == 'create') {
 				$lastProduct = $this->productRepository->findBy([], ['id' => 'DESC'], 1);
@@ -103,6 +103,7 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 	{
 		$grid = new Datagrid($this, $name);
 		$grid->setTemplateFile(__DIR__ . '/../datagrid_override.latte');
+		$settings = $this->settings->store;
 
 		$queryBuilder = $this->productRepository->createQueryBuilder('p')
 			->select('p', 'c')
@@ -112,14 +113,21 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 		$grid->setDefaultPerPage(20);
 
 		$grid->addColumnText('id', 'ID');
-		$grid->addColumnLink('name', 'Name', 'edit')->setClass('block hover:text-pink-600')->setSortable();
 
-		$grid->addColumnText('url', 'URL', 'url_slug')->setRenderer(function($item) {
-			return '/' . $item->getUrlSlug();
+		$grid->addColumnText('image', ' ')->setRenderer(function($row) use($settings) {
+			echo '<img src="' . $row->getImage($settings->product_image_small) . '" width="25" data-full="' . $row->getImage($settings->product_image_medium)  . '">';
+		});
+
+	$grid->addColumnLink('name', 'Name', 'edit')
+		->setClass('block hover:text-pink-600')
+		->setSortable();
+
+
+		$grid->addColumnText('url', 'URL', 'url_slug')->setRenderer(function($row) {
+			return '/' . $row->getUrlSlug();
 		});
 
 		$grid->addColumnText('categories', 'Kategorie')->setRenderer(function($product) {
-
 			$cats = $product->getCategories();
 			if (!empty($cats)) {
 				$catArray = [];
@@ -141,8 +149,8 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 		$grid->addColumnNumber('price', 'Cena')->setSortable()
 			->setFilterRange('price', 'x')->setPlaceholders(['Od', 'Do']);
 
-		$grid->addColumnText('active', 'Aktivní')->setRenderer(function($item) {
-			return $item->getActive() == 1 ? '✔️' : '❌';
+		$grid->addColumnText('active', 'Aktivní')->setRenderer(function($row) {
+			return $row->getActive() == 1 ? '✔️' : '❌';
 		});
 
 		$grid->addFilterText('name', 'Name')->setPlaceholder('Hledat dle názvu');

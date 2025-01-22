@@ -36,12 +36,23 @@ class ProductFormFactory
 			->addRule($form::MinLength, 'Dlouhý popis musí mít alespoň %d znaků', 3); // 300
 
 		$form->addTextArea('descShort', 'Krátký popis', 80, 5)
+			->addRule($form::MaxLength, 'Krátku popis může obsahovat maximálně %d znaků', 400)
 			->addConditionOn($form['descShort'], $form::MaxLength, 1) // 100
 			->setRequired('Nezadal jsi dlouhý popis, zadej krátký');
 
 		$form->addFloat('price', 'Cena')
 			->setRequired('Zadejte cenu')
 			->addRule($form::Min, 'Cena musí být alespoň %d ', 1);
+
+
+		// @TODO Tyto krasavce lupnout do pole a v latte iterovat z nej - Tohle pujde pres JS
+
+		$form->addFloat('price_discount_0', 'Zlevněná cena');
+
+		$form->addDate('discount_start_date', 'Od kdy');
+		$form->addDate('discount_end_date', 'Do kdy');
+		$form->addInteger('discount_quantity', 'Od počtu kusů')->setDefaultValue(1);
+
 
 		$max_imgage_size = $this->settings->store->product_image_max_size_kb;
 		$form->addUpload('image', 'Obrázek')
@@ -69,6 +80,7 @@ class ProductFormFactory
 
 	public function formSubmitted(Form $form, $data)
 	{
+		bdump($data);
 		if ($this->action == 'create' && $this->productFacade->skuExists($data->sku)) {
 			$form->addError('Zadané SKU již existuje');
 		}

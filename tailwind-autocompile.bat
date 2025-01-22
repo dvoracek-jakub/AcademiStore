@@ -1,1 +1,2 @@
-npx tailwindcss --postcss -i ./src/www/assets/css/tailwind-src.css -o ./src/www/assets/css/public.css --watch --verbose
+start npx tailwindcss --postcss -i ./src/www/assets/css/tailwind-public.css -o ./src/www/assets/css/public.css --watch --verbose
+start npx tailwindcss --postcss -i ./src/www/assets/css/tailwind-admin.css -o ./src/www/assets/css/admin.341599157.css --watch --verbose

@@ -5,6 +5,7 @@ namespace App\Model\Product;
 use App\Model\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Model\Product\ProductImage;
+use App\Model\Product\ProductPrice;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Product\ProductRepository")
@@ -76,7 +77,6 @@ class Product extends AbstractEntity
 	 */
 	private $createdAt;
 
-
 	/** @var ProductImage */
 	public $productImage;
 
@@ -88,18 +88,36 @@ class Product extends AbstractEntity
 		$this->productImage = $productImage;
 	}
 
-	public function __construct(ProductImage $productImage)
+	/**
+	 * Called by \App\Model\Product\ProductEventSubscriber
+	 */
+	public function setProductPrice(ProductPrice $productPrice)
+	{
+		$this->productPrice = $productPrice;
+	}
+
+	public function __construct()
 	{
 		/* Default values */
 		$this->active = 1;
 		$this->stock = 0;
 		$this->createdAt = new \DateTime();
 		$this->imageName = '';
+		$this->categories = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 
 	public function getImage(string $dimensions = '')
 	{
-	    return $this->productImage->getImage($this, $dimensions);
+		return $this->productImage->getImage($this, $dimensions);
+	}
+
+	public function getPriceHtml(bool $full = false, string $size = 'md'): string
+	{
+		$price = number_format((float) $this->getPrice(), 0, ',', ' ');
+		// @TODO Měnu a formátování ber z $this->productPrice
+		$html = '<span>' . $price . ',- </span>';
+		// @TODO checknout slevy, pokud existuje, skrtnout puvodni cenu ^ a vypsat vedle zlevnenou
+		return $html;
 	}
 
 	public function getCategories(): \Doctrine\Common\Collections\Collection
@@ -112,7 +130,7 @@ class Product extends AbstractEntity
 	 */
 	public function addCategory(\App\Model\Category\Category $category): self
 	{
-		if (!$this->categories->contains($category)) {
+		if (!$this->categories || !$this->categories->contains($category)) {
 			$this->categories[] = $category;
 			$category->addProduct($this);
 		}
