@@ -1,7 +1,8 @@
 CREATE TABLE product_discount
 (
-	"id" INT NOT NULL REFERENCES product(id),
-	"price" INT,
+	"id" SERIAL PRIMARY KEY,
+	"product_id" INT NOT NULL REFERENCES product(id),
+	"price" DECIMAL(10, 2) DEFAULT NULL,
 	"start_date" DATE,
 	"end_date" DATE,
 	"from_quantity" INT DEFAULT 1,

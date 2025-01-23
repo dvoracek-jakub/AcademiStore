@@ -9,10 +9,10 @@
 	<title>{ifset title}{include title|stripHtml} | {/ifset}AcademiStore</title>
 </head>
 
-<body>
+<body class="{block pageType}home{/block}">
 	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
 	
-	<main class="{block pageType}home{/block} mx-auto max-w-[1400px] border-x-2 border-gray-200 main-content min-h-screen flex-1  md:mb-10 w-full">
+	<main class="mx-auto max-w-[1400px] border-x-2 border-gray-200 main-content min-h-screen flex-1  md:mb-10 w-full">
 		
 		<section id="header" class="m">
 			<div class="bg-gray-100 pt-3">

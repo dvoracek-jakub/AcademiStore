@@ -3,6 +3,7 @@ services:
 	- App\Module\Admin\Accessory\AdminAuthenticator
 	- App\Module\Admin\Accessory\Form\ProductFormFactory
 	- App\Model\Product\ProductImage
+	- App\Model\Product\ProductPrice
 	- App\Core\Settings(%academi%, %debugMode%, %appDir%)
 	- App\Model\Product\ProductEventSubscriber
 

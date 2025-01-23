@@ -58,6 +58,7 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 	{
 		$this->product = $this->productRepository->findOneById($id);
 
+		// Fetch products categories
 		$relatedCategories = [];
 		foreach ($this->product->getCategories() as $category) {
 			$relatedCategories[] = $category->getId();
@@ -66,7 +67,7 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 		if (!$this->product) {
 			throw new \Exception('Product not found');
 		}
-
+		
 		$tpl = $this->getTemplate();
 		$tpl->setFile(__DIR__ . '/create.latte');
 		$tpl->action = 'edit';
@@ -114,13 +115,13 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 
 		$grid->addColumnText('id', 'ID');
 
-		$grid->addColumnText('image', ' ')->setRenderer(function($row) use($settings) {
-			echo '<img src="' . $row->getImage($settings->product_image_small) . '" width="25" data-full="' . $row->getImage($settings->product_image_medium)  . '">';
+		$grid->addColumnText('image', ' ')->setRenderer(function($row) use ($settings) {
+			echo '<img src="' . $row->getImage($settings->product_image_small) . '" width="25" data-full="' . $row->getImage($settings->product_image_medium) . '">';
 		});
 
-	$grid->addColumnLink('name', 'Name', 'edit')
-		->setClass('block hover:text-pink-600')
-		->setSortable();
+		$grid->addColumnLink('name', 'Name', 'edit')
+			->setClass('block hover:text-pink-600')
+			->setSortable();
 
 
 		$grid->addColumnText('url', 'URL', 'url_slug')->setRenderer(function($row) {
@@ -136,14 +137,13 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 				}
 				echo implode(', ', $catArray);
 			}
-			return ;
+			return;
 		});
 
 		$grid->addFilterSelect('categories', '..', $this->categoryFacade->getAssociative())
 			->setAttribute('class', 'select2')
 			->setCondition(function($queryBuilder, $value) {
 				$queryBuilder->where('c.id = :catId')->setParameter('catId', $value);
-
 			});
 
 		$grid->addColumnNumber('price', 'Cena')->setSortable()

@@ -6,6 +6,7 @@ use App\Model\Product\Product;
 use App\Model\Category\Category;
 use Nette\Application\UI\Form;
 use App\Model\Product\ProductImage;
+use App\Model\Product\ProductDiscount;
 
 class ProductFacade
 {
@@ -25,12 +26,14 @@ class ProductFacade
 		$this->categoryRepository = $this->em->getRepository(Category::class);
 	}
 
-	public function saveProduct($data, array $categories, int $id = null): Product
+	public function saveProduct($data, array $categories, array $discounts, int $id = null): Product
 	{
 		if ($id) {
 			$product = $this->productRepository->findOneById($id);
 			$this->productRepository->unwireCategories($id);
+			$this->productRepository->removeDiscounts($id);
 			$product->getCategories()->clear();
+			$product->getDiscounts()->clear();
 		} else {
 			$product = new Product();
 		}
@@ -51,12 +54,32 @@ class ProductFacade
 		}
 		$product->setSku($data->sku);
 
+		// Relate categories
 		if (!empty($categories)) {
 			foreach ($categories as $catId) {
 				$category = $this->categoryRepository->find($catId);
 				if ($category) {
 					$product->addCategory($category);
 				}
+			}
+		}
+
+		// Relate discounts
+		if (!empty($discounts)) {
+			foreach ($discounts as $discount) {
+				$productDiscount = new ProductDiscount();
+				$productDiscount->setPrice($discount['price']);
+
+				if (!empty($discount['start_date'])) {
+					$productDiscount->setStartDate($discount['start_date']);
+				}
+				if (!empty($discount['end_date'])) {
+					$productDiscount->setEndDate($discount['end_date']);
+				}
+				if (!empty($discount['quantity'])) {
+					$productDiscount->setFromQuantity($discount['quantity']);
+				}
+				$product->addDiscount($productDiscount);
 			}
 		}
 

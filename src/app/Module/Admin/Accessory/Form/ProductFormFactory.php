@@ -47,12 +47,6 @@ class ProductFormFactory
 
 		// @TODO Tyto krasavce lupnout do pole a v latte iterovat z nej - Tohle pujde pres JS
 
-		$form->addFloat('price_discount_0', 'Zlevněná cena');
-
-		$form->addDate('discount_start_date', 'Od kdy');
-		$form->addDate('discount_end_date', 'Do kdy');
-		$form->addInteger('discount_quantity', 'Od počtu kusů')->setDefaultValue(1);
-
 
 		$max_imgage_size = $this->settings->store->product_image_max_size_kb;
 		$form->addUpload('image', 'Obrázek')
@@ -80,7 +74,6 @@ class ProductFormFactory
 
 	public function formSubmitted(Form $form, $data)
 	{
-		bdump($data);
 		if ($this->action == 'create' && $this->productFacade->skuExists($data->sku)) {
 			$form->addError('Zadané SKU již existuje');
 		}
@@ -94,10 +87,33 @@ class ProductFormFactory
 
 		$data->imageName = $this->processImage($form, $data->image);
 		$categories = $form->getHttpData()['categories'] ?? [];
+		$discounts = $this->getDiscountsData($form->getHttpData());
 
 		if (!$form->hasErrors()) {
-			$this->productFacade->saveProduct($data, $categories, $this->id);
+			$this->productFacade->saveProduct($data, $categories, $discounts, $this->id);
 		}
+	}
+
+	/** Formats form data into usable form */
+	private function getDiscountsData($httpData): array
+	{
+		$out = [];
+		if (!empty($httpData['discount_price'])) {
+			$i = -1;
+			foreach ($httpData['discount_price'] as $discount) {
+				$i++;
+				if ((int) $discount < 1) {
+					continue;
+				}
+				$out[] = [
+					'price' => $discount,
+					'start_date' => $httpData['discount_start_date'][$i],
+					'end_date' => $httpData['discount_end_date'][$i],
+					'quantity' => $httpData['discount_quantity'][$i]
+				];
+			}
+		}
+		return $out;
 	}
 
 	private function processImage(Form $form, \Nette\Http\FileUpload $image)

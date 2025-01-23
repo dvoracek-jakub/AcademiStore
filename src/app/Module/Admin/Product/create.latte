@@ -1,6 +1,6 @@
 {block sectionTitle}{if $action == 'create'}New Product{else}{$product->getName()}{/if}{/block}
+{block pageType}product{/block}
 {block content}
-
 
 <form n:name=productForm class="form">
 	<div class="grid grid-cols-[700px_1fr] gap-16">
@@ -34,30 +34,17 @@
 				<input n:name=price class="w-28">
 			</div>
 			
-			<div class="mt-4 border border-1 border-gray-200 pl-2 pb-2 discount-rules">
-				<div class="discount-rule-row grid grid-cols-4 ">
-				
-					
-					{*<div>
-						{label discount_start_date, class=>'block font-bold' /}
-						<input n:name=discount_start_date  class="w-/4">
-					</div>
-					
-					<div>
-						{label discount_end_date, class=>'block font-bold' /}
-						<input n:name=discount_end_date  class="w-3/4">
-					</div>
-					
-					<div>
-						{label discount_quantity, class=>'block font-bold' /}
-						<input n:name=discount_quantity  class="w-24">
-					</div>*}
-				</div>
-				
+			<div class="mt-4 {*border border-1 border-gray-200 pl-2 pb-2*} discount-rules">
+				{if count($product->getDiscounts()) > 0}
+					{foreach $product->getDiscounts() as $discount}
+						{include 'productDiscounts.latte', discount => $discount}
+					{/foreach}
+				{/if}
+				{include 'productDiscounts.latte', template => true}
 			</div>
-			<a>Přidat slevu</a>
+			<a class="add-discount-row cursor-pointer">Přidat slevu</a>
 			
-			<div class="mt-4">
+			<div class="mt-8">
 				<input n:name="active">
 				{label active :/}
 			</div>

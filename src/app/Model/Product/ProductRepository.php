@@ -43,4 +43,14 @@ final class ProductRepository extends AbstractRepository
 		$stmt->executeStatement();
 	}
 
+	/**
+	 * Removes all product's discounts
+	 */
+	public function removeDiscounts(int $productId)
+	{
+		$stmt = $this->connection->prepare("DELETE FROM product_discount WHERE product_id = :productId");
+		$stmt->bindValue('productId', $productId);
+		$stmt->executeStatement();
+	}
+
 }

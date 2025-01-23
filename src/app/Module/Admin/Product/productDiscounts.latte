@@ -1,0 +1,31 @@
+{php $discount = $discount ?? null}
+{php $template = $template ?? null}
+
+<div class="{if $template}template{/if} discount-rule-row grid grid-cols-4 mb-3 gap-4">
+	<div>
+		<label for="discount_price" class="font-bold block">Zlevněná cena</label>
+		<input type="number" name="discount_price[]" class="w-28" {if $discount}value="{$discount->getPrice()}"{/if}>
+		<span class="text-xs float-end">⚙️</span>
+	</div>
+	
+	<div>
+		<label for="discount_start_date" class="font-bold block">Začátek</label>
+		<input type="date" name="discount_start_date[]" class="w-full"
+			   {if $discount && $discount->getStartDate()}value="{$discount->getStartDate()->format('Y-m-d')}"{/if}>
+	</div>
+	
+	<div>
+		<label for="discount_end_date" class="font-bold block">Konec</label>
+		<input type="date" name="discount_end_date[]" class="w-full"
+			   {if $discount && $discount->getEndDate()}value="{$discount->getEndDate()->format('Y-m-d')}"{/if}>
+	</div>
+	
+	<div>
+		<label for="discount_quantity" class="font-bold block">Od počtu kusů</label>
+		<input type="number" name="discount_quantity[]" class="w-1/2" value="{if $discount}{$discount->getFromQuantity()}{else}1{/if}">
+		
+		{if !$template}
+			<a class="float-end cursor-pointer remove">❌</a>
+		{/if}
+	</div>
+</div>

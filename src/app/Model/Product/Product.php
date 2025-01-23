@@ -4,6 +4,8 @@ namespace App\Model\Product;
 
 use App\Model\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use App\Model\Product\ProductImage;
 use App\Model\Product\ProductPrice;
 
@@ -26,6 +28,11 @@ class Product extends AbstractEntity
 	 * @ORM\JoinTable(name="product_category")
 	 */
 	private $categories;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="App\Model\Product\ProductDiscount", mappedBy="product", cascade={"persist"})
+	 */
+	private Collection $discounts;
 
 	/**
 	 * @ORM\Column(type="string")
@@ -78,7 +85,21 @@ class Product extends AbstractEntity
 	private $createdAt;
 
 	/** @var ProductImage */
-	public $productImage;
+	private $productImage;
+
+	/** @var ProductPrice */
+	private $productPrice;
+
+	public function __construct()
+	{
+		/* Default values */
+		$this->active = 1;
+		$this->stock = 0;
+		$this->createdAt = new \DateTime();
+		$this->imageName = '';
+		$this->categories = new ArrayCollection();
+		$this->discounts = new ArrayCollection();
+	}
 
 	/**
 	 * Called by \App\Model\Product\ProductEventSubscriber
@@ -94,16 +115,7 @@ class Product extends AbstractEntity
 	public function setProductPrice(ProductPrice $productPrice)
 	{
 		$this->productPrice = $productPrice;
-	}
-
-	public function __construct()
-	{
-		/* Default values */
-		$this->active = 1;
-		$this->stock = 0;
-		$this->createdAt = new \DateTime();
-		$this->imageName = '';
-		$this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->productPrice->setProduct($this);
 	}
 
 	public function getImage(string $dimensions = '')
@@ -113,10 +125,21 @@ class Product extends AbstractEntity
 
 	public function getPriceHtml(bool $full = false, string $size = 'md'): string
 	{
-		$price = number_format((float) $this->getPrice(), 0, ',', ' ');
+		//;
+		$priceOriginal = $this->getPrice();
+		$priceWithDiscounts = $this->productPrice->getPriceWithDiscounts();
+
 		// @TODO Měnu a formátování ber z $this->productPrice
-		$html = '<span>' . $price . ',- </span>';
-		// @TODO checknout slevy, pokud existuje, skrtnout puvodni cenu ^ a vypsat vedle zlevnenou
+
+		$priceClass = 'text-xl';
+		$discountHtml = '';
+		if ($priceWithDiscounts < $priceOriginal) {
+			$priceClass = 'line-through text-base';
+			$discountHtml = '<span class="price-discounted ml-4 text-xl">' . $this->productPrice->format($priceWithDiscounts) . '</span>';
+		}
+		$html = '<span class="' . $priceClass . ' price-original">' . $this->productPrice->format($priceOriginal) . '</span>';
+		$html .= $discountHtml;
+
 		return $html;
 	}
 
@@ -125,27 +148,45 @@ class Product extends AbstractEntity
 		return $this->categories;
 	}
 
-	/**
-	 * @return self
-	 */
-	public function addCategory(\App\Model\Category\Category $category): self
+	public function addCategory(\App\Model\Category\Category $category)
 	{
 		if (!$this->categories || !$this->categories->contains($category)) {
 			$this->categories[] = $category;
 			$category->addProduct($this);
 		}
-		return $this;
 	}
 
-	/**
-	 * @return self
-	 */
-	public function removeCategory(Category $category): self
+	public function removeCategory(Category $category)
 	{
 		if ($this->categories->removeElement($category)) {
 			$category->removeProduct($this);
 		}
-		return $this;
+	}
+
+	/**
+	 * @return Collection|ProductDiscount[]
+	 */
+	public function getDiscounts(): Collection
+	{
+		return $this->discounts;
+	}
+
+	public function addDiscount(ProductDiscount $discount)
+	{
+		if (!$this->discounts->contains($discount)) {
+			$this->discounts[] = $discount;
+			$discount->setProduct($this);
+		}
+	}
+
+	public function removeDiscount(ProductDiscount $discount)
+	{
+		if ($this->discounts->contains($discount)) {
+			$this->discounts->removeElement($discount);
+			if ($discount->getProduct() === $this) {
+				$discount->setProduct(null);
+			}
+		}
 	}
 
 	/**
@@ -229,6 +270,8 @@ class Product extends AbstractEntity
 	}
 
 	/**
+	 * Gets raw price without discounts applied
+	 *
 	 * @return mixed
 	 */
 	public function getPrice()
