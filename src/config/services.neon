@@ -1,6 +1,6 @@
 services:
 	- App\Core\RouterFactory::createRouter
-	- App\Module\Admin\Accessory\AdminAuthenticator
+	- App\Core\Authenticator\AdminAuthenticator
 	- App\Module\Admin\Accessory\Form\ProductFormFactory
 	- App\Model\Product\ProductImage
 	- App\Model\Product\ProductPrice

@@ -18,8 +18,13 @@
 		<div class="desc-short">
 			{$product->getDescShort()}
 		</div>
-		<div class="price mt-3 font-bold">
-			{$product->getPriceHtml(true, 'xl')|noescape}
+		<div class="mt-8 price mt-3 font-bold grid grid-cols-2">
+			<div>
+				{$product->getPriceHtml(false, 'base')|noescape}
+			</div>
+			<div>
+				<a class="button-xl button-pink button-cart">Do košíku</a>
+			</div>
 		</div>
 	</div>
 </div>

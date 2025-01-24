@@ -32,6 +32,19 @@
 	.infobox {
 		@apply bg-gradient-to-b border-b-4 rounded-lg shadow-xl p-5;
 	}
+	.button-xl {
+		@apply text-xl px-8 py-2 border border-2 rounded-lg cursor-pointer font-semibold;
+
+	}
+	.button-pink {
+		@apply bg-pink-800 text-pink-50 hover:bg-pink-700 hover:text-white !important;
+	}
+	.button-cart::before {
+		content: "🛒 ";
+	}
+	.button-cart {
+		padding-left: 25px;
+	}
 }
 
 

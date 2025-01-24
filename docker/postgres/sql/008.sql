@@ -1,0 +1,9 @@
+CREATE TABLE customer (
+	"id" SERIAL PRIMARY KEY,
+	"email" VARCHAR NOT NULL,
+	"password" VARCHAR NOT NULL,
+	"created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	"active" BOOL DEFAULT FALSE
+);
+
+UPDATE system.db SET version = 8;

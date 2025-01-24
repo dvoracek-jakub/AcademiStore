@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\Admin\Accessory;
+namespace App\Core\Authenticator;
 
 use Nette;
 use Nette\Security\SimpleIdentity;

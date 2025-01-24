@@ -655,6 +655,41 @@ video {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
+.button-xl {
+  cursor: pointer;
+  border-radius: 0.5rem;
+  border-width: 2px;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+}
+
+.button-pink {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(157 23 77 / var(--tw-bg-opacity, 1)) !important;
+  --tw-text-opacity: 1 !important;
+  color: rgb(253 242 248 / var(--tw-text-opacity, 1)) !important;
+}
+
+.button-pink:hover {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(190 24 93 / var(--tw-bg-opacity, 1)) !important;
+  --tw-text-opacity: 1 !important;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1)) !important;
+}
+
+.button-cart::before {
+  content: "🛒 ";
+}
+
+.button-cart {
+  padding-left: 25px;
+}
+
 .pointer-events-none {
   pointer-events: none;
 }
@@ -769,16 +804,16 @@ video {
   margin-top: 0.5rem;
 }
 
+.mt-3 {
+  margin-top: 0.75rem;
+}
+
 .mt-4 {
   margin-top: 1rem;
 }
 
 .mt-8 {
   margin-top: 2rem;
-}
-
-.mt-3 {
-  margin-top: 0.75rem;
 }
 
 .block {

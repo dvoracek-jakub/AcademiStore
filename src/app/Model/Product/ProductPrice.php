@@ -14,35 +14,37 @@ class ProductPrice
 
 	public function setProduct(Product $product)
 	{
-	    $this->product = $product;
+		$this->product = $product;
 	}
 
 	/**
 	 * Gets price with discounts applied
 	 */
-	public function getPriceWithDiscounts(int $qty = 1)
+	public function getPriceWithDiscounts(int $orderedQty = 1)
 	{
 		$lowestPrice = $this->product->getPrice();
-
-		// Faking
-		$price = round($price * 0.9);
 
 		$discounts = $this->product->getDiscounts();
 		if (count($discounts) > 0) {
 			foreach ($discounts as $discount) {
+				$isActive = true;
+				$todayDate = new \DateTime();
 
-				// Is active by date?
-				// @TOdo tady pořešit všechny 4 možnosti:
+				if ($discount->getStartDate() && $discount->getStartDate() > $todayDate) {
+					$isActive = false;
+				}
 
-				// No date
-				// Only FROM
-				// Only TO
-				// Between FROM and TO
+				if ($discount->getEndDate() && $discount->getEndDate() < $todayDate) {
+					$isActive = false;
+				}
 
+				// Is active by quantity in the cart?
+				if ($orderedQty > 1 && $orderedQty < $discount->getFromQuantity()) {
+					$isActive = false;
+				}
 
-				// Is active by quantity?
-				if ($qty > 1) {
-
+				if ($isActive && $discount->getPrice() < $lowestPrice) {
+					$lowestPrice = $discount->getPrice();
 				}
 			}
 		}
@@ -53,4 +55,5 @@ class ProductPrice
 	{
 		return number_format((float) $price, 0, ',', ' ') . ',- Kč';
 	}
+
 }

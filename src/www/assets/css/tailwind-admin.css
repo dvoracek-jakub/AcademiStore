@@ -37,7 +37,7 @@
 	}
 
 	.button-xl {
-		@apply text-xl px-8 py-2;
+		@apply text-xl px-8 py-2 border border-2 rounded cursor-pointer;
 		text-transform: uppercase;
 	}
 }

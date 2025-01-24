@@ -21,6 +21,15 @@ class BasePresenter extends Nette\Application\UI\Presenter
 	/** @var ProductImage */
 	private $productImage;
 
+	public function startup()
+	{
+		parent::startup();
+		if (!$this->getUser()->isLoggedIn()) {
+			die("<br>\n" . time() . ' [' . __LINE__ . "] ");
+			$this->redirect('Sign:in');
+		}
+	}
+
 	public function injectCategoryFacade(CategoryFacade $categoryFacade)
 	{
 		$this->categoryFacade = $categoryFacade;
@@ -40,11 +49,6 @@ class BasePresenter extends Nette\Application\UI\Presenter
 		protected \App\Model\EntityManagerDecorator $em,
 		protected \App\Core\Settings $settings
 	) {}
-
-	public function startup()
-	{
-		parent::startup();
-	}
 
 	public function beforeRender()
 	{

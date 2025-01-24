@@ -123,19 +123,17 @@ class Product extends AbstractEntity
 		return $this->productImage->getImage($this, $dimensions);
 	}
 
-	public function getPriceHtml(bool $full = false, string $size = 'md'): string
+	public function getPriceHtml(bool $full = false, string $size = 'xl'): string
 	{
-		//;
 		$priceOriginal = $this->getPrice();
 		$priceWithDiscounts = $this->productPrice->getPriceWithDiscounts();
 
-		// @TODO Měnu a formátování ber z $this->productPrice
-
-		$priceClass = 'text-xl';
+		// @ TODO zakomponuj $full = false. tedy nezobrazovat original price
+		$priceClass = 'text-' . $size;
 		$discountHtml = '';
 		if ($priceWithDiscounts < $priceOriginal) {
-			$priceClass = 'line-through text-base';
-			$discountHtml = '<span class="price-discounted ml-4 text-xl">' . $this->productPrice->format($priceWithDiscounts) . '</span>';
+			$priceClass = 'line-through text-sm';
+			$discountHtml = '<span class="price-discounted ml-4 text-' . $size . '">' . $this->productPrice->format($priceWithDiscounts) . '</span>';
 		}
 		$html = '<span class="' . $priceClass . ' price-original">' . $this->productPrice->format($priceOriginal) . '</span>';
 		$html .= $discountHtml;
