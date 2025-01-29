@@ -5,12 +5,13 @@
 	<meta name="viewport" content="width=device-width">
 	{block assets}
 		<link href="/assets/css/public.css" rel="stylesheet">  <!-- Tailwind compiled output -->
+		<script src="https://unpkg.com/naja@2/dist/Naja.min.js"></script>
 	{/block}
 	<title>{ifset title}{include title|stripHtml} | {/ifset}AcademiStore</title>
 </head>
 
 <body class="{block pageType}home{/block}">
-	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+
 	
 	<main class="mx-auto max-w-[1400px] border-x-2 border-gray-200 main-content min-h-screen flex-1  md:mb-10 w-full">
 		
@@ -42,6 +43,14 @@
 	
 	{block scripts}
 		<script src="https://unpkg.com/nette-forms@3"></script>
+	{/block}
+	
+	{block lazyLoadScripts}
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				naja.initialize();
+			});
+		</script>
 	{/block}
 </body>
 </html>

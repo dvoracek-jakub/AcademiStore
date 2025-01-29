@@ -20,7 +20,7 @@ class BasePresenter extends Nette\Application\UI\Presenter
 	public function startup()
 	{
 		parent::startup();
-		if (!$this->getUser()->isLoggedIn()) {
+		if (!$this->getUser()->isLoggedIn() || !$this->getUser()->isInRole('admin')) {
 			$this->redirect('Sign:in');
 		}
 	}

@@ -1,5 +1,11 @@
 
 <div style="float: right">
-	<a href="" class="pr-2">🛒</a>
-	<a n:href="Customer:login">Přihlásit</a>
+	<a n:href="Cart:detail" class="pr-2">🛒</a>
+	
+	{if $user->isLoggedIn()}
+		👤
+		<a n:href="Sign:out">Odhlásit</a>
+	{else}
+		<a n:href="Sign:in">Přihlásit</a>
+	{/if}
 </div>

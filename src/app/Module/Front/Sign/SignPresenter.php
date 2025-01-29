@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Admin\Sign;
+namespace App\Module\Front\Sign;
 
-use App\Module\Admin\Accessory\FormFactory;
+use App\Module\Front\Accessory\FormFactory;
 use App\UI\Admin\Sign\Nette;
 use Nette\Application\UI\Form;
-use App\Core\Authenticator\AdminAuthenticator;
+use App\Core\Authenticator\CustomerAuthenticator;
 
 final class SignPresenter extends \Nette\Application\UI\Presenter
 {
 
 	public function __construct(
 		private FormFactory $formFactory,
-		private AdminAuthenticator $authenticator
+		private CustomerAuthenticator $authenticator
 	) {}
 
 	/**
@@ -37,7 +37,7 @@ final class SignPresenter extends \Nette\Application\UI\Presenter
 			try {
 				$identity = $this->authenticator->authenticate($data->username, $data->password);
 				$this->getUser()->login($identity);
-				$this->redirect('Dashboard:');
+				$this->redirect('Home:');
 			} catch (\Nette\Security\AuthenticationException $e) {
 				$form->addError($e->getMessage());
 			}
@@ -53,7 +53,7 @@ final class SignPresenter extends \Nette\Application\UI\Presenter
 	{
 		$this->flashMessage('Successfully Logged out.');
 		$this->getUser()->logout();
-		$this->redirect('sign:in');
+		$this->redirect('Home:');
 	}
 
 }

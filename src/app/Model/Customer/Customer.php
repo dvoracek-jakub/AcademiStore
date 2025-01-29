@@ -44,6 +44,16 @@ class Customer extends AbstractEntity
 	private $active;
 
 	/**
+	 * @ORM\OneToMany(targetEntity="App\Model\Cart\Cart", mappedBy="customer", cascade={"persist"})
+	 */
+	private Collection $carts;
+
+	public function __construct()
+	{
+		$this->discounts = new ArrayCollection();
+	}
+
+	/**
 	 * @return mixed
 	 */
 	public function getEmail()
@@ -105,6 +115,32 @@ class Customer extends AbstractEntity
 	public function setActive($active): void
 	{
 		$this->active = $active;
+	}
+
+	/**
+	 * @return Collection|Cart[]
+	 */
+	public function getCarts(): Collection
+	{
+		return $this->carts;
+	}
+
+	public function createCart(Cart $cart)
+	{
+		if (!$this->carts->contains($cart)) {
+			$this->carts[] = $cart;
+			$cart->setCustomer($this);
+		}
+	}
+
+	public function removeCart(Cart $cart)
+	{
+		if ($this->carts->contains($cart)) {
+			$this->carts->removeElement($cart);
+			if ($cart->getCustomer() === $this) {
+				$cart->setCustomer(null);
+			}
+		}
 	}
 
 }

@@ -24,10 +24,9 @@ class BasePresenter extends Nette\Application\UI\Presenter
 	public function startup()
 	{
 		parent::startup();
-		if (!$this->getUser()->isLoggedIn()) {
-			die("<br>\n" . time() . ' [' . __LINE__ . "] ");
+		/*if (!$this->getUser()->isLoggedIn() || !$this->getUser()->isInRole('customer')) {
 			$this->redirect('Sign:in');
-		}
+		}*/
 	}
 
 	public function injectCategoryFacade(CategoryFacade $categoryFacade)
@@ -47,14 +46,22 @@ class BasePresenter extends Nette\Application\UI\Presenter
 
 	public function __construct(
 		protected \App\Model\EntityManagerDecorator $em,
-		protected \App\Core\Settings $settings
+		protected \App\Core\Settings $settings,
+		protected \Nette\Http\Session $session
 	) {}
 
 	public function beforeRender()
 	{
 		$tpl = $this->getTemplate();
 		$tpl->settings = $this->settings;
+
 		$tpl->categoryTree = $this->em->getRepository(Category::class)->getForTreeView();
 	}
 
+	public function shutdown(\Nette\Application\Response $response): void
+	{
+		$request = $this->getHttpRequest();
+		$system = $this->session->getSection('system');
+		$system->lastVisitedPage = $request->getUrl();
+	}
 }
