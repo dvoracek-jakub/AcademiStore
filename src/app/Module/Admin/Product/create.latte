@@ -34,15 +34,17 @@
 				<input n:name=price class="w-28">
 			</div>
 			
-			<div class="mt-4 {*border border-1 border-gray-200 pl-2 pb-2*} discount-rules">
-				{if count($product->getDiscounts()) > 0}
-					{foreach $product->getDiscounts() as $discount}
-						{include 'productDiscounts.latte', discount => $discount}
-					{/foreach}
-				{/if}
-				{include 'productDiscounts.latte', template => true}
-			</div>
-			<a class="add-discount-row cursor-pointer">Přidat slevu</a>
+			{if $action == 'edit'}
+				<div class="mt-4 {*border border-1 border-gray-200 pl-2 pb-2*} discount-rules">
+					{if count($product->getDiscounts()) > 0}
+						{foreach $product->getDiscounts() as $discount}
+							{include 'productDiscounts.latte', discount => $discount}
+						{/foreach}
+					{/if}
+					{include 'productDiscounts.latte', template => true}
+				</div>
+				<a class="add-discount-row cursor-pointer">Přidat slevu</a>
+			{/if}
 			
 			<div class="mt-8">
 				<input n:name="active">

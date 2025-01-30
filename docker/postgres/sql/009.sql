@@ -10,9 +10,9 @@ CREATE TABLE cart (
 );
 
 CREATE TABLE cart_item (
-    "id" SERIAL PRIMARY KEY,
-    "cart_id" INT REFERENCES cart(id) ON DELETE CASCADE,
-    "product_id" INT REFERENCES product(id) ON DELETE CASCADE,
+    "id" BIGSERIAL PRIMARY KEY,
+    "cart_id" INT NOT NULL REFERENCES cart(id) ON DELETE CASCADE,
+    "product_id" INT NOT NULL REFERENCES product(id) ON DELETE CASCADE,
     "quantity" INT NOT NULL CHECK (quantity > 0),
     "price" DECIMAL(10, 2) DEFAULT NULL
 );

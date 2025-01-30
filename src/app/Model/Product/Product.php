@@ -2,12 +2,13 @@
 
 namespace App\Model\Product;
 
+use App\Model\Category\Category;
+use App\Model\Product\ProductImage;
+use App\Model\Product\ProductPrice;
 use App\Model\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use App\Model\Product\ProductImage;
-use App\Model\Product\ProductPrice;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Product\ProductRepository")
@@ -123,6 +124,11 @@ class Product extends AbstractEntity
 		return $this->productImage->getImage($this, $dimensions);
 	}
 
+	public function getPriceWithDiscounts()
+	{
+		return $this->productPrice->getPriceWithDiscounts();
+	}
+
 	public function getPriceHtml(bool $full = false, string $size = 'xl'): string
 	{
 		$priceOriginal = $this->getPrice();
@@ -133,7 +139,8 @@ class Product extends AbstractEntity
 		$discountHtml = '';
 		if ($priceWithDiscounts < $priceOriginal) {
 			$priceClass = 'line-through text-sm';
-			$discountHtml = '<span class="price-discounted ml-4 text-' . $size . '">' . $this->productPrice->format($priceWithDiscounts) . '</span>';
+			$discountHtml = '<span class="price-discounted ml-4 text-' . $size . '">'
+				. $this->productPrice->format($priceWithDiscounts) . '</span>';
 		}
 		$html = '<span class="' . $priceClass . ' price-original">' . $this->productPrice->format($priceOriginal) . '</span>';
 		$html .= $discountHtml;

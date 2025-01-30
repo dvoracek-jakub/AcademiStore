@@ -53,6 +53,7 @@ class ProductPrice
 
 	public function format($price)
 	{
+		// CZ
 		return number_format((float) $price, 0, ',', ' ') . ',- Kč';
 	}
 

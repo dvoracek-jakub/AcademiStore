@@ -3,7 +3,9 @@
 declare(strict_types=1);
 namespace App\Module\Front;
 
+use App\Model\Customer\Customer;
 use App\Model\Category\Category;
+use App\Model\Cart\CartFacade;
 use App\Model\Category\CategoryFacade;
 use App\Model\Product\ProductFacade;
 use App\Model\Product\ProductImage;
@@ -13,25 +15,42 @@ class BasePresenter extends Nette\Application\UI\Presenter
 {
 
 	/** @var CategoryFacade */
-	protected $categoryFacade;
+	protected CategoryFacade $categoryFacade;
+
+	/** @var CartFacade */
+	protected CartFacade $cartFacade;
 
 	/** @var ProductFacade */
-	protected $productFacade;
+	protected ProductFacade $productFacade;
 
 	/** @var ProductImage */
-	private $productImage;
+	private ProductImage $productImage;
+
+	/** @var Customer */
+	protected ?Customer $customer;
 
 	public function startup()
 	{
 		parent::startup();
-		/*if (!$this->getUser()->isLoggedIn() || !$this->getUser()->isInRole('customer')) {
-			$this->redirect('Sign:in');
-		}*/
+		$this->customer = null;
+		if ($this->getUser()->isLoggedIn() && $this->getUser()->isInRole('customer')) {
+			$this->customer = $this->em->getRepository(Customer::class)->find($this->getUser()->getId());
+			if (!$this->customer || empty($this->customer)) {
+				$this->flashMessage('Došlo k chybě s přihlašováním.');
+				$this->getUser()->logout();
+				$this->redirect('Home:');
+			}
+		}
 	}
 
 	public function injectCategoryFacade(CategoryFacade $categoryFacade)
 	{
 		$this->categoryFacade = $categoryFacade;
+	}
+
+	public function injectCartFacade(CartFacade $cartFacade)
+	{
+		$this->cartFacade = $cartFacade;
 	}
 
 	public function injectProductFacade(ProductFacade $productFacade)
@@ -64,4 +83,5 @@ class BasePresenter extends Nette\Application\UI\Presenter
 		$system = $this->session->getSection('system');
 		$system->lastVisitedPage = $request->getUrl();
 	}
+
 }

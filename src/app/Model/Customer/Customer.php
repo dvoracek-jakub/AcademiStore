@@ -125,7 +125,7 @@ class Customer extends AbstractEntity
 		return $this->carts;
 	}
 
-	public function createCart(Cart $cart)
+	public function createCart($cart)
 	{
 		if (!$this->carts->contains($cart)) {
 			$this->carts[] = $cart;
@@ -133,7 +133,7 @@ class Customer extends AbstractEntity
 		}
 	}
 
-	public function removeCart(Cart $cart)
+	public function removeCart($cart)
 	{
 		if ($this->carts->contains($cart)) {
 			$this->carts->removeElement($cart);

@@ -1,3 +1,60 @@
 {block content}
 
-kart detaiol
+<h1>Košík</h1>
+
+{if $cart->getItems()}
+
+	{snippet cartItems}
+		<table class="w-full border-collapse border border-gray-300 text-left">
+			<thead class="bg-gray-50">
+			<tr>
+				<th class="p-3 border border-gray-300 w-1/2">Produkt</th>
+				<th class="p-3 border border-gray-300">Cena</th>
+				<th class="p-3 border border-gray-300">Množství</th>
+				<th class="p-3 border border-gray-300 w-1/12">Odstranit</th>
+			</tr>
+			</thead>
+			<tbody class="divide-y divide-gray-200">
+			{foreach $cart->getItems() as $item}
+				{var $image = $item->getProduct()->getImage($settings->store->product_image_small)}
+				<tr>
+					<td class="p-3 border border-gray-200">
+						<a n:href="Product:detail $item->getProduct()->getId()" target="_blank">
+							{if !empty($image)}
+								<img src="{$image}" alt="" class="float-left w-8 mr-3">
+							{/if}
+							{$item->getProduct()->getName()}
+						</a>
+					</td>
+					<td class="p-3 border border-gray-200">
+						{$item->getPrice() * $item->getQuantity()|formatPrice}
+						{if $item->getQuantity() > 1}
+							<span class="text-gray-600 text-sm pl-2">
+								({$item->getPrice()|formatPrice} za 1 ks)
+							</span>
+						{/if}
+					</td>
+					<td class="p-3 border border-gray-200">
+						{$item->getQuantity()}
+					</td>
+					<td class="p-3 border border-gray-200 text-center">
+						<a n:href="removeItem! $item->getId()" class="ajax">❌</a>
+					</td>
+				</tr>
+			{/foreach}
+			</tbody>
+			<tfoot>
+				<td class="text-lg font-bold pl-3">
+					Celkem
+				</td>
+				<td class="pl-3">
+					<div class="text-lg font-bold">
+						{$cartTotals['withTax']|formatPrice}
+					</div>
+					{$cartTotals['withoutTax']|formatPrice} bez DPH
+				</td>
+				<td colspan="2"></td>
+			</tfoot>
+		</table>
+	{/snippet}
+{/if}
