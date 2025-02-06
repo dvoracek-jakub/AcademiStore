@@ -65,11 +65,19 @@
 		}
 	}
 }
+.cart-list {
+	input {
+		border: 1px solid #e1cccc;
+	}
+}
 main {
 	.content-area {
 		@apply px-10;
 		h1 {
 			@apply text-2xl mb-3
+		}
+		h2 {
+			@apply text-xl mb-3
 		}
 	}
 }

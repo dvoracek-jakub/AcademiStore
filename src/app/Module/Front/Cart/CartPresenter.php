@@ -13,25 +13,37 @@ final class CartPresenter extends \App\Module\Front\BasePresenter
 	public function startup()
 	{
 		parent::startup();
+		$this->cartFacade->setCustomer($this->customer);
 	}
 
 	public function actionDetail()
 	{
-		$cart = $this->cartFacade->getCurrentCart(false, $this->customer);
+		$this->em->clear();
+		$cart = $this->cartFacade->getCurrentCart();
 
 		if (!$cart) {
 			$this->flashMessage('V košíku nejsou žádné položky');
 			$this->redirect('Home:');
 		}
+
 		bdump($cart, 'Current Cart');
 		$this->template->cart = $cart;
 		$this->template->cartTotals = $this->cartFacade->getCartTotals($cart);
 	}
 
+	public function handleUpdateQuantity()
+	{
+		$itemId = (int) $_POST['itemId'];
+		$quantity = (int) $_POST['quantity'];
+		$this->cartFacade->updateItemQuantity($itemId, $quantity);
+
+	    $this->redrawControl('cartItems');
+	}
+
 	public function actionAdd(int $productId, int $quantity = 1)
 	{
 		/** @var \App\Model\Cart\Cart */
-		$cart = $this->cartFacade->getCurrentCart(true, $this->customer);
+		$cart = $this->cartFacade->getCurrentCart(true);
 
 		$product = $this->em->getRepository(Product::class)->find($productId);
 		if (!$product) {
