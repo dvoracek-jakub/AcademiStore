@@ -104,7 +104,7 @@ class CartFacade
 	{
 		$overallPrice = 0;
 
-		//@TODO totals, tady ale stare hodnoty.. pritom radky v latte vypisuje katualni
+		//@TODO totals, tady ale stare hodnoty.. pritom radky v latte vypisuje aktualni
 		foreach ($cart->getItems() as $item) {
 			bdump($item->getQuantity(),  "QTY for ITEM: " . $item->getProduct()->getName());
 			$overallPrice += $item->getPrice() * $item->getQuantity();

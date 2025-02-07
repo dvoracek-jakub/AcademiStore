@@ -34,7 +34,6 @@
 	}
 	.button-xl {
 		@apply text-xl px-8 py-2 border border-2 rounded-lg cursor-pointer font-semibold;
-
 	}
 	.button-pink {
 		@apply bg-pink-800 text-pink-50 hover:bg-pink-700 hover:text-white !important;
@@ -45,9 +44,10 @@
 	.button-cart {
 		padding-left: 25px;
 	}
+	.comment {
+		@apply text-gray-500 text-sm;
+	}
 }
-
-
 
 
 /* Store */
@@ -88,6 +88,17 @@ main.category-detail {
 	.content-area {
 		h3 {
 			@apply text-base mb-3
+		}
+	}
+}
+
+form {
+	.radios {
+		label {
+			cursor: pointer;
+		}
+		input[type="radio"] {
+			margin-right: 5px;
 		}
 	}
 }

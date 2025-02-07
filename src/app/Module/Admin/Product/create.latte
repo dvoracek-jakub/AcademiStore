@@ -1,4 +1,10 @@
-{block sectionTitle}{if $action == 'create'}New Product{else}{$product->getName()}{/if}{/block}
+{block sectionTitle}
+	{if $action == 'create'}
+		New Product
+	{else}
+		{$product->getName()}
+	{/if}
+{/block}
 {block pageType}product{/block}
 {block content}
 

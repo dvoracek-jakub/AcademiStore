@@ -18,7 +18,6 @@ final class CartPresenter extends \App\Module\Front\BasePresenter
 
 	public function actionDetail()
 	{
-		$this->em->clear();
 		$cart = $this->cartFacade->getCurrentCart();
 
 		if (!$cart) {
@@ -28,6 +27,7 @@ final class CartPresenter extends \App\Module\Front\BasePresenter
 
 		bdump($cart, 'Current Cart');
 		$this->template->cart = $cart;
+		$this->template->edit = true;
 		$this->template->cartTotals = $this->cartFacade->getCartTotals($cart);
 	}
 

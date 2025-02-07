@@ -1,9 +1,12 @@
+{php $edit = $edit ?? null}
 {block content}
 
 <h1>Košík</h1>
 
-{if $cart->getItems()}
+{block cartItems}
 
+{if $cart->getItems()}
+	
 	{snippet cartItems}
 		<table class="cart-list w-full border-collapse border border-gray-300 text-left">
 			<thead class="bg-gray-50">
@@ -11,7 +14,9 @@
 				<th class="p-3 border border-gray-300 w-1/2">Produkt</th>
 				<th class="p-3 border border-gray-300">Cena</th>
 				<th class="p-3 border border-gray-300 w-1/12">Množství</th>
-				<th class="p-3 border border-gray-300 w-1/12">Odstranit</th>
+				{if $edit}
+					<th class="p-3 border border-gray-300 w-1/12">Odstranit</th>
+				{/if}
 			</tr>
 			</thead>
 			<tbody class="divide-y divide-gray-200">
@@ -35,55 +40,65 @@
 						{/if}
 					</td>
 					<td class="p-3 border border-gray-200">
-						<input name="item-{$item->getId()}" value="{$item->getQuantity()}" class="w-2/3 text-center mx-auto block">
+						{if $edit}
+							<input name="item-{$item->getId()}" value="{$item->getQuantity()}" class="w-2/3 text-center mx-auto block">
+						{else}
+							{$item->getQuantity()}
+						{/if}
 					</td>
-					<td class="p-3 border border-gray-200 text-center">
-						<a n:href="removeItem! $item->getId()" class="ajax">❌</a>
-					</td>
+					{if $edit}
+						<td class="p-3 border border-gray-200 text-center">
+							<a n:href="removeItem! $item->getId()" class="ajax">❌</a>
+						</td>
+					{/if}
 				</tr>
 			{/foreach}
 			</tbody>
-			<tfoot>
-				<td class="text-lg font-bold pl-3">
-					Celkem
-				</td>
-				<td class="pl-3">
-					<div class="text-lg font-bold">
-						{$cartTotals['withTax']|formatPrice}
-					</div>
-					{$cartTotals['withoutTax']|formatPrice} bez DPH
-				</td>
-				<td colspan="2" class="text-center">
-					<a class="button-xl button-pink" n:href="Checkout:overview">
-						Objednat
-					</a>
-				</td>
-			</tfoot>
+			{if $edit}
+				<tfoot>
+					<td class="text-lg font-bold pl-3">
+						Celkem
+					</td>
+					<td class="pl-3">
+						<div class="text-lg font-bold">
+							{$cartTotals['withTax']|formatPrice}
+						</div>
+						{$cartTotals['withoutTax']|formatPrice} bez DPH
+					</td>
+					<td colspan="2" class="text-center">
+						<a class="button-xl button-pink" n:href="Checkout:overview">
+							Objednat
+						</a>
+					</td>
+				</tfoot>
+			{/if}
 		</table>
-		<script>
-			$(document).ready(function () {
-				let itemQtyTimeout;
-				$("input[name^='item-']").on("keyup", function () {
-					clearTimeout(itemQtyTimeout);
-					let $input = $(this);
-
-					itemQtyTimeout = setTimeout(function () {
-						let itemId = $input.attr("name").split('-')[1];
-						let quantity = $input.val();
-
-						$.ajax({
-							type: "POST",
-							url: {link updateQuantity!},
-							data: { itemId: itemId, quantity: quantity }
-						}).done(function(response) {
-							$('#snippet--cartItems').html(response.snippets["snippet--cartItems"]);
-							// @TODO z nejakyho duvodu nerefreshuje totals. Vydebugovat!
-							location.reload();
-						});
-					}, 1000);
+		{if $edit}
+			<script>
+				$(document).ready(function () {
+					let itemQtyTimeout;
+					$("input[name^='item-']").on("keyup", function () {
+						clearTimeout(itemQtyTimeout);
+						let $input = $(this);
+	
+						itemQtyTimeout = setTimeout(function () {
+							let itemId = $input.attr("name").split('-')[1];
+							let quantity = $input.val();
+	
+							$.ajax({
+								type: "POST",
+								url: {link updateQuantity!},
+								data: { itemId: itemId, quantity: quantity }
+							}).done(function(response) {
+								$('#snippet--cartItems').html(response.snippets["snippet--cartItems"]);
+								// @TODO z nejakyho duvodu nerefreshuje totals. Vydebugovat!
+								location.reload();
+							});
+						}, 1000);
+					});
 				});
-			});
-		</script>
+			</script>
+		{/if}
 	{/snippet}
 {/if}
-
+{/block}

@@ -9,7 +9,7 @@ module.exports = {
 	  'hover:text-pink-600',
 	  'w-24',
 	  'ml-2 ml-4 ml-8 ml-12 ml-16 ml-20',
-	  'line-through'
+	  'line-through comment'
 	],
     theme: {
         extend: {},

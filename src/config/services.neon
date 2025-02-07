@@ -1,6 +1,7 @@
 services:
 	- App\Core\RouterFactory::createRouter
 	- App\Module\Admin\Accessory\Form\ProductFormFactory
+	- App\Module\Front\Accessory\Form\CheckoutFormFactory
 	- App\Core\Authenticator\AdminAuthenticator
 	- App\Core\Authenticator\CustomerAuthenticator
 	- App\Model\Product\ProductImage

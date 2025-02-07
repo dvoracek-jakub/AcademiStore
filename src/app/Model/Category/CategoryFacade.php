@@ -2,7 +2,7 @@
 
 namespace App\Model\Category;
 
-use App\Model\Category\Category as CategoryEntity;
+use App\Model\Category\Category;
 use Nette\Application\UI\Form;
 
 class CategoryFacade
@@ -13,15 +13,15 @@ class CategoryFacade
 
 	public function __construct(private \App\Model\EntityManagerDecorator $em)
 	{
-		$this->categoryRepository = $this->em->getRepository(CategoryEntity::class);
+		$this->categoryRepository = $this->em->getRepository(Category::class);
 	}
 
-	public function saveCategory($data, int $id = null): CategoryEntity
+	public function saveCategory($data, int $id = null): Category
 	{
 		if ($id) {
 			$category = $this->categoryRepository->findOneById($id);
 		} else {
-			$category = new CategoryEntity();
+			$category = new Category();
 		}
 
 		if ((int) $data->parentId > 0) {

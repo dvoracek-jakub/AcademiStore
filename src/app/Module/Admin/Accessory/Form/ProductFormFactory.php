@@ -10,7 +10,6 @@ use function Symfony\Component\String\b;
 
 class ProductFormFactory
 {
-
 	private string $action;
 	private ?int $id;
 
@@ -44,10 +43,6 @@ class ProductFormFactory
 			->setRequired('Zadejte cenu')
 			->addRule($form::Min, 'Cena musí být alespoň %d ', 1);
 
-
-		// @TODO Tyto krasavce lupnout do pole a v latte iterovat z nej - Tohle pujde pres JS
-
-
 		$max_imgage_size = $this->settings->store->product_image_max_size_kb;
 		$form->addUpload('image', 'Obrázek')
 			->addRule($form::Image, 'Avatar musí být JPEG, PNG, GIF, WebP nebo AVIF')
@@ -67,12 +62,12 @@ class ProductFormFactory
 			$form['active']->setDefaultValue($product->getActive());
 		}
 
-		$form->onSuccess[] = [$this, 'formSubmitted'];
+		$form->onSuccess[] = [$this, 'formSucceeded'];
 		$form->addSubmit('submit', 'Odeslat');
 		return $form;
 	}
 
-	public function formSubmitted(Form $form, $data)
+	public function formSucceeded(Form $form, $data)
 	{
 		if ($this->action == 'create' && $this->productFacade->skuExists($data->sku)) {
 			$form->addError('Zadané SKU již existuje');

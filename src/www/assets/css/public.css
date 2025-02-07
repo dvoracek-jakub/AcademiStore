@@ -690,6 +690,13 @@ video {
   padding-left: 25px;
 }
 
+.comment {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity, 1));
+}
+
 .pointer-events-none {
   pointer-events: none;
 }
@@ -820,6 +827,10 @@ video {
   margin-top: 1.25rem;
 }
 
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
 .mt-8 {
   margin-top: 2rem;
 }
@@ -888,6 +899,10 @@ video {
   width: 33.333333%;
 }
 
+.w-2\/3 {
+  width: 66.666667%;
+}
+
 .w-24 {
   width: 6rem;
 }
@@ -910,10 +925,6 @@ video {
 
 .w-full {
   width: 100%;
-}
-
-.w-2\/3 {
-  width: 66.666667%;
 }
 
 .min-w-44 {
@@ -1446,6 +1457,14 @@ main.product-detail {
 :is(main.category-detail .content-area) h3 {
       font-size: 1rem;
       line-height: 1.5rem;
+    }
+
+:is(form .radios) label {
+      cursor: pointer;
+    }
+
+:is(form .radios) input[type="radio"] {
+      margin-right: 5px;
     }
 
 /* Nette */
