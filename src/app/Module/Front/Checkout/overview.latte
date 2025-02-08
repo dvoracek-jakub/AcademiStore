@@ -7,6 +7,7 @@
 {include cartItems from '../Cart/detail.latte', edit: false}
 
 
+{snippet deliveryOptions}
 <form n:name=checkoutForm>
 	{if $form->hasErrors()}
 		<ul class="errors mt-5">
@@ -14,40 +15,74 @@
 		</ul>
 	{/if}
 	
-	<div class="grid grid-cols-2 mt-6">
-		<div class="radios">
-			<h2 class="mt-5">Doprava</h2>
-			
-			<div n:inner-foreach="$form['shippingId']->items as $key => $label">
-				<div>
-					<input type="radio" n:name="shippingId:$key" value="{$key}">
-					<label n:name="shippingId:$key">{$label|noescape}</label>
+
+		<div class="grid grid-cols-2 mt-6">
+			<div class="radios">
+				<h2 class="mt-5">Doprava</h2>
+				
+				<div n:inner-foreach="$form['shippingId']->items as $key => $label">
+					<div>
+						<input type="radio" n:name="shippingId:$key" value="{$key}">
+						<label n:name="shippingId:$key">{$label|noescape}</label>
+					</div>
+				</div>
+			</div>
+			<div class="radios">
+				<h2 class="mt-5">Platba</h2>
+				
+				<div n:inner-foreach="$form['paymentId']->items as $key => $label">
+					<div>
+						<input type="radio" n:name="paymentId:$key" value="{$key}">
+						<label n:name="paymentId:$key">{$label|noescape}</label>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="radios">
-			<h2 class="mt-5">Platba</h2>
-			
-			<div n:inner-foreach="$form['paymentId']->items as $key => $label">
-				<div>
-					<input type="radio" n:name="paymentId:$key" value="{$key}">
-					<label n:name="paymentId:$key">{$label|noescape}</label>
-				</div>
-			</div>
+		
+		<div class="mt-6 text-lg">
+			Cena včetně dopravy a platby:
+			<span class="text-xl font-bold ml-2">
+				{$totals->withTax|formatPrice}
+			</span>
+			<span class="comment ml-3">
+				{$totals->withoutTax|formatPrice} bez DPH
+			</span>
 		</div>
-	</div>
-	
-	<div class="mt-6 text-lg">
-		Cena včetně dopravy a platby: <span class="text-xl font-bold">{='1324'|formatPrice}</span>
-	</div>
 	
 	{input submit, class=>'button-xl button-pink block mt-6 mx-auto w-1/3'}
 	
 	<script>
 		// @todo ajax check zvolených kombinací shipping<>payment
-		
-		// @todo ajax a přepočítání totals
-	</script>
 
+		
+		$(document).ready(function () {
+			$("input[name='shippingId'], input[name='paymentId']").on("click", function () {
+				let shippingId = $('input[name="shippingId"]:checked').val();
+				let paymentId = $('input[name="paymentId"]:checked').val();
+				if (typeof shippingId === 'undefined') {
+					shippingId = 0;
+				}
+				if (typeof paymentId === 'undefined') {
+					paymentId = 0;
+				}
+				//console.log('shipping '  + shippingId + '; paym: ' + paymentId);
+				$.ajax({
+					type: "POST",
+					url: {link deliveryOptions!},
+					data: { shippingId: shippingId, paymentId: paymentId }
+				}).done(function(response) {
+					$('#snippet--deliveryOptions').html(response.snippets["snippet--deliveryOptions"]);
+					
+					// todo tohle bude volano jen pokud nevyjde match
+					if (!response.isValidDeliveryCombination) {
+						$("input[name='paymentId'][value='1']").prop('checked', true); // Reset to credit card
+					}
+					
+				});
+		
+			});
+		});
+	</script>
 </form>
 
+{/snippet}

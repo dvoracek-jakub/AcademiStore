@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Model\Payment;
-
-use App\Model\Payment\Payment;
+namespace App\Model\Delivery\Payment;
 
 class PaymentFacade
 {
 
-	/** @var \App\Model\Payment\PaymentRepository|\Doctrine\ORM\EntityRepository */
+	/** @var \App\Model\Delivery\Payment\PaymentRepository|\Doctrine\ORM\EntityRepository */
 	private $paymentRepository;
 
 	public function __construct(
@@ -20,7 +18,7 @@ class PaymentFacade
 
 	public function getPaymentsArray(bool $appendPrice = false): array
 	{
-		$payments = $this->em->getRepository(\App\Model\Payment\Payment::class)->findBy([], ['priority' => 'ASC']);
+		$payments = $this->em->getRepository(\App\Model\Delivery\Payment\Payment::class)->findBy([], ['priority' => 'ASC']);
 		$out = [];
 		if ($payments) {
 			foreach ($payments as $payment) {

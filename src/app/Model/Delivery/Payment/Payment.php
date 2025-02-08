@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Payment;
+namespace App\Model\Delivery\Payment;
 
 use App\Model\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 /**
- * @ORM\Entity(repositoryClass="App\Model\Payment\PaymentRepository")
+ * @ORM\Entity(repositoryClass="App\Model\Delivery\Payment\PaymentRepository")
  * @ORM\Table(name="`payment`")
  */
 class Payment extends AbstractEntity

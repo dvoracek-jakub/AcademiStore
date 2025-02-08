@@ -1,20 +1,20 @@
 <?php declare(strict_types=1);
 
-namespace App\Model\Payment;
+namespace App\Model\Delivery\Shipping;
 
-use App\Model\Payment\Payment;
+use App\Model\Shipping\Customer;
 use Doctrine\DBAL\Connection;
 use Nettrine\Extra\Repository\AbstractRepository;
 
 /**
- * @extends AbstractRepository<\App\Model\Payment\Payment>
+ * @extends AbstractRepository<\App\Model\Delivery\Shipping\Shipping>
  * @method Customer|null find($id, ?int $lockMode = null, ?int $lockVersion = null)
  * @method Customer|null findOneBy(array $criteria, array $orderBy = null)
  * @method Customer|null findOneById(int $id)
  * @method Customer[] findAll()
  * @method Customer[] findBy(array $criteria, array $orderBy = null, ?int $limit = null, ?int $offset = null)
  */
-final class PaymentRepository extends AbstractRepository
+final class ShippingRepository extends AbstractRepository
 {
 
 	private Connection $connection;

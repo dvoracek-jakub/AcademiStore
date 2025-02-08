@@ -16,7 +16,8 @@ final class CartPresenter extends \App\Module\Front\BasePresenter
 		$this->cartFacade->setCustomer($this->customer);
 	}
 
-	public function actionDetail()
+	// Musi byt render* metoda, aby reflektovala zmeny z handle* signalu. Action* se totiz vola pred nim.
+	public function renderDetail()
 	{
 		$cart = $this->cartFacade->getCurrentCart();
 

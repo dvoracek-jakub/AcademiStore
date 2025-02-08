@@ -91,11 +91,6 @@ class CartFacade
 			}
 		}
 
-		//@TODO totals, tady jeste ok..
-		foreach ($cart->getItems() as $item) {
-			bdump($item->getQuantity(),  "UIQ QTY for ITEM: " . $item->getProduct()->getName());
-		}
-		//$this->em->refresh($cart);
 		$this->em->persist($cart);
 		$this->em->flush();
 	}
@@ -103,10 +98,7 @@ class CartFacade
 	public function getCartTotals(Cart $cart): array
 	{
 		$overallPrice = 0;
-
-		//@TODO totals, tady ale stare hodnoty.. pritom radky v latte vypisuje aktualni
 		foreach ($cart->getItems() as $item) {
-			bdump($item->getQuantity(),  "QTY for ITEM: " . $item->getProduct()->getName());
 			$overallPrice += $item->getPrice() * $item->getQuantity();
 		}
 		return [

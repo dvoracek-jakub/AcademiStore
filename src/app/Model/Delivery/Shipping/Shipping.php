@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Shipping;
+namespace App\Model\Delivery\Shipping;
 
 use App\Model\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 /**
- * @ORM\Entity(repositoryClass="App\Model\Shipping\ShippingRepository")
+ * @ORM\Entity(repositoryClass="App\Model\Delivery\Shipping\ShippingRepository")
  * @ORM\Table(name="`shipping`")
  */
 class Shipping extends AbstractEntity
