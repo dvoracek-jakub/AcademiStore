@@ -17,4 +17,5 @@ search:
 	-	in: %appDir%
 		classes:
 			- *Factory
+			- *Service
 			- *Facade

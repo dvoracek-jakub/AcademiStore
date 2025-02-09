@@ -3,7 +3,7 @@
 namespace App\Module\Admin\Accessory\Form;
 
 use \Nette\Application\UI\Form;
-use App\Model\Category\CategoryFacade;
+use App\Model\Category\CategoryService;
 use App\Model\Category\Category;
 class CategoryFormFactory
 {
@@ -12,7 +12,7 @@ class CategoryFormFactory
 	private string $action;
 	private $categoryRepository;
 
-	public function __construct(private \App\Core\Settings $settings, private CategoryFacade $categoryFacade) {}
+	public function __construct(private \App\Core\Settings $settings, private CategoryService $categoryService) {}
 
 	public function createCategoryForm(string $action, ?Category $category = null): Form
 	{
@@ -23,7 +23,7 @@ class CategoryFormFactory
 		$form->addText('name', 'Název')
 			->setRequired('Zadejte název');
 
-		$form->addSelect('parentId', 'Nadřazená kategorie', $this->categoryFacade->getAssociative());
+		$form->addSelect('parentId', 'Nadřazená kategorie', $this->categoryService->getAssociative());
 
 		$form->addTextArea('description', 'Popis', 80, 18);
 
@@ -46,7 +46,7 @@ class CategoryFormFactory
 	public function formSubmitted(Form $form, $data)
 	{
 		if (!$form->hasErrors()) {
-			$this->categoryFacade->saveCategory($data, $this->id);
+			$this->categoryService->saveCategory($data, $this->id);
 		}
 	}
 

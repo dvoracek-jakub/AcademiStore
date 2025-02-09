@@ -7,7 +7,7 @@ namespace App\Model\Delivery;
 use App\Model\Delivery\Payment\Payment;
 use App\Model\Delivery\Shipping\Shipping;
 
-class DeliveryFacade
+class DeliveryService
 {
 
 	public function __construct(
@@ -15,9 +15,9 @@ class DeliveryFacade
 		private \App\Model\EntityManagerDecorator $em,
 	) {}
 
-	public function recalculateTotals($cartFacade)
+	public function recalculateTotals($cartService)
 	{
-		$cart = $cartFacade->getCurrentCart();
+		$cart = $cartService->getCurrentCart();
 		$checkoutSession = $this->session->getSection('deliveryOptions');
 		$totals = [
 			'withoutTax' => 0,
@@ -25,7 +25,7 @@ class DeliveryFacade
 		];
 
 		// Add items cost
-		$cartTotals = $cartFacade->getCartTotals($cart);
+		$cartTotals = $cartService->getCartTotals($cart);
 		$totals['withoutTax'] += $cartTotals['withoutTax'];
 		$totals['withTax'] += $cartTotals['withTax'];
 

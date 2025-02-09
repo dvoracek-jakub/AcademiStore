@@ -2,7 +2,7 @@
 
 namespace App\Module\Admin\Accessory\Form;
 
-use App\Model\Product\ProductFacade;
+use App\Model\Product\ProductService;
 use Nette\Application\UI\Form;
 use App\Model\Product\ProductImage;
 use App\Model\Product\Product;
@@ -14,7 +14,7 @@ class ProductFormFactory
 	private ?int $id;
 
 	public function __construct(
-		public ProductFacade $productFacade,
+		public ProductService $productService,
 		private \App\Core\Settings $settings,
 		private ProductImage $productImage
 	) {}
@@ -69,14 +69,14 @@ class ProductFormFactory
 
 	public function formSucceeded(Form $form, $data)
 	{
-		if ($this->action == 'create' && $this->productFacade->skuExists($data->sku)) {
+		if ($this->action == 'create' && $this->productService->skuExists($data->sku)) {
 			$form->addError('Zadané SKU již existuje');
 		}
 
 		if ($this->action == 'edit') {
 			// Replacing existing image OR deleting the old one
 			if ($data->image->isImage() && $data->image->isOk() || $data->deleteImage) {
-				$this->productFacade->deleteImage($this->id);
+				$this->productService->deleteImage($this->id);
 			}
 		}
 
@@ -85,7 +85,7 @@ class ProductFormFactory
 		$discounts = $this->getDiscountsData($form->getHttpData());
 
 		if (!$form->hasErrors()) {
-			$this->productFacade->saveProduct($data, $categories, $discounts, $this->id);
+			$this->productService->saveProduct($data, $categories, $discounts, $this->id);
 		}
 	}
 

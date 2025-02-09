@@ -3,14 +3,14 @@
 declare(strict_types=1);
 namespace App\Module\Admin;
 
-use App\Model\Category\CategoryFacade;
+use App\Model\Category\CategoryService;
 use Nette;
 
 class BasePresenter extends Nette\Application\UI\Presenter
 {
 
-	/** @var CategoryFacade */
-	protected $categoryFacade;
+	/** @var CategoryService */
+	protected $categoryService;
 
 	public function __construct(
 		protected \App\Model\EntityManagerDecorator $em,
@@ -30,9 +30,9 @@ class BasePresenter extends Nette\Application\UI\Presenter
 		$this->template->product_image_path = $this->settings->store->product_image_path;
 	}
 
-	public function injectCategoryFacade(CategoryFacade $categoryFacade)
+	public function injectCategoryService(CategoryService $categoryService)
 	{
-		$this->categoryFacade = $categoryFacade;
+		$this->categoryService = $categoryService;
 	}
 
 }

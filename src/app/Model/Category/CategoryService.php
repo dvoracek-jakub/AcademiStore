@@ -5,7 +5,7 @@ namespace App\Model\Category;
 use App\Model\Category\Category;
 use Nette\Application\UI\Form;
 
-class CategoryFacade
+class CategoryService
 {
 
 	/** @var \App\Model\Category\CategoryRepository|\Doctrine\ORM\EntityRepository */

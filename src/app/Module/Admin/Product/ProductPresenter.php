@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Admin\Product;
 
 use App\Model\Category\Category;
-use App\Model\Product\ProductFacade;
+use App\Model\Product\ProductService;
 use Nette;
 use App\Module\Admin\Accessory\Form\ProductFormFactory;
 use Nette\Application\UI\Form;
@@ -22,8 +22,8 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 	/** @var ProductFormFactory */
 	private $productFormFactory;
 
-	/** @var ProductFacade */
-	private $productFacade;
+	/** @var ProductService */
+	private $productService;
 
 	/** @var ProductImage */
 	private $productImage;
@@ -42,9 +42,9 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 		$this->productImage = $productImage;
 	}
 
-	public function injectProductFacade(ProductFacade $productFacade)
+	public function injectProductService(ProductService $productService)
 	{
-		$this->productFacade = $productFacade;
+		$this->productService = $productService;
 	}
 
 	public function actionCreate()
@@ -140,7 +140,7 @@ final class ProductPresenter extends \App\Module\Admin\BasePresenter
 			return;
 		});
 
-		$grid->addFilterSelect('categories', '..', $this->categoryFacade->getAssociative())
+		$grid->addFilterSelect('categories', '..', $this->categoryService->getAssociative())
 			->setAttribute('class', 'select2')
 			->setCondition(function($queryBuilder, $value) {
 				$queryBuilder->where('c.id = :catId')->setParameter('catId', $value);

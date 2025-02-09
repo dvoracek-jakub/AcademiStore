@@ -2,7 +2,7 @@
 
 namespace App\Model\Delivery\Shipping;
 
-class ShippingFacade
+class ShippingService
 {
 
 	/** @var \App\Model\Delivery\Shipping\ShippingRepository|\Doctrine\ORM\EntityRepository */

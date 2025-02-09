@@ -2,7 +2,7 @@
 
 namespace App\Model\Delivery\Payment;
 
-class PaymentFacade
+class PaymentService
 {
 
 	/** @var \App\Model\Delivery\Payment\PaymentRepository|\Doctrine\ORM\EntityRepository */

@@ -13,13 +13,13 @@ final class CartPresenter extends \App\Module\Front\BasePresenter
 	public function startup()
 	{
 		parent::startup();
-		$this->cartFacade->setCustomer($this->customer);
+		$this->cartService->setCustomer($this->customer);
 	}
 
 	// Musi byt render* metoda, aby reflektovala zmeny z handle* signalu. Action* se totiz vola pred nim.
 	public function renderDetail()
 	{
-		$cart = $this->cartFacade->getCurrentCart();
+		$cart = $this->cartService->getCurrentCart();
 
 		if (!$cart) {
 			$this->flashMessage('V košíku nejsou žádné položky');
@@ -29,14 +29,14 @@ final class CartPresenter extends \App\Module\Front\BasePresenter
 		bdump($cart, 'Current Cart');
 		$this->template->cart = $cart;
 		$this->template->edit = true;
-		$this->template->cartTotals = $this->cartFacade->getCartTotals($cart);
+		$this->template->cartTotals = $this->cartService->getCartTotals($cart);
 	}
 
 	public function handleUpdateQuantity()
 	{
 		$itemId = (int) $_POST['itemId'];
 		$quantity = (int) $_POST['quantity'];
-		$this->cartFacade->updateItemQuantity($itemId, $quantity);
+		$this->cartService->updateItemQuantity($itemId, $quantity);
 
 	    $this->redrawControl('cartItems');
 	}
@@ -44,14 +44,14 @@ final class CartPresenter extends \App\Module\Front\BasePresenter
 	public function actionAdd(int $productId, int $quantity = 1)
 	{
 		/** @var \App\Model\Cart\Cart */
-		$cart = $this->cartFacade->getCurrentCart(true);
+		$cart = $this->cartService->getCurrentCart(true);
 
 		$product = $this->em->getRepository(Product::class)->find($productId);
 		if (!$product) {
 			die('ERR: Product not found.');  // Řešit lépěji...
 		}
 
-		if ($this->cartFacade->cartItemExists($cart, $productId)) {
+		if ($this->cartService->cartItemExists($cart, $productId)) {
 			$cartItem = $this->em->getRepository(CartItem::class)->findOneBy([
 				'cart'    => $cart->getId(),
 				'product' => $productId,

@@ -7,7 +7,7 @@ use App\Model\Category\Category;
 use App\Model\Customer\Customer;
 use Nette\Application\UI\Form;
 
-class CartFacade
+class CartService
 {
 
 	/** @var \App\Model\Cart\CartRepository|\Doctrine\ORM\EntityRepository */

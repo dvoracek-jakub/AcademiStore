@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Front\Checkout;
 
-use App\Model\Delivery\DeliveryFacade;
+use App\Model\Delivery\DeliveryService;
 use App\Module\Front\Accessory\Form\CheckoutFormFactory;
 
 class CheckoutPresenter extends \App\Module\Front\BasePresenter
@@ -13,30 +13,30 @@ class CheckoutPresenter extends \App\Module\Front\BasePresenter
 	/** @var CheckoutFormFactory */
 	private CheckoutFormFactory $checkoutFormFactory;
 
-	/** @var DeliveryFacade */
-	private DeliveryFacade $deliveryFacade;
+	/** @var DeliveryService */
+	private DeliveryService $deliveryService;
 
 	public function injectCheckoutForm(CheckoutFormFactory $checkoutFormFactory)
 	{
 		$this->checkoutFormFactory = $checkoutFormFactory;
 	}
 
-	public function injectDeliveryFacade(DeliveryFacade $deliveryFacade)
+	public function injectDeliveryService(DeliveryService $deliveryService)
 	{
-		$this->deliveryFacade = $deliveryFacade;
+		$this->deliveryService = $deliveryService;
 	}
 
 	// Musi byt render* metoda, aby reflektovala zmeny z handle* signalu. Action* se totiz vola pred nim.
 	public function renderOverview()
 	{
-		$cart = $this->cartFacade->getCurrentCart();
+		$cart = $this->cartService->getCurrentCart();
 
 		if (!$cart) {
 			$this->flashMessage('V košíku nejsou žádné položky');
 			$this->redirect('Home:');
 		}
 
-		$totals = $this->deliveryFacade->recalculateTotals($this->cartFacade);
+		$totals = $this->deliveryService->recalculateTotals($this->cartService);
 
 		$this->template->cart = $cart;
 		$this->template->totals = (object) $totals;
@@ -56,7 +56,7 @@ class CheckoutPresenter extends \App\Module\Front\BasePresenter
 		}
 		if ($this->isAjax()) {
 			$this->redrawControl('deliveryOptions');
-			$this->payload->isValidDeliveryCombination = $this->deliveryFacade->isValidDeliveryCombination($shippingId, $paymentId);
+			$this->payload->isValidDeliveryCombination = $this->deliveryService->isValidDeliveryCombination($shippingId, $paymentId);
 		}
 	}
 

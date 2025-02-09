@@ -6,7 +6,7 @@ namespace App\Module\Admin\Category;
 
 
 use Nette;
-use App\Model\Category\CategoryFacade;
+use App\Model\Category\CategoryService;
 use App\Module\Admin\Accessory\Form\CategoryFormFactory;
 use Nette\Application\UI\Form;
 use Contributte\Datagrid\Datagrid;
@@ -96,7 +96,7 @@ final class CategoryPresenter extends \App\Module\Admin\BasePresenter
 		});
 		$grid->addFilterText('name', 'Name')->setPlaceholder('Hledat dle názvu');
 
-		$grid->addFilterSelect('parentId', '..', $this->categoryFacade->getAssociative())
+		$grid->addFilterSelect('parentId', '..', $this->categoryService->getAssociative())
 			->setAttribute('class', 'select2')
 			->setCondition(function($result, $value) {
 				$out = [];
@@ -117,7 +117,7 @@ final class CategoryPresenter extends \App\Module\Admin\BasePresenter
 
 	public function actionDelete(int $id)
 	{
-		$this->categoryFacade->delete($id);
+		$this->categoryService->delete($id);
 		$this->redirect('Category:list');
 		exit;
 	}

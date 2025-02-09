@@ -5,23 +5,23 @@ namespace App\Module\Front;
 
 use App\Model\Customer\Customer;
 use App\Model\Category\Category;
-use App\Model\Cart\CartFacade;
-use App\Model\Category\CategoryFacade;
-use App\Model\Product\ProductFacade;
+use App\Model\Cart\CartService;
+use App\Model\Category\CategoryService;
+use App\Model\Product\ProductService;
 use App\Model\Product\ProductImage;
 use Nette;
 
 class BasePresenter extends Nette\Application\UI\Presenter
 {
 
-	/** @var CategoryFacade */
-	protected CategoryFacade $categoryFacade;
+	/** @var CategoryService */
+	protected CategoryService $categoryService;
 
-	/** @var CartFacade */
-	protected CartFacade $cartFacade;
+	/** @var CartService */
+	protected CartService $cartService;
 
-	/** @var ProductFacade */
-	protected ProductFacade $productFacade;
+	/** @var ProductService */
+	protected ProductService $productService;
 
 	/** @var ProductImage */
 	private ProductImage $productImage;
@@ -43,19 +43,19 @@ class BasePresenter extends Nette\Application\UI\Presenter
 		}
 	}
 
-	public function injectCategoryFacade(CategoryFacade $categoryFacade)
+	public function injectCategoryService(CategoryService $categoryService)
 	{
-		$this->categoryFacade = $categoryFacade;
+		$this->categoryService = $categoryService;
 	}
 
-	public function injectCartFacade(CartFacade $cartFacade)
+	public function injectCartService(CartService $cartService)
 	{
-		$this->cartFacade = $cartFacade;
+		$this->cartService = $cartService;
 	}
 
-	public function injectProductFacade(ProductFacade $productFacade)
+	public function injectProductService(ProductService $productService)
 	{
-		$this->productFacade = $productFacade;
+		$this->productService = $productService;
 	}
 
 	public function injectProductImage(ProductImage $productImage)

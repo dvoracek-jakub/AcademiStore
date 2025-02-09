@@ -8,7 +8,7 @@ use Nette\Application\UI\Form;
 use App\Model\Product\ProductImage;
 use App\Model\Product\ProductDiscount;
 
-class ProductFacade
+class ProductService
 {
 
 	/** @var \App\Model\Product\ProductRepository|\Doctrine\ORM\EntityRepository */
