@@ -26,6 +26,12 @@ class CheckoutPresenter extends \App\Module\Front\BasePresenter
 		$this->deliveryService = $deliveryService;
 	}
 
+	public function startup()
+	{
+		parent::startup();
+		$this->cartService->setCustomer($this->customer);
+	}
+
 	// Musi byt render* metoda, aby reflektovala zmeny z handle* signalu. Action* se totiz vola pred nim.
 	public function renderOverview()
 	{

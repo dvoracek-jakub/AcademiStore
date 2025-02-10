@@ -5,7 +5,7 @@ namespace App\Module\Front\Accessory\Form;
 use App\Model\Delivery\DeliveryService;
 use App\Model\Delivery\Payment\PaymentService;
 use App\Model\Delivery\Shipping\ShippingService;
-use App\Model\Order\OrderFacade;
+use App\Model\Order\NewOrderFacade;
 use Nette\Application\UI\Form;
 
 class CheckoutFormFactory
@@ -15,7 +15,7 @@ class CheckoutFormFactory
 		private DeliveryService $deliveryService,
 		private ShippingService $shippingService,
 		private PaymentService $paymentService,
-		private OrderFacade $orderFacade,
+		private NewOrderFacade $newOrderFacade,
 		private \App\Core\Settings $settings,
 		private \Nette\Http\Session $session
 	) {}
@@ -55,7 +55,7 @@ class CheckoutFormFactory
 			//$this->productService->saveProduct($data, $categories, $discounts, $this->id);
 
 			// todo Vytvorit objednavku
-			$this->orderFacade->processNewOrder();
+			$this->newOrderFacade->processOrder();
 
 			// todo IF paymentId == 1 (credit card), tak status bude stale paid=false a presmerujeme na stranku pro platbu
 			// todo  teprve po OK obdrzeni platby nastavit paid=true, zobrazime   dekovaci stranku, posleme emaily...

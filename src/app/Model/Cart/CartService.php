@@ -33,6 +33,7 @@ class CartService
 	public function getCurrentCart(bool $createNew = false): ?\App\Model\Cart\Cart
 	{
 		$customerId = $this->customer ? $this->customer->getId() : null;
+		bdump($customerId, "Customer ID");
 		$cart = $this->em->getRepository(\App\Model\Cart\Cart::class)->getCart(null, $customerId, 'new');
 		if (!$cart && $createNew) {
 			/** @var \App\Model\Cart\Cart */

@@ -26,7 +26,6 @@ final class CartPresenter extends \App\Module\Front\BasePresenter
 			$this->redirect('Home:');
 		}
 
-		bdump($cart, 'Current Cart');
 		$this->template->cart = $cart;
 		$this->template->edit = true;
 		$this->template->cartTotals = $this->cartService->getCartTotals($cart);
