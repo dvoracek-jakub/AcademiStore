@@ -11,6 +11,13 @@ parameters:
         port: 5432
         user: ::getenv('POSTGRES_STORE_USER')
         password: ::getenv('POSTGRES_STORE_PASSWORD')
+    gopay:
+        goId:
+        clientId:
+        clientSecret:
+        gatewayUrl:
+        returnUrl:
+        notificationUrl:
 
 application:
 	errorPresenter:

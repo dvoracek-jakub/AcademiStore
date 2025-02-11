@@ -27,7 +27,8 @@
 		"nettrine/fixtures": "^0.7.2",
 		"contributte/console": "^0.10.1",
 		"nettrine/extra": "v0.1.0",
-		"ublaboo/datagrid": "dev-master"
+		"ublaboo/datagrid": "dev-master",
+		"gopay/payments-sdk-php": "^1.10"
 
 	},
 	"require-dev": {

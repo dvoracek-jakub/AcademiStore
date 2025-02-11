@@ -8,6 +8,7 @@ services:
 	- App\Model\Product\ProductPrice
 	- App\Core\Settings(%academi%, %debugMode%, %appDir%)
 	- App\Model\Product\ProductEventSubscriber
+	- App\Core\Payment\GoPayDecorator(%gopay%)
 
 latte:
 	extensions:

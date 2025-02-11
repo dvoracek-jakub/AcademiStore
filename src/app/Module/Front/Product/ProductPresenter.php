@@ -11,7 +11,6 @@ use Nette;
 class ProductPresenter extends \App\Module\Front\BasePresenter
 {
 
-
 	public function actionDetail(int $id)
 	{
 		$product = $this->em->getRepository(Product::class)->find($id);

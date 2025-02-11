@@ -3,7 +3,6 @@
 namespace App\Model\Category;
 
 use App\Model\Category\Category;
-use Nette\Application\UI\Form;
 
 class CategoryService
 {

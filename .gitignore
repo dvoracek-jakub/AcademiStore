@@ -3,6 +3,7 @@
 src/log/
 src/temp/
 src/vendor/
+src/config/local.neon
 src/www/images/
 *.log
 node_modules

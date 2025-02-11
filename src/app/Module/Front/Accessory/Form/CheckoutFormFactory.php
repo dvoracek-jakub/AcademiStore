@@ -2,6 +2,7 @@
 
 namespace App\Module\Front\Accessory\Form;
 
+use App\Model\Customer\CustomerService;
 use App\Model\Delivery\DeliveryService;
 use App\Model\Delivery\Payment\PaymentService;
 use App\Model\Delivery\Shipping\ShippingService;
@@ -16,10 +17,10 @@ class CheckoutFormFactory
 		private ShippingService $shippingService,
 		private PaymentService $paymentService,
 		private NewOrderFacade $newOrderFacade,
-		private \App\Core\Settings $settings,
-		private \Nette\Http\Session $session
+		private \Nette\Http\Session $session,
+		private \Nette\Security\User $user,
+		private CustomerService $customerService
 	) {}
-
 
 	public function createCheckoutForm(): Form
 	{
@@ -44,24 +45,21 @@ class CheckoutFormFactory
 
 	public function formSucceeded(Form $form, $data)
 	{
-		// $form->addError('Zadané SKU již existuje');
 		bdump($data);
 
 		if (!$this->deliveryService->isValidDeliveryCombination($data->shippingId, $data->paymentId)) {
-			$form->addError('Zvolená platební metoda není pro tuto dopravu k dispozici');
+			$form->addError('Zvolená platební metoda není pro tuto dopravu k dispozici.');
+		}
+
+		$customerId = (int) $this->user->getIdentity()->id;
+		if ($customerId < 1) {
+			$form->addError('Nepřihlášený uživatel nemůže vytvářet objednávky.');
 		}
 
 		if (!$form->hasErrors()) {
-			//$this->productService->saveProduct($data, $categories, $discounts, $this->id);
-
-			// todo Vytvorit objednavku
-			$this->newOrderFacade->processOrder();
-
-			// todo IF paymentId == 1 (credit card), tak status bude stale paid=false a presmerujeme na stranku pro platbu
-			// todo  teprve po OK obdrzeni platby nastavit paid=true, zobrazime   dekovaci stranku, posleme emaily...
-
-			// todo ELSE tak paid=false (ci tak nejak) a redirect na              dekovaci stranku, posleme emaily...
-
+			$customer = $this->customerService->getCustomer($customerId);
+			$this->newOrderFacade->processOrder($customer, $data->shippingId, $data->paymentId);
 		}
 	}
+
 }

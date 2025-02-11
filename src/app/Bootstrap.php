@@ -24,6 +24,7 @@ class Bootstrap
 			->register();
 
 		$configurator->addConfig($rootDir . '/config/common.neon');
+		$configurator->addConfig($rootDir . '/config/local.neon');
 		$configurator->addConfig($rootDir . '/config/services.neon');
 
 		return $configurator;
