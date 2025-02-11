@@ -2,6 +2,8 @@
 
 namespace App\Model\Delivery\Shipping;
 
+use App\Model\Delivery\Shipping\Shipping;
+
 class ShippingService
 {
 
@@ -13,6 +15,11 @@ class ShippingService
 		private \App\Model\Product\ProductPrice $productPrice
 	) {
 		$this->shippingRepository = $this->em->getRepository(\App\Model\Delivery\Shipping\Shipping::class);
+	}
+
+	public function getShipping(int $id): ?Shipping
+	{
+		return $this->shippingRepository->find($id);
 	}
 
 	public function getShippingsArray(bool $appendPrice = false): array

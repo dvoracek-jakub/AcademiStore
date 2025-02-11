@@ -17,7 +17,7 @@ class CustomerService
 		$this->customerRepository = $this->em->getRepository(Customer::class);
 	}
 
-	public function getCustomer(int $id)
+	public function getCustomer(int $id): ?Customer
 	{
 		return $this->customerRepository->find($id);
 	}

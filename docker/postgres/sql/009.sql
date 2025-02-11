@@ -1,11 +1,11 @@
-CREATE TYPE cart_status AS ENUM ('new', 'ordered');
+CREATE TYPE cart_status AS ENUM ('NEW', 'ORDERED');
 
 CREATE TABLE cart (
     "id" SERIAL PRIMARY KEY,
     "customer_id" INT REFERENCES customer(id) ON DELETE CASCADE,
     "session_id" VARCHAR,
     "created_at" TIMESTAMP DEFAULT NOW(),
-    "status" cart_status DEFAULT 'new',
+    "status" cart_status DEFAULT 'NEW',
     CHECK (customer_id IS NOT NULL OR session_id IS NOT NULL)
 );
 

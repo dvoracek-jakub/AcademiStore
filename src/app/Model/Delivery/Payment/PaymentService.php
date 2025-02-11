@@ -2,6 +2,8 @@
 
 namespace App\Model\Delivery\Payment;
 
+use App\Model\Delivery\Payment\Payment;
+
 class PaymentService
 {
 
@@ -11,9 +13,13 @@ class PaymentService
 	public function __construct(
 		private \App\Model\EntityManagerDecorator $em,
 		private \App\Model\Product\ProductPrice $productPrice
-	)
-	{
+	) {
 		$this->paymentRepository = $this->em->getRepository(Payment::class);
+	}
+
+	public function getPayment(int $id): ?Payment
+	{
+		return $this->paymentRepository->find($id);
 	}
 
 	public function getPaymentsArray(bool $appendPrice = false): array
@@ -24,7 +30,7 @@ class PaymentService
 			foreach ($payments as $payment) {
 				$paymentName = $payment->getName();
 				if ($appendPrice) {
-					$paymentName .=  ' <span class="comment">[' . $this->productPrice->format($payment->getPrice()) . ']</span>';
+					$paymentName .= ' <span class="comment">[' . $this->productPrice->format($payment->getPrice()) . ']</span>';
 				}
 				$out[$payment->getId()] = $paymentName;
 			}

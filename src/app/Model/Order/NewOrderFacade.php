@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace App\Model\Order;
 
 use App\Core\Payment\GoPayDecorator;
+use App\Model\Order\OrderService;
 use App\Model\Customer\Customer;
 use App\Model\Order\Order;
 
 class NewOrderFacade
 {
 
-	public function __construct(private GoPayDecorator $goPay) {}
+	public function __construct(private GoPayDecorator $goPay,
+		private OrderService $orderService,
+	) {}
 
 	/**
 	 * @TODO udělej to tak, aby nová objednávka šla vytvořit i třeba z admina
@@ -23,10 +26,9 @@ class NewOrderFacade
 	{
 
 		bdump($customer);
-		die("<br>\n".time().' ['.__LINE__."] ");
 
 		// TODO Vzdy jako prvni vytvorime objednavku
-		$order = $this->createOrder();
+		$order = $this->orderService->createOrder($customer);
 
 		// Dale viz dokumentace
 
@@ -36,31 +38,10 @@ class NewOrderFacade
 	/**
 	 * zkontroluje, jestli je objednavka v naprostem poradku
 	 */
-	public function checkGatewayPaymentState()
-	{
-
-	}
-
-	/*
-	 *  Vytvoří objednávku
-	 *
-	 */
-	public function createOrder(): Order
-	{
-		$order;
-		/*
-		 * TODO Vytvořit objednávku,
-		 */
+	public function checkGatewayPaymentState() {}
 
 
-		// TODO krome samotne order vytvori i zaznam v order_payment. Status zde vzdy = UNPAID
 
-		return $order;
-	}
-
-	public function success()
-	{
-
-	}
+	public function success() {}
 
 }

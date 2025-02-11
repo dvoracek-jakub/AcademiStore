@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model\Customer;
 
+use App\Model\Order\Order;
 use App\Model\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -44,13 +45,36 @@ class Customer extends AbstractEntity
 	private $active;
 
 	/**
+	 * @ORM\OneToMany(targetEntity="App\Model\Order\Order", mappedBy="customer", cascade={"persist"})
+	 */
+	private $orders;
+
+	/**
 	 * @ORM\OneToMany(targetEntity="App\Model\Cart\Cart", mappedBy="customer", cascade={"persist"})
 	 */
 	private Collection $carts;
 
 	public function __construct()
 	{
-		$this->discounts = new ArrayCollection();
+		$this->orders = new ArrayCollection();
+	}
+
+	public function addOrder(Order $order)
+	{
+		if (!$this->orders->contains($order)) {
+			$this->orders[] = $order;
+			$order->setCustomer($this);
+		}
+	}
+
+	public function removeOrder(Order $order)
+	{
+		if ($this->orders->contains($order)) {
+			$this->orders->removeElement($order);
+			if ($order->getCustomer() === $this) {
+				$order->setCustomer(null);
+			}
+		}
 	}
 
 	/**
