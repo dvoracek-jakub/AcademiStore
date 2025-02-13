@@ -19,6 +19,7 @@ final class RouterFactory
 		// FRONTEND
 		$router->addRoute('/', 'Front:Home:default');
 		$router->addRoute('/doctrine', 'Front:Home:doctrine');
+		$router->addRoute('/potvrzeni-platby', 'Front:Checkout:paymentGatewayCallback');
 
 		// ADMIN
 		$router->addRoute('/admin', 'Admin:Dashboard:default');

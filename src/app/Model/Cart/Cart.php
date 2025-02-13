@@ -19,7 +19,7 @@ class Cart extends AbstractEntity
 
 	/**
 	 * @ORM\Id
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", nullable=FALSE)
 	 * @ORM\GeneratedValue(strategy="IDENTITY")
 	 */
 	protected int $id;
@@ -57,6 +57,7 @@ class Cart extends AbstractEntity
 
 	public function __construct()
 	{
+		$this->createdAt = new \DateTime();
 		$this->items = new ArrayCollection();
 	}
 

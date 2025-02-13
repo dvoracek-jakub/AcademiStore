@@ -1,11 +1,11 @@
 CREATE TYPE order_status AS ENUM ('NEW', 'IN_PROCESS', 'COMPLETED', 'RETURNED', 'CANCELLED');
-CREATE TYPE payment_status AS ENUM ('UNPAID', 'PAID', 'CANCELLED');
+CREATE TYPE payment_status AS ENUM ('UNPAID', 'CREATED', 'PAID', 'CANCELLED');
 
 CREATE TABLE "order" (
     "id" SERIAL PRIMARY KEY,
     "customer_id" INT NOT NULL REFERENCES customer(id),
     "cart_id" INT NOT NULL REFERENCES cart(id) UNIQUE,
-    "shipping_id" INT NOT NULL REFERENCES shipping(id),
+    "shipping_id" INT NOT NULL REFERENCES shippingType(id),
     "payment_id" INT NOT NULL REFERENCES payment(id),
     "delivery_address" VARCHAR,
     "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -17,6 +17,7 @@ CREATE TABLE order_payment (
     "order_id" INT NOT NULL REFERENCES "order"(id),
     "status" payment_status DEFAULT 'UNPAID',
     "remote_identifier" VARCHAR,
+    "remote_state" VARCHAR,
     "modified" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

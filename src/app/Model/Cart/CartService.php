@@ -24,7 +24,7 @@ class CartService
 
 	public function setCustomer(Customer $customer = null)
 	{
-	    $this->customer = $customer;
+		$this->customer = $customer;
 	}
 
 	/**
@@ -33,11 +33,10 @@ class CartService
 	public function getCurrentCart(bool $createNew = false): ?\App\Model\Cart\Cart
 	{
 		$customerId = $this->customer ? $this->customer->getId() : null;
-		bdump($customerId, "Customer ID");
-		$cart = $this->em->getRepository(\App\Model\Cart\Cart::class)->getCart(null, $customerId, 'new');
+		$cart = $this->em->getRepository(Cart::class)->getCart(null, $customerId, 'NEW');
 		if (!$cart && $createNew) {
 			/** @var \App\Model\Cart\Cart */
-			$cart = new \App\Model\Cart\Cart();
+			$cart = new Cart();
 
 			$sessionId = $_COOKIE['PHPSESSID'] ?? null;
 			if (!$customerId && !$sessionId) {
@@ -49,13 +48,27 @@ class CartService
 			}
 
 			$cart->setSessionId($sessionId);
-			$cart->setStatus('new');
+			$cart->setStatus('NEW');
 			$this->em->persist($cart);
 			$this->em->flush();
 
 			return $this->getCurrentCart();
 		}
+
 		return $cart;
+	}
+
+	public function setStatus(Cart|int $cart, string $status)
+	{
+		if (!$cart instanceof Cart) {
+			if ((int) $cart < 1) {
+				die('Neexistující košík'); // Řešit lépěji
+			}
+			$cart = $this->em->getRepository(Cart::class)->find($cart);
+		}
+		$cart->setStatus($status);
+		$this->em->persist($cart);;
+		$this->em->flush();
 	}
 
 	public function cartItemExists(Cart $cart, int $productId, int $cartItemId = null)
@@ -104,7 +117,7 @@ class CartService
 		}
 		return [
 			'withoutTax' => $overallPrice / 1.21, // Daň. koeficient řešit později (včetně tax-per-item)
-			'withTax' => $overallPrice,
+			'withTax'    => $overallPrice,
 		];
 	}
 

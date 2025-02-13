@@ -39,18 +39,24 @@ class Order extends AbstractEntity
 	 * @ORM\ManyToOne(targetEntity="\App\Model\Delivery\Shipping\Shipping")
 	 * @ORM\JoinColumn(name="shipping_id", referencedColumnName="id")
 	 */
-	private $shipping;
+	private $shippingType;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="\App\Model\Delivery\Payment\Payment")
 	 * @ORM\JoinColumn(name="payment_id", referencedColumnName="id")
 	 */
-	private $payment;
+	private $paymentType;
+
+	/**
+	 * @ORM\OneToOne(targetEntity="\App\Model\Order\OrderPayment", mappedBy="order")
+	 */
+	public $paymentStatus;
 
 	/**
 	 * @ORM\Column(type="string", name="delivery_address")
 	 */
 	private $deliveryAddress;
+
 
 	/**
 	 * @ORM\Column(type="datetime", name="created_at")
@@ -61,6 +67,12 @@ class Order extends AbstractEntity
 	 * @ORM\Column(type="string")
 	 */
 	private $status;
+
+	public function __construct()
+	{
+	    $this->createdAt = new \DateTime();
+		$this->status = 'NEW';
+	}
 
 	/**
 	 * @return mixed
@@ -97,33 +109,33 @@ class Order extends AbstractEntity
 	/**
 	 * @return mixed
 	 */
-	public function getShipping()
+	public function getShippingType()
 	{
-		return $this->shipping;
+		return $this->shippingType;
 	}
 
 	/**
-	 * @param  mixed  $shipping
+	 * @param  mixed  $shippingType
 	 */
-	public function setShipping($shipping): void
+	public function setShippingType($shippingType): void
 	{
-		$this->shipping = $shipping;
+		$this->shippingType = $shippingType;
 	}
 
 	/**
 	 * @return mixed
 	 */
-	public function getPayment()
+	public function getPaymentType()
 	{
-		return $this->payment;
+		return $this->paymentType;
 	}
 
 	/**
-	 * @param  mixed  $payment
+	 * @param  mixed  $paymentType
 	 */
-	public function setPayment($payment): void
+	public function setPaymentType($paymentType): void
 	{
-		$this->payment = $payment;
+		$this->paymentType = $paymentType;
 	}
 
 	/**
@@ -188,6 +200,22 @@ class Order extends AbstractEntity
 	public function setStatus($status): void
 	{
 		$this->status = $status;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getPaymentStatus()
+	{
+		return $this->paymentStatus;
+	}
+
+	/**
+	 * @param  mixed  $paymentStatus
+	 */
+	public function setPaymentStatus($paymentStatus): void
+	{
+		$this->paymentStatus = $paymentStatus;
 	}
 
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Front\Checkout;
 
 use App\Model\Delivery\DeliveryService;
+use App\Model\Order\NewOrderFacade;
 use App\Module\Front\Accessory\Form\CheckoutFormFactory;
 
 class CheckoutPresenter extends \App\Module\Front\BasePresenter
@@ -16,6 +17,9 @@ class CheckoutPresenter extends \App\Module\Front\BasePresenter
 	/** @var DeliveryService */
 	private DeliveryService $deliveryService;
 
+	/** @var NewOrderFacade */
+	private NewOrderFacade $newOrder;
+
 	public function injectCheckoutForm(CheckoutFormFactory $checkoutFormFactory)
 	{
 		$this->checkoutFormFactory = $checkoutFormFactory;
@@ -24,6 +28,11 @@ class CheckoutPresenter extends \App\Module\Front\BasePresenter
 	public function injectDeliveryService(DeliveryService $deliveryService)
 	{
 		$this->deliveryService = $deliveryService;
+	}
+
+	public function injectNewOrderFacade(NewOrderFacade $newOrderFacade)
+	{
+		$this->newOrder = $newOrderFacade;
 	}
 
 	public function startup()
@@ -73,6 +82,17 @@ class CheckoutPresenter extends \App\Module\Front\BasePresenter
 			// Tady asi nic, různé redirecty na platební brány apod se budou dít v checkoutformfactory
 		};
 		return $form;
+	}
+
+	public function actionPaymentGatewayCallback($id)
+	{
+		$this->newOrder->checkGatewayPaymentState($id);
+	}
+
+	public function actionCompleted(int $id, int $paid = 0)
+	{
+		// TODO check, jestli je jeho
+		// TODO check, jestli je opravdu ve stavu NEW, jinak zobrazit jine hlasky (jakoze uz byla zpracovana, zrusena...)
 	}
 
 }

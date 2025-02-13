@@ -29,7 +29,7 @@ class DeliveryService
 		$totals['withoutTax'] += $cartTotals['withoutTax'];
 		$totals['withTax'] += $cartTotals['withTax'];
 
-		// Add shipping cost
+		// Add shippingType cost
 		if ($checkoutSession->shippingId > 0) {
 			$shipping = $this->em->getRepository(Shipping::class)->find($checkoutSession->shippingId);
 			$totals['withoutTax'] += $shipping->getPrice() / 1.2; // todo later lépěji

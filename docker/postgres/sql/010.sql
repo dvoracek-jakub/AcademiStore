@@ -1,4 +1,4 @@
-CREATE TABLE shipping (
+CREATE TABLE shippingType (
     "id" SERIAL PRIMARY KEY,
     "name" VARCHAR,
     "price" DECIMAL(10,2) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE payment (
 
 CREATE TABLE payment_shipping (
     "payment_id" INT REFERENCES payment(id) ON DELETE CASCADE,
-    "shipping_id" INT REFERENCES shipping(id) ON DELETE CASCADE
+    "shipping_id" INT REFERENCES shippingType(id) ON DELETE CASCADE
 );
 
 COMMENT ON TABLE payment_shipping IS 'Obsahuje všechny validní kombinace dopravy <> platby';

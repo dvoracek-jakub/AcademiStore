@@ -72,7 +72,8 @@ final class CartPresenter extends \App\Module\Front\BasePresenter
 			die(" vratit JSON...");
 		} else {
 			$system = $this->session->getSection('system');
-			$this->redirectUrl((string) $system->lastVisitedPage);
+			//$this->redirectUrl((string) $system->lastVisitedPage);
+			$this->redirect('Cart:detail');
 		}
 	}
 
