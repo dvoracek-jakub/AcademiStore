@@ -27,13 +27,18 @@ class CartService
 		$this->customer = $customer;
 	}
 
+	public function getCart(int $id): ?Cart
+	{
+		return $this->cartRepository->getCart($id);
+	}
+
 	/**
 	 * @param  bool  $createNew  Create a 'new' cart if not found
 	 */
-	public function getCurrentCart(bool $createNew = false): ?\App\Model\Cart\Cart
+	public function getCurrentCart(bool $createNew = false): ?Cart
 	{
 		$customerId = $this->customer ? $this->customer->getId() : null;
-		$cart = $this->em->getRepository(Cart::class)->getCart(null, $customerId, 'NEW');
+		$cart = $this->cartRepository->getCart(null, $customerId, 'NEW');
 		if (!$cart && $createNew) {
 			/** @var \App\Model\Cart\Cart */
 			$cart = new Cart();

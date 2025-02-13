@@ -28,7 +28,7 @@ final class CartRepository extends AbstractRepository
 	}
 
 	/**
-	 * Gets cart by id or the visitor's "new" one
+	 * Gets cart by id or the visitor's|customer's "new" one
 	 */
 	public function getCart(?int $cartId = null, ?int $customerId = null, ?string $status = null): ?Cart
 	{

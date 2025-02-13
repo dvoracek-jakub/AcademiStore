@@ -24,6 +24,9 @@ class NewOrderFacade
 
 	public function processOrder(Customer $customer, int $shippingId, int $paymentId)
 	{
+		$cart = $this->cartService->getCurrentCart();
+		$totalPrice = $this->cartService->getCartTotals($cart);
+
 		// Create new order
 		// @var \App\Model\Order\Order
 		$order = $this->orderService->createOrder($customer, $shippingId, $paymentId);
@@ -35,8 +38,7 @@ class NewOrderFacade
 			$afterPaymentCreated = function($paymentIdentifier) use ($orderId) {
 				$this->orderService->updatePaymentStatus($orderId, $paymentIdentifier, 'CREATED');
 			};
-			// TODO posilat realnou castku
-			$this->goPay->createPayment($order->getId(), 104, $customer->getEmail(), $afterPaymentCreated);
+			$this->goPay->createPayment($order->getId(), $totalPrice['withTax'], $customer->getEmail(), $afterPaymentCreated);
 			die('STATREP/X8V1W');
 		} else {
 			$this->success($order);
@@ -55,12 +57,8 @@ class NewOrderFacade
 			$order = $this->orderService->getOrderByRemoteIdentifier($paymentIdentifier);
 			$this->success($order, true);
 		} else {
-
 			$this->orderService->updatePaymentStatus(null, $status->id, null, $status->state);
-			die('TODO: checkGatewayPaymentState Payment FAILED');
-			/*
-				funkce vrati (do presenteru) nejakou chybu, v presenteru ji zobrazime
-			 */
+			throw new \Exception($status->state);
 		}
 	}
 

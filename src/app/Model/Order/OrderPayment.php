@@ -38,7 +38,7 @@ class OrderPayment extends AbstractEntity
 	private $remoteIdentifier;
 
 	/**
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="string", name="remote_state")
 	 */
 	private $remoteState;
 

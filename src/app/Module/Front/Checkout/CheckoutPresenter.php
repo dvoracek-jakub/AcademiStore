@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Front\Checkout;
 
 use App\Model\Delivery\DeliveryService;
+use App\Model\Order\OrderService;
 use App\Model\Order\NewOrderFacade;
 use App\Module\Front\Accessory\Form\CheckoutFormFactory;
 
@@ -17,6 +18,9 @@ class CheckoutPresenter extends \App\Module\Front\BasePresenter
 	/** @var DeliveryService */
 	private DeliveryService $deliveryService;
 
+	/** @var OrderService */
+	private OrderService $orderService;
+
 	/** @var NewOrderFacade */
 	private NewOrderFacade $newOrder;
 
@@ -28,6 +32,11 @@ class CheckoutPresenter extends \App\Module\Front\BasePresenter
 	public function injectDeliveryService(DeliveryService $deliveryService)
 	{
 		$this->deliveryService = $deliveryService;
+	}
+
+	public function injectOrderService(OrderService $orderService)
+	{
+		$this->orderService = $orderService;
 	}
 
 	public function injectNewOrderFacade(NewOrderFacade $newOrderFacade)
@@ -52,7 +61,6 @@ class CheckoutPresenter extends \App\Module\Front\BasePresenter
 		}
 
 		$totals = $this->deliveryService->recalculateTotals($this->cartService);
-
 		$this->template->cart = $cart;
 		$this->template->totals = (object) $totals;
 	}
@@ -78,21 +86,34 @@ class CheckoutPresenter extends \App\Module\Front\BasePresenter
 	public function createComponentCheckoutForm()
 	{
 		$form = $this->checkoutFormFactory->createCheckoutForm();
-		$form->onSuccess[] = function(): void {
-			// Tady asi nic, různé redirecty na platební brány apod se budou dít v checkoutformfactory
-		};
 		return $form;
 	}
 
 	public function actionPaymentGatewayCallback($id)
 	{
-		$this->newOrder->checkGatewayPaymentState($id);
+		try {
+			$this->newOrder->checkGatewayPaymentState($id);
+		} catch (\Exception $e) {
+			$tpl = $this->getTemplate();
+			$tpl->setFile(__DIR__ . '/payment-failed.latte');
+			$tpl->state = $e->getMessage();
+		}
 	}
 
 	public function actionCompleted(int $id, int $paid = 0)
 	{
-		// TODO check, jestli je jeho
-		// TODO check, jestli je opravdu ve stavu NEW, jinak zobrazit jine hlasky (jakoze uz byla zpracovana, zrusena...)
+		if (!$this->getUser()->isLoggedIn() || (int) $id < 1) {
+			$this->redirect('Home:');
+		}
+		$order = $this->orderService->getOrder($id);
+
+		if ($order->getCustomer()->getId() !== $this->getUser()->getIdentity()->id) {
+			$this->redirect('Home:');
+		}
+
+		$cart = $this->cartService->getCart($order->getCart()->getId());
+		$this->template->order = $order;
+		$this->template->totalPrice = $this->cartService->getCartTotals($cart)['withTax'];
 	}
 
 }

@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Delivery\Shipping\ShippingRepository")
- * @ORM\Table(name="`shippingType`")
+ * @ORM\Table(name="`shipping`")
  */
 class Shipping extends AbstractEntity
 {

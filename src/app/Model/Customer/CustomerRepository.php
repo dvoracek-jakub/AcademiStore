@@ -26,4 +26,19 @@ final class CustomerRepository extends AbstractRepository
 		$this->connection = $em->getConnection();
 	}
 
+	public function getOrdersRaw(int $customerId)
+	{
+		$sql = '
+			SELECT 
+				id,
+				delivery_address,
+				created_at,
+				status
+			FROM "order" 
+			WHERE customer_id = :customerId ';
+		$stmt = $this->connection->prepare($sql);
+		$stmt->bindValue('customerId', $customerId);
+		return $stmt->executeQuery()->fetchAllAssociative();
+	}
+
 }
