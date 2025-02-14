@@ -32,6 +32,21 @@ class Customer extends AbstractEntity
 	/**
 	 * @ORM\Column(type="string")
 	 */
+	private $firstname;
+
+	/**
+	 * @ORM\Column(type="string")
+	 */
+	private $lastname;
+
+	/**
+	 * @ORM\Column(type="string")
+	 */
+	private $phone;
+
+	/**
+	 * @ORM\Column(type="string")
+	 */
 	private $password;
 
 	/**
@@ -57,6 +72,8 @@ class Customer extends AbstractEntity
 	public function __construct()
 	{
 		$this->orders = new ArrayCollection();
+		$this->createdAt = new \DateTime();
+		$this->active = 1;
 	}
 
 	public function addOrder(Order $order)
@@ -165,6 +182,54 @@ class Customer extends AbstractEntity
 				$cart->setCustomer(null);
 			}
 		}
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getFirstname()
+	{
+		return $this->firstname;
+	}
+
+	/**
+	 * @param  mixed  $firstname
+	 */
+	public function setFirstname($firstname): void
+	{
+		$this->firstname = $firstname;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getLastname()
+	{
+		return $this->lastname;
+	}
+
+	/**
+	 * @param  mixed  $lastname
+	 */
+	public function setLastname($lastname): void
+	{
+		$this->lastname = $lastname;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getPhone()
+	{
+		return $this->phone;
+	}
+
+	/**
+	 * @param  mixed  $phone
+	 */
+	public function setPhone($phone): void
+	{
+		$this->phone = $phone;
 	}
 
 }

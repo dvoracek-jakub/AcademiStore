@@ -32,14 +32,14 @@ class DeliveryService
 		// Add shippingType cost
 		if ($checkoutSession->shippingId > 0) {
 			$shipping = $this->em->getRepository(Shipping::class)->find($checkoutSession->shippingId);
-			$totals['withoutTax'] += $shipping->getPrice() / 1.2; // todo later lépěji
+			$totals['withoutTax'] += $shipping->getPrice() / 1.2; // later lépěji
 			$totals['withTax'] += $shipping->getPrice();
 		}
 
 		// Add payment cost
 		if ($checkoutSession->paymentId > 0) {
 			$payment = $this->em->getRepository(Payment::class)->find($checkoutSession->paymentId);
-			$totals['withoutTax'] += $payment->getPrice() / 1.2;  // todo later lépěji
+			$totals['withoutTax'] += $payment->getPrice() / 1.2;  // later lépěji
 			$totals['withTax'] += $payment->getPrice();
 		}
 		return $totals;
@@ -47,7 +47,7 @@ class DeliveryService
 
 	public function isValidDeliveryCombination(int $shippingId, int $paymentId): bool
 	{
-	    return true; // todo later
+	    return true; // later lépěji
 	}
 
 }

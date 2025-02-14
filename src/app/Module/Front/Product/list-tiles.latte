@@ -1,0 +1,17 @@
+
+
+{if !empty($products)}
+	
+	<div class="grid grid-cols-4 gap-4 product-list">
+		{foreach $products as $product}
+			{var $image = $product->getImage($settings->store->product_image_small)}
+			<a class="item" n:href="Product:detail $product->getId()">
+				{if !empty($image)}
+					<img src="{$image}" alt="">
+				{/if}
+				<h3>{$product->getName()}</h3>
+				<div class="text-center">{$product->getPrice()|formatPrice}</div>
+			</a>
+		{/foreach}
+	</div>
+{/if}
