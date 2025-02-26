@@ -39,6 +39,15 @@ class CategoryService
 		return $category;
 	}
 
+	public function findProductsByCategory(Category $category, int $offset, int $length, array $filter)
+	{
+		// todo checkovat, jestli hodnoty v order sedi
+
+		// todo rozmiklikovat filter array na jednotlive vars
+
+		return $this->categoryRepository->findProductsByCategory($category, $offset, $length);
+	}
+
 	public function generateUrlSlug(string $name): string
 	{
 		$urlSlug = \Nette\Utils\Strings::webalize($name);
@@ -65,7 +74,7 @@ class CategoryService
 
 	public function delete(int $id)
 	{
-	    $category = $this->categoryRepository->findOneById($id);
+		$category = $this->categoryRepository->findOneById($id);
 		$this->em->remove($category);
 		$this->em->flush();
 	}

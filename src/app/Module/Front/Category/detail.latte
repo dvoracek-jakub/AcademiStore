@@ -4,4 +4,11 @@
 
 <h1>{$category->getName()}</h1>
 
-{include '../Product/list-tiles.latte', products => $category->getProducts()}
+{form filterForm, class=>'mb-3'}
+	<label>Řazení:</label> {input order}
+	<label>Cena od:</label> {input priceFrom}
+	<label>Cena do:</label> {input priceTo}
+	<input type="submit" value="Filtrovat">
+{/form}
+
+{include '../Product/list-tiles.latte', products => $products}

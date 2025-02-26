@@ -14,4 +14,40 @@
 			</a>
 		{/foreach}
 	</div>
+	
+	<div class="pagination">
+		{if $paginator->page > 1}
+			<a n:href="detail, $categoryId, 1">1</a>
+		{else}
+			<span class="active">1</span>
+		{/if}
+		
+		{if $paginator->page > 4}
+			<span>..</span>
+		{/if}
+		
+		{for $i = max(2, $paginator->page - 2); $i < $paginator->page; $i++}
+			<a n:href="detail, $categoryId, $i">{$i}</a>
+		{/for}
+		
+		{if $paginator->page != 1 && $paginator->page != $paginator->pageCount}
+			<span class="active">{$paginator->page}</span>
+		{/if}
+		
+		{for $i = $paginator->page + 1; $i <= min($paginator->pageCount - 1, $paginator->page + 2); $i++}
+			<a n:href="detail, $categoryId, $i">{$i}</a>
+		{/for}
+		
+		{if $paginator->page < $paginator->pageCount - 3}
+			<span>..</span>
+		{/if}
+		
+		{if $paginator->page < $paginator->pageCount}
+			<a n:href="detail, $categoryId, $paginator->pageCount">{$paginator->pageCount}</a>
+		{else}
+			<span class="active">{$paginator->pageCount}</span>
+		{/if}
+	</div>
+
+	
 {/if}

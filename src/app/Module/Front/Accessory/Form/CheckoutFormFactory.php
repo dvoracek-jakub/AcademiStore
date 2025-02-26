@@ -45,8 +45,6 @@ class CheckoutFormFactory
 
 	public function formSucceeded(Form $form, $data)
 	{
-		bdump($data);
-
 		if (!$this->deliveryService->isValidDeliveryCombination($data->shippingId, $data->paymentId)) {
 			$form->addError('Zvolená platební metoda není pro tuto dopravu k dispozici.');
 		}

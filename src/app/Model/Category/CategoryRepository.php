@@ -31,6 +31,19 @@ final class CategoryRepository extends AbstractRepository
 		return $stmt->executeQuery()->fetchAllAssociative();   // fetchAssociative() ...
 	}
 
+	public function findProductsByCategory(Category $category, int $offset, int $limit): array
+	{
+		return $this->em->createQuery('
+				SELECT p 
+		        FROM App\Model\Product\Product p 
+		        JOIN p.categories c 
+		        WHERE c = :category
+			')
+			->setParameter('category', $category)
+			->setFirstResult($offset)
+			->setMaxResults($limit)
+			->getResult();
+	}
 
 	public function getForListDatagrid()
 	{
