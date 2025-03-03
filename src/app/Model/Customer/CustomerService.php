@@ -22,7 +22,7 @@ class CustomerService
 		return $this->customerRepository->find($id);
 	}
 	
-	public function getBy(array $criteria, bool $single = false)
+	public function getBy(array $criteria = [], bool $single = false)
 	{
 		if ($single) {
 			return $this->customerRepository->findOneBy($criteria);

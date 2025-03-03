@@ -2,8 +2,10 @@
 
 namespace App\Model\Product;
 
+use App\Model\Category\CategoryRepository;
 use Doctrine\DBAL\Connection;
 use Nettrine\Extra\Repository\AbstractRepository;
+use App\Model\Category\Category;
 
 /**
  * @extends AbstractRepository<\App\Model\Product\Product>
@@ -26,12 +28,57 @@ final class ProductRepository extends AbstractRepository
 		$this->connection = $em->getConnection();
 	}
 
-	public function getProducts()
+	public function getProducts(Category $category, int $offset, int $limit, ?array $where, ?string $order, bool $countOnly)
 	{
-		$sql = "SELECT * FROM product";
-		$stmt = $this->connection->prepare($sql);
-		return $stmt->executeQuery()->fetchAllAssociative();   // fetchAssociative() ...
+		// Get products count only
+		if ($countOnly) {
+			$query = 'SELECT COUNT(p.id) FROM product p';
+			if ($category instanceof Category) {
+				$query .= ' INNER JOIN product_category pc ON pc.product_id = p.id AND pc.category_id = ? ';
+			}
+			if (!empty($where)) {
+				foreach ($where as $k => $v) {
+					$query .= ' AND ' . $k . ' ? ';
+				}
+			}
+			$stmt = $this->em->getConnection()->prepare($query);
+			if ($category instanceof Category) {
+				$stmt->bindValue(1, $category->getId());
+			}
+			if (!empty($where)) {
+				$i = 2;
+				foreach ($where as $k => $v) {
+					$stmt->bindValue($i, $v);
+					$i++;
+				}
+			}
+			return $stmt->executeQuery()->fetchOne();
+		}
+
+		// Get full ORM results
+		$conditions = [];
+		if (!empty($where)) {
+			foreach ($where as $k => $v) {
+				$conditions[] = $k . $v;
+			}
+		}
+		$qb = $this->em->createQuery('
+				SELECT p 
+		        FROM App\Model\Product\Product p 
+		        JOIN p.categories c 
+		        WHERE c = :category
+		        ' . (!empty($conditions) ? ' AND ' . implode(' AND ', $conditions) : '' ) . '
+		        ORDER BY ' . $order . '
+			')
+			->setFirstResult($offset)
+			->setMaxResults($limit);
+
+		if ($category instanceof Category) {
+			$qb->setParameter('category', $category);
+		}
+		return $qb->getResult();
 	}
+
 
 	/**
 	 * Removes all product's category relations

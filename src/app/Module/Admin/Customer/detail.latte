@@ -1,0 +1,64 @@
+{block content}
+
+<h2>Uživatel {$customer->getLastname()} {$customer->getFirstname()}</h2>
+
+
+<table>
+	<tr>
+		<td>Name</td>
+		<td>{$customer->getLastname()} {$customer->getFirstname()}</td>
+	</tr>
+	<tr>
+		<td>E-mail</td>
+		<td>{$customer->getEmail()}</td>
+	</tr>
+	<tr>
+		<td class="pr-5">Phone number</td>
+		<td>{$customer->getPhone()}</td>
+	</tr>
+	<tr>
+		<td>Created</td>
+		<td>{$customer->getCreatedAt()->format('Y-m-d G:i:s')}</td>
+	</tr>
+	<tr>
+		<td>Active</td>
+		<td>{$customer->getActive()}</td>
+	</tr>
+</table>
+
+
+
+{if !empty($customer->getOrders())}
+	<h3 class="mt-8">Orders</h3>
+	<table>
+		<thead>
+			<tr>
+				<th class="pr-5">#</th>
+				<th>Created</th>
+				<th class="text-center">Items</th>
+				<th class="text-center pl-5">Status</th>
+			</tr>
+		</thead>
+		<tbody>
+		{foreach $customer->getOrders() as $order}
+			<tr>
+				<td>{$order->getId()}</td>
+				<td class="pr-4">
+					<a n:href="Order:detail $order->getId()">{$order->getCreatedAt()->format('Y-m-d G:i:s')}</a>
+				</td>
+				<td class="text-center">{count($order->getCart()->getItems())}</td>
+				<td class="text-center pl-5">{$order->getStatus()}</td>
+			</tr>
+		{/foreach}
+		</tbody>
+	</table>
+{/if}
+
+
+
+{if !empty($currentCart->getItems())}
+	<h3 class="mt-8">Obsah košíku</h3>
+	{foreach $currentCart->getItems() as $item}
+		{$item->getId()}
+	{/foreach}
+{/if}

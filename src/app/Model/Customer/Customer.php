@@ -232,4 +232,20 @@ class Customer extends AbstractEntity
 		$this->phone = $phone;
 	}
 
+	/**
+	 * @return \Doctrine\Common\Collections\ArrayCollection
+	 */
+	public function getOrders()
+	{
+		return $this->orders;
+	}
+
+	/**
+	 * @param  \Doctrine\Common\Collections\ArrayCollection  $orders
+	 */
+	public function setOrders(ArrayCollection $orders): void
+	{
+		$this->orders = $orders;
+	}
+
 }

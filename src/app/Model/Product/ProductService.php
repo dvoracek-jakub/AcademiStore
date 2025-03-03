@@ -100,6 +100,35 @@ class ProductService
 		return $urlSlug;
 	}
 
+	public function getProducts(Category $category, int $offset, int $length, array $filter, bool $countOnly = false)
+	{
+		$order = 'p.name ASC';
+		if (isset($filter['order'])) {
+			if ($filter['order'] == 'price_asc') {
+				$order = 'p.price ASC';
+			}
+			if ($filter['order'] == 'price_desc') {
+				$order = 'p.price DESC';
+			}
+			if ($filter['order'] == 'name_asc') {
+				$order = 'p.name ASC';
+			}
+			if ($filter['order'] == 'name_desc') {
+				$order = 'p.name DESC';
+			}
+		}
+
+		$where = [];
+		if (isset($filter['priceFrom']) && (int) $filter['priceFrom'] > 0) {
+			$where['p.price > '] = (int) $filter['priceFrom'];
+		}
+		if (isset($filter['priceTo']) && (int) $filter['priceTo'] > 0) {
+			$where['p.price < '] =  (int) $filter['priceTo'];
+		}
+
+		return $this->productRepository->getProducts($category, $offset, $length, $where, $order, $countOnly);
+	}
+
 	public function generateSku(string $name, array $variants = []): string
 	{
 		// Normalize symbols
