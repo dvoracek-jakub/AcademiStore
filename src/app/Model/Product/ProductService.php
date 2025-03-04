@@ -120,10 +120,10 @@ class ProductService
 
 		$where = [];
 		if (isset($filter['priceFrom']) && (int) $filter['priceFrom'] > 0) {
-			$where['p.price > '] = (int) $filter['priceFrom'];
+			$where['p.price >= '] = (int) $filter['priceFrom'];
 		}
 		if (isset($filter['priceTo']) && (int) $filter['priceTo'] > 0) {
-			$where['p.price < '] =  (int) $filter['priceTo'];
+			$where['p.price <= '] =  (int) $filter['priceTo'];
 		}
 
 		return $this->productRepository->getProducts($category, $offset, $length, $where, $order, $countOnly);

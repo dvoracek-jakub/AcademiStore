@@ -1,7 +1,5 @@
+{block sectionTitle}Customer {$customer->getLastname()} {$customer->getFirstname()}{/block}
 {block content}
-
-<h2>Uživatel {$customer->getLastname()} {$customer->getFirstname()}</h2>
-
 
 <table>
 	<tr>
@@ -27,8 +25,8 @@
 </table>
 
 
-
-{if !empty($customer->getOrders())}
+{var $customerOrders = $customer->getOrders()}
+{if count($customerOrders) > 0}
 	<h3 class="mt-8">Orders</h3>
 	<table>
 		<thead>
@@ -40,13 +38,14 @@
 			</tr>
 		</thead>
 		<tbody>
-		{foreach $customer->getOrders() as $order}
+		{foreach $customerOrders as $order}
+			{var $cartItems = $order->getCart()->getItems()}
 			<tr>
 				<td>{$order->getId()}</td>
 				<td class="pr-4">
 					<a n:href="Order:detail $order->getId()">{$order->getCreatedAt()->format('Y-m-d G:i:s')}</a>
 				</td>
-				<td class="text-center">{count($order->getCart()->getItems())}</td>
+				<td class="text-center">{count($cartItems)}</td>
 				<td class="text-center pl-5">{$order->getStatus()}</td>
 			</tr>
 		{/foreach}
@@ -55,8 +54,7 @@
 {/if}
 
 
-
-{if !empty($currentCart->getItems())}
+{if $currentCart && !empty($currentCart->getItems())}
 	<h3 class="mt-8">Obsah košíku</h3>
 	{foreach $currentCart->getItems() as $item}
 		{$item->getId()}

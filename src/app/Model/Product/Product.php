@@ -126,6 +126,7 @@ class Product extends AbstractEntity
 
 	public function getPriceWithDiscounts()
 	{
+		$this->productPrice->setProduct($this);
 		return $this->productPrice->getPriceWithDiscounts();
 	}
 

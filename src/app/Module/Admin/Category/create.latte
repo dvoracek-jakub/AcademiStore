@@ -1,4 +1,10 @@
-{block sectionTitle}New Category{/block}
+{block sectionTitle}
+	{if $action == 'create'}
+		New Category
+	{else}
+		{$category->getName()}
+	{/if}
+{/block}
 {block content}
 
 

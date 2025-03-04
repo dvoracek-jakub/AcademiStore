@@ -5,6 +5,7 @@ namespace App\Model\Order;
 use App\Model\Cart\CartService;
 use App\Model\Delivery\Shipping\ShippingService;
 use App\Model\Delivery\Payment\PaymentService;
+use App\Model\Order\Order;
 use App\Model\Customer\Customer;
 use App\Model\Order\OrderPayment;
 
@@ -20,12 +21,21 @@ class OrderService
 		private ShippingService $shippingService,
 		private PaymentService $paymentService
 	) {
-		$this->orderRepository = $this->em->getRepository(\App\Model\Order\Order::class);
+		$this->orderRepository = $this->em->getRepository(Order::class);
 	}
 
 	public function getOrder(int $id): ?Order
 	{
 		return $this->orderRepository->find($id);
+	}
+
+	public function getBy(array $criteria = [], bool $single = false)
+	{
+		if ($single) {
+			return $this->orderRepository->findOneBy($criteria);
+		} else {
+			return $this->orderRepository->findBy($criteria);
+		}
 	}
 
 	/**
@@ -42,7 +52,7 @@ class OrderService
 		}
 
 		// Create order
-		$order = new \App\Model\Order\Order();
+		$order = new Order();
 		$order->setCustomer($customer);
 		$order->setCart($cart);
 		$order->setShippingType($shipping);
@@ -62,6 +72,14 @@ class OrderService
 		$this->em->flush();
 
 		return $order;
+	}
+
+	public function updateStatus(int $orderId, string $status)
+	{
+		$order = $this->em->getRepository(Order::class)->findOneBy(['id' => $orderId]);
+		$order->setStatus($status);
+		$this->em->persist($order);
+		$this->em->flush();
 	}
 
 	public function updatePaymentStatus(?int $orderId, $paymentIdentifier, ?string $status = '', ?string $remoteState = '')
@@ -87,7 +105,7 @@ class OrderService
 	{
 		$qb = $this->em->createQueryBuilder()
 			->select('o', 'p')
-			->from(\App\Model\Order\Order::class, 'o')
+			->from(Order::class, 'o')
 			->innerJoin('o.paymentStatus', 'p')
 			->where('p.remoteIdentifier = :remoteIdentifier')
 			->setParameter('remoteIdentifier', $paymentIdentifier);
