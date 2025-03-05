@@ -49,11 +49,43 @@
 			</span>
 		</div>
 	
+
+	{if $showAddressForm}
+		<h2 class="mt-8">Doručovací adresa</h2>
+		<div class="grid grid-cols-3">
+			<div>
+				{label firstname /}<br>
+				{input firstname}
+			</div>
+			<div>
+				{label lastname /}<br>
+				{input lastname}
+			</div>
+			<div>
+				{label phone /}<br>
+				{input phone}
+			</div>
+			
+			<div>
+				{label street /}<br>
+				{input street}
+			</div>
+			<div>
+				{label city /}<br>
+				{input city}
+			</div>
+			<div>
+				{label zip /}<br>
+				{input zip}
+			</div>
+		</div>
+		
+	{/if}
+	
 	{input submit, class=>'button-xl button-pink block mt-6 mx-auto w-1/3'}
 	
 	<script>
 		// @todo ajax check zvolených kombinací shipping<>payment
-
 		
 		$(document).ready(function () {
 			$("input[name='shippingId'], input[name='paymentId']").on("click", function () {

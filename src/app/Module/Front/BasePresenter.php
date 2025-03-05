@@ -7,6 +7,7 @@ use App\Model\Customer\Customer;
 use App\Model\Category\Category;
 use App\Model\Cart\CartService;
 use App\Model\Category\CategoryService;
+use App\Model\Customer\CustomerService;
 use App\Model\Product\ProductService;
 use App\Model\Product\ProductImage;
 use Nette;
@@ -23,11 +24,21 @@ class BasePresenter extends Nette\Application\UI\Presenter
 	/** @var ProductService */
 	protected ProductService $productService;
 
+	/** @var CustomerService */
+	protected CustomerService $customerService;
+
 	/** @var ProductImage */
 	private ProductImage $productImage;
 
 	/** @var Customer */
 	protected ?Customer $customer;
+
+	public function __construct(
+		protected \App\Model\EntityManagerDecorator $em,
+		protected \App\Core\Settings $settings,
+		protected \Nette\Http\Session $session,
+		protected \Nette\Http\Request $httpRequest
+	) {}
 
 	public function startup()
 	{
@@ -63,12 +74,10 @@ class BasePresenter extends Nette\Application\UI\Presenter
 		$this->productImage = $productImage;
 	}
 
-	public function __construct(
-		protected \App\Model\EntityManagerDecorator $em,
-		protected \App\Core\Settings $settings,
-		protected \Nette\Http\Session $session,
-		protected \Nette\Http\Request $httpRequest
-	) {}
+	public function injectCustomerService(CustomerService $customerService)
+	{
+		$this->customerService = $customerService;
+	}
 
 	public function beforeRender()
 	{

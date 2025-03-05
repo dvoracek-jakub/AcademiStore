@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model\Customer;
 
+use App\Model\Address\Address;
 use App\Model\Customer\Customer;
 
 class CustomerService
@@ -21,7 +22,7 @@ class CustomerService
 	{
 		return $this->customerRepository->find($id);
 	}
-	
+
 	public function getBy(array $criteria = [], bool $single = false)
 	{
 		if ($single) {
@@ -58,13 +59,44 @@ class CustomerService
 		return false;
 	}
 
-	public function createCustomer($data)
+	public function saveCustomer($data, ?int $id = null)
 	{
-		/** @var Customer */
-		$customer = new Customer();
-		$customer->setEmail($data->email);
-		$customer->setPassword(password_hash($data->password, PASSWORD_ARGON2ID));
+		if ($id) {
+			$customer = $this->customerRepository->find($id);
+		} else {
+			/** @var Customer */
+			$customer = new Customer();
+		}
+
+		if (isset($data->firstname) && !empty($data->firstname)) {
+			$customer->setFirstname($data->firstname);
+		}
+		
+		if (isset($data->email) && !empty($data->email)) {
+			$customer->setEmail($data->email);
+		}
+
+		if (isset($data->password) && !empty($data->password)) {
+			$customer->setPassword(password_hash($data->password, PASSWORD_ARGON2ID));
+		}
+
 		$this->em->persist($customer);
+		$this->em->flush();
+	}
+
+	public function saveAddress($data, int $customerId)
+	{
+		$address = $this->em->getRepository(Address::class)->findOneBy(['customer' => $customerId]);
+		if (!$address instanceof Address) {
+			$address = new Address();
+		}
+
+		$customer = $this->customerRepository->find($customerId);
+		$address->setCustomer($customer);
+		$address->setCity($data->city);
+		$address->setStreet($data->street);
+		$address->setZip($data->zip);
+		$this->em->persist($address);
 		$this->em->flush();
 	}
 

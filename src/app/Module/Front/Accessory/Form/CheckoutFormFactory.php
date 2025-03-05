@@ -30,6 +30,13 @@ class CheckoutFormFactory
 		$form->addRadioList('shippingId', 'Doprava', $shippings);
 		$form->addRadioList('paymentId', 'Platba', $payments);
 
+		$form->addText('firstname', 'Jméno');
+		$form->addText('lastname', 'Příjmení');
+		$form->addText('phone', 'Telefon');
+		$form->addText('street', 'Ulice a čp.');
+		$form->addText('city', 'Město');
+		$form->addText('zip', 'PSČ');
+
 		$checkout = $this->session->getSection('deliveryOptions');
 		if ($checkout->shippingId > 0) {
 			$form['shippingId']->setDefaultValue($checkout->shippingId);
@@ -56,7 +63,7 @@ class CheckoutFormFactory
 
 		if (!$form->hasErrors()) {
 			$customer = $this->customerService->getCustomer($customerId);
-			$this->newOrderFacade->processOrder($customer, $data->shippingId, $data->paymentId);
+			$this->newOrderFacade->processOrder($customer, $data);
 		}
 	}
 

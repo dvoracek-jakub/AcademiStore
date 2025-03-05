@@ -20,7 +20,7 @@ class ProductPrice
 	/**
 	 * Gets price with discounts applied
 	 */
-	public function getPriceWithDiscounts(int $orderedQty = 1)
+	public function getLowestActivePrice(int $orderedQty = 1)
 	{
 		$lowestPrice = $this->product->getPrice();
 
@@ -39,7 +39,7 @@ class ProductPrice
 				}
 
 				// Is active by quantity in the cart?
-				if ($orderedQty > 1 && $orderedQty < $discount->getFromQuantity()) {
+				if ($orderedQty < $discount->getFromQuantity()) {
 					$isActive = false;
 				}
 

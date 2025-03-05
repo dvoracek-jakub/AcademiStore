@@ -53,12 +53,6 @@ class Order extends AbstractEntity
 	public $paymentStatus;
 
 	/**
-	 * @ORM\Column(type="string", name="delivery_address")
-	 */
-	private $deliveryAddress;
-
-
-	/**
 	 * @ORM\Column(type="datetime", name="created_at")
 	 */
 	private $createdAt;
@@ -70,7 +64,7 @@ class Order extends AbstractEntity
 
 	public function __construct()
 	{
-	    $this->createdAt = new \DateTime();
+		$this->createdAt = new \DateTime();
 		$this->status = 'NEW';
 	}
 
@@ -136,22 +130,6 @@ class Order extends AbstractEntity
 	public function setPaymentType($paymentType): void
 	{
 		$this->paymentType = $paymentType;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getDeliveryAddress()
-	{
-		return $this->deliveryAddress;
-	}
-
-	/**
-	 * @param  mixed  $deliveryAddress
-	 */
-	public function setDeliveryAddress($deliveryAddress): void
-	{
-		$this->deliveryAddress = $deliveryAddress;
 	}
 
 	/**

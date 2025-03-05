@@ -1,0 +1,59 @@
+{block content}
+
+<h1>Vaše údaje</h1>
+
+
+<form n:name=customerDetailFrom>
+	{if $form->hasErrors()}
+		<ul class="errors">
+			<li n:foreach="$form->getOwnErrors() as $error">{$error}</li>
+		</ul>
+	{/if}
+	
+	<div>
+		{label firstname /}<br>
+		{input firstname}
+	</div>
+	<div>
+		{label lastname /}<br>
+		{input lastname}
+	</div>
+	<div>
+		{label phone /}<br>
+		{input phone}
+	</div>
+	
+	<h3>Adresa</h3>
+	<div>
+		{label street /}<br>
+		{input street}
+	</div>
+	<div>
+		{label city /}<br>
+		{input city}
+	</div>
+	<div>
+		{label zip /}<br>
+		{input zip}
+	</div>
+	
+	<h3>Změna hesla</h3>
+	<div>
+		{label password_old /}<br>
+		{input password_old}
+	</div>
+	<div>
+		{label password_new /}<br>
+		{input password_new}
+	</div>
+	<div>
+		{label password_new_check /}<br>
+		{input password_new_check}
+	</div>
+	
+	<div class="mt-5">
+		{input send}
+	</div>
+	
+
+</form>

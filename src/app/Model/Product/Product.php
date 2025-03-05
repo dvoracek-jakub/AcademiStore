@@ -66,6 +66,11 @@ class Product extends AbstractEntity
 	private $price;
 
 	/**
+	 * @ORM\Column(type="decimal", name="lowest_unit_price")
+	 */
+	private $lowestUnitPrice;
+
+	/**
 	 * @ORM\Column(type="integer")
 	 */
 	private $stock;
@@ -127,13 +132,13 @@ class Product extends AbstractEntity
 	public function getPriceWithDiscounts()
 	{
 		$this->productPrice->setProduct($this);
-		return $this->productPrice->getPriceWithDiscounts();
+		return $this->productPrice->getLowestActivePrice();
 	}
 
 	public function getPriceHtml(bool $full = false, string $size = 'xl'): string
 	{
 		$priceOriginal = $this->getPrice();
-		$priceWithDiscounts = $this->productPrice->getPriceWithDiscounts();
+		$priceWithDiscounts = $this->productPrice->getLowestActivePrice();
 
 		// @ TODO zakomponuj $full = false. tedy nezobrazovat original price
 		$priceClass = 'text-' . $size;
@@ -355,6 +360,22 @@ class Product extends AbstractEntity
 	public function setImageName($imageName): void
 	{
 		$this->imageName = $imageName;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getLowestUnitPrice()
+	{
+		return $this->lowestUnitPrice;
+	}
+
+	/**
+	 * @param  mixed  $lowestUnitPrice
+	 */
+	public function setLowestUnitPrice($lowestUnitPrice): void
+	{
+		$this->lowestUnitPrice = $lowestUnitPrice;
 	}
 
 }

@@ -22,18 +22,19 @@ class NewOrderFacade
 		private LinkGenerator $linkGenerator
 	) {}
 
-	public function processOrder(Customer $customer, int $shippingId, int $paymentId)
+	public function processOrder(Customer $customer, $data)
 	{
 		$cart = $this->cartService->getCurrentCart();
 		$totalPrice = $this->cartService->getCartTotals($cart);
 
 		// Create new order
 		// @var \App\Model\Order\Order
-		$order = $this->orderService->createOrder($customer, $shippingId, $paymentId);
+		$order = $this->orderService->createOrder($customer, $data);
+		$this->orderService->saveOrderDeliveryData($order->getId(), $data);
 		bdump("Crated order: " . $order->getId(), 'New Order Created');
 
 		// Is card payment
-		if ($paymentId === 1) {
+		if ($data->paymentId === 1) {
 			$orderId = $order->getId();
 			$afterPaymentCreated = function($paymentIdentifier) use ($orderId) {
 				$this->orderService->updatePaymentStatus($orderId, $paymentIdentifier, 'CREATED');

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Model\Customer;
 
 use App\Model\Order\Order;
+use App\Model\Address\Address;
 use App\Model\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -63,6 +64,11 @@ class Customer extends AbstractEntity
 	 * @ORM\OneToMany(targetEntity="App\Model\Order\Order", mappedBy="customer", cascade={"persist"})
 	 */
 	private $orders;
+
+	/**
+	 * @ORM\OneToOne(targetEntity="App\Model\Address\Address", mappedBy="customer")
+	 */
+	private ?Address $address;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="App\Model\Cart\Cart", mappedBy="customer", cascade={"persist"})
@@ -246,6 +252,25 @@ class Customer extends AbstractEntity
 	public function setOrders(ArrayCollection $orders): void
 	{
 		$this->orders = $orders;
+	}
+
+	/**
+	 * @return \App\Model\Address\Address
+	 */
+	public function getAddress(): ?Address
+	{
+		return $this->address;
+	}
+
+	/**
+	 * @param  \App\Model\Address\Address  $address
+	 */
+	public function setAddress(Address $address): void
+	{
+		$this->address = $address;
+		if ($address->getCustomer() !== $this) {
+			$address->setCustomer($this);
+		}
 	}
 
 }

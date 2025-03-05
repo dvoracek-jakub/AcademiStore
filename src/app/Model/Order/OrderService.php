@@ -41,10 +41,10 @@ class OrderService
 	/**
 	 * Creates an order including all necessities
 	 */
-	public function createOrder(Customer $customer, int $shippingId, int $paymentId): Order
+	public function createOrder(Customer $customer, $data): Order
 	{
-		$shipping = $this->shippingService->getShipping($shippingId);
-		$payment = $this->paymentService->getPayment($paymentId);
+		$shipping = $this->shippingService->getShipping($data->shippingId);
+		$payment = $this->paymentService->getPayment($data->paymentId);
 		$cart = $this->cartService->getCurrentCart();
 
 		if (!$cart) {
@@ -57,7 +57,6 @@ class OrderService
 		$order->setCart($cart);
 		$order->setShippingType($shipping);
 		$order->setPaymentType($payment);
-		$order->setDeliveryAddress('domu');
 		$this->em->persist($order);
 		$this->em->flush();
 
@@ -72,6 +71,11 @@ class OrderService
 		$this->em->flush();
 
 		return $order;
+	}
+
+	public function saveOrderDeliveryData(int $orderId, $data)
+	{
+		$delivery = new \App\Model\Order\OrderDeliveryData();
 	}
 
 	public function updateStatus(int $orderId, string $status)

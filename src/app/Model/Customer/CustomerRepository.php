@@ -31,7 +31,6 @@ final class CustomerRepository extends AbstractRepository
 		$sql = '
 			SELECT 
 				id,
-				delivery_address,
 				created_at,
 				status
 			FROM "order" 

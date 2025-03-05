@@ -38,7 +38,11 @@ final class ProductRepository extends AbstractRepository
 			}
 			if (!empty($where)) {
 				foreach ($where as $k => $v) {
-					$query .= ' AND ' . $k . ' ? ';
+					// Converts potential camelCase to snake_case to handle the difference
+					// between column naming in the database and properties in the Entity
+					$snak = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $k));
+					
+					$query .= ' AND ' . $snak . ' ? ';
 				}
 			}
 			$stmt = $this->em->getConnection()->prepare($query);

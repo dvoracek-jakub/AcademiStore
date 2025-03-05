@@ -54,6 +54,7 @@ class CheckoutPresenter extends \App\Module\Front\BasePresenter
 	public function renderOverview()
 	{
 		$cart = $this->cartService->getCurrentCart();
+		$checkoutSession = $this->session->getSection('deliveryOptions');
 
 		if (!$cart) {
 			$this->flashMessage('V košíku nejsou žádné položky');
@@ -63,6 +64,7 @@ class CheckoutPresenter extends \App\Module\Front\BasePresenter
 		$totals = $this->deliveryService->recalculateTotals($this->cartService);
 		$this->template->cart = $cart;
 		$this->template->totals = (object) $totals;
+		$this->template->showAddressForm = ($checkoutSession->shippingId == 4 ? false : true);
 	}
 
 	public function handleDeliveryOptions()

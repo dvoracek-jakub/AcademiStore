@@ -20,10 +20,12 @@ class ProductService
 
 	public function __construct(
 		public \App\Model\EntityManagerDecorator $em,
-		private ProductImage $productImage
+		private ProductImage $productImage,
+		private \App\Model\Product\ProductPrice $productPrice
 	) {
 		$this->productRepository = $this->em->getRepository(Product::class);
 		$this->categoryRepository = $this->em->getRepository(Category::class);
+		$this->productPrice = $productPrice;
 	}
 
 	public function saveProduct($data, array $categories, array $discounts, int $id = null): Product
@@ -85,7 +87,23 @@ class ProductService
 
 		$this->em->persist($product);
 		$this->em->flush();
+		$this->setLowestPrice($product->getId());
 		return $product;
+	}
+
+	/**
+	 * Sets the lowest price for a given product by updating its lowest unit price based on active pricing rules.
+	 * TODO Call for each product in a CRON task every day
+	 */
+	public function setLowestPrice(int $productId)
+	{
+		$product = $this->productRepository->findOneById($productId);
+		$this->productPrice->setProduct($product);
+		$lowestPrice = $this->productPrice->getLowestActivePrice(1);
+		$product->setLowestUnitPrice($lowestPrice);
+		$this->em->persist($product);
+		$this->em->flush();
+		bdump($lowestPrice, 'Setting lowest active price');
 	}
 
 	public function generateUrlSlug(string $name): string
@@ -105,10 +123,10 @@ class ProductService
 		$order = 'p.name ASC';
 		if (isset($filter['order'])) {
 			if ($filter['order'] == 'price_asc') {
-				$order = 'p.price ASC';
+				$order = 'p.lowestUnitPrice ASC';
 			}
 			if ($filter['order'] == 'price_desc') {
-				$order = 'p.price DESC';
+				$order = 'p.lowestUnitPrice DESC';
 			}
 			if ($filter['order'] == 'name_asc') {
 				$order = 'p.name ASC';
@@ -120,10 +138,10 @@ class ProductService
 
 		$where = [];
 		if (isset($filter['priceFrom']) && (int) $filter['priceFrom'] > 0) {
-			$where['p.price >= '] = (int) $filter['priceFrom'];
+			$where['p.lowestUnitPrice >= '] = (int) $filter['priceFrom'];
 		}
 		if (isset($filter['priceTo']) && (int) $filter['priceTo'] > 0) {
-			$where['p.price <= '] =  (int) $filter['priceTo'];
+			$where['p.lowestUnitPrice <= '] = (int) $filter['priceTo'];
 		}
 
 		return $this->productRepository->getProducts($category, $offset, $length, $where, $order, $countOnly);

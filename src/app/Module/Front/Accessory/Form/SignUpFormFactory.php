@@ -50,7 +50,7 @@ class SignUpFormFactory
 		}
 
 		if (!$form->hasErrors()) {
-			$this->customerService->createCustomer($data);
+			$this->customerService->saveCustomer($data);
 		}
 	}
 
