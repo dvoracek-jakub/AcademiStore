@@ -27,10 +27,12 @@ final class CustomerPresenter extends \App\Module\Front\BasePresenter
 		$defaults['lastname'] = $customer->getLastname();
 		$defaults['phone'] = $customer->getPhone();
 
-		$defaults['street'] = $customer->getAddress()->getStreet();
-		$defaults['city'] = $customer->getAddress()->getCity();
-		$defaults['zip'] = $customer->getAddress()->getZip();
-		
+		if ($customer->getAddress()) {
+			$defaults['street'] = $customer->getAddress()->getStreet();
+			$defaults['city'] = $customer->getAddress()->getCity();
+			$defaults['zip'] = $customer->getAddress()->getZip();
+		}
+
 		$form = $this->customerDetailFormFactory->create($defaults);
 		$form->onSuccess[] = function() {
 			$this->flashMessage('Změny byly uloženy.');

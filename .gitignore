@@ -5,6 +5,7 @@ src/temp/
 src/vendor/
 src/config/local.neon
 src/www/images/
+src/www/adminer.php
 *.log
 node_modules
 notes.txt

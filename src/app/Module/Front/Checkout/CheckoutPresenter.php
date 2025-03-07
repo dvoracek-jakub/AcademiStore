@@ -87,7 +87,8 @@ class CheckoutPresenter extends \App\Module\Front\BasePresenter
 
 	public function createComponentCheckoutForm()
 	{
-		$form = $this->checkoutFormFactory->createCheckoutForm();
+		$customer = $this->customerService->getBy(['id' => $this->getUser()->getId()], true);
+		$form = $this->checkoutFormFactory->createCheckoutForm($customer->getDataArray());
 		return $form;
 	}
 

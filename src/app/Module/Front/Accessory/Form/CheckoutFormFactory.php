@@ -22,20 +22,29 @@ class CheckoutFormFactory
 		private CustomerService $customerService
 	) {}
 
-	public function createCheckoutForm(): Form
+	public function createCheckoutForm(?array $defaults = []): Form
 	{
 		$form = new Form();
 		$shippings = $this->shippingService->getShippingsArray(true);
 		$payments = $this->paymentService->getPaymentsArray(true);
-		$form->addRadioList('shippingId', 'Doprava', $shippings);
-		$form->addRadioList('paymentId', 'Platba', $payments);
+		$form->addRadioList('shippingId', 'Doprava', $shippings)
+			->setRequired('Vyberte dopravu');
+		$form->addRadioList('paymentId', 'Platba', $payments)
+			->setRequired('Vyberte platbu');
 
-		$form->addText('firstname', 'Jméno');
-		$form->addText('lastname', 'Příjmení');
-		$form->addText('phone', 'Telefon');
-		$form->addText('street', 'Ulice a čp.');
-		$form->addText('city', 'Město');
-		$form->addText('zip', 'PSČ');
+		$form->addText('firstname', 'Jméno')
+			->setRequired('Vyplňte vaše jméno');
+		$form->addText('lastname', 'Příjmení')
+			->setRequired('Vyplňte vaše příjmení');
+		$form->addText('phone', 'Telefon')
+			->setRequired('Vyplňte váš telefon');
+		$form->addText('street', 'Ulice a čp.')
+			->setRequired('Vyplňte ulici');
+		$form->addText('city', 'Město')
+			->setRequired('Vyplňte město');
+		$form->addText('zip', 'PSČ')
+			->setRequired('Vyplňte PSČ');
+		$form->addSubmit('submit', 'Odeslat objednávku');
 
 		$checkout = $this->session->getSection('deliveryOptions');
 		if ($checkout->shippingId > 0) {
@@ -45,7 +54,7 @@ class CheckoutFormFactory
 			$form['paymentId']->setDefaultValue($checkout->paymentId);
 		}
 
-		$form->addSubmit('submit', 'Odeslat objednávku');
+		$form->setDefaults($defaults);
 		$form->onSuccess[] = [$this, 'formSucceeded'];
 		return $form;
 	}

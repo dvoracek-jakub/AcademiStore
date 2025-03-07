@@ -3,6 +3,7 @@ COPY docker/php/php-development.ini /usr/local/etc/php/php.ini
 
 RUN apt-get update && apt-get install -y \
     git \
+    unzip \
     libpq-dev \
     libfreetype6-dev \
     libjpeg62-turbo-dev \

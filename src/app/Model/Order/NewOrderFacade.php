@@ -30,8 +30,10 @@ class NewOrderFacade
 		// Create new order
 		// @var \App\Model\Order\Order
 		$order = $this->orderService->createOrder($customer, $data);
-		$this->orderService->saveOrderDeliveryData($order->getId(), $data);
 		bdump("Crated order: " . $order->getId(), 'New Order Created');
+
+		// Save delivery data
+		$this->orderService->saveDeliveryData($order, $customer, $data);
 
 		// Is card payment
 		if ($data->paymentId === 1) {
@@ -44,6 +46,7 @@ class NewOrderFacade
 		} else {
 			$this->success($order);
 		}
+
 	}
 
 	/**

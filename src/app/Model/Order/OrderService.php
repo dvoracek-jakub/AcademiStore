@@ -73,11 +73,6 @@ class OrderService
 		return $order;
 	}
 
-	public function saveOrderDeliveryData(int $orderId, $data)
-	{
-		$delivery = new \App\Model\Order\OrderDeliveryData();
-	}
-
 	public function updateStatus(int $orderId, string $status)
 	{
 		$order = $this->em->getRepository(Order::class)->findOneBy(['id' => $orderId]);
@@ -102,6 +97,21 @@ class OrderService
 			$orderPayment->setRemoteState($remoteState);
 		}
 		$this->em->persist($orderPayment);
+		$this->em->flush();
+	}
+
+	public function saveDeliveryData($order, $customer, $data)
+	{
+		$deliveryData = new \App\Model\Order\OrderDeliveryData();
+		$deliveryData->setOrder($order);
+		$deliveryData->setCity($data->city);
+		$deliveryData->setStreet($data->street);
+		$deliveryData->setZip($data->zip);
+		$deliveryData->setFirstname($data->firstname);
+		$deliveryData->setLastname($data->lastname);
+		$deliveryData->setPhone($data->phone);
+		$deliveryData->setEmail($customer->getEmail());
+		$this->em->persist($deliveryData);
 		$this->em->flush();
 	}
 

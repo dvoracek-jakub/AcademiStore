@@ -273,4 +273,23 @@ class Customer extends AbstractEntity
 		}
 	}
 
+	public function getDataArray(): array
+	{
+		$address = $this->getAddress() ?? null;
+	    $data = [
+		    'id' => $this->getId(),
+			'firstname' => $this->getFirstname(),
+			'lastname' => $this->getLastname(),
+			'email' => $this->getEmail(),
+			'phone' => $this->getPhone()
+	    ];
+
+		if ($address) {
+			$data['street'] = $this->getAddress()->getStreet();
+			$data['city'] = $this->getAddress()->getCity();
+			$data['zip'] = $this->getAddress()->getZip();
+		}
+		return $data;
+	}
+
 }

@@ -33,7 +33,8 @@
 	},
 	"require-dev": {
 		"nette/tester": "^2.5",
-		"symfony/thanks": "^1"
+		"symfony/thanks": "^1",
+		"phpstan/phpstan": "^2.1"
 	},
 	"autoload": {
 		"psr-4": {

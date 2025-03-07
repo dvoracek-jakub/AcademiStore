@@ -62,6 +62,11 @@ class Order extends AbstractEntity
 	 */
 	private $status;
 
+	/**
+	 * @ORM\OneToOne(targetEntity="App\Model\Order\OrderDeliveryData", mappedBy="order")
+	 */
+	private ?\App\Model\Order\OrderDeliveryData $orderDeliveryData;
+
 	public function __construct()
 	{
 		$this->createdAt = new \DateTime();
