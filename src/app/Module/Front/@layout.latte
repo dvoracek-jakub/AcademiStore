@@ -4,7 +4,8 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
 	{block assets}
-		<link href="/assets/css/public.css" rel="stylesheet">  <!-- Tailwind compiled output -->
+		<link href="/assets/css/utility.css" rel="stylesheet">  <!-- Tailwind compiled utilities -->
+		<link href="/assets/css/main.css" rel="stylesheet">  <!-- SASS compiled output -->
 		<script src="https://unpkg.com/naja@2/dist/Naja.min.js"></script>
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	{/block}
@@ -12,7 +13,6 @@
 </head>
 
 <body class="{block pageType}home{/block}">
-
 	
 	<main class="mx-auto max-w-[1400px] border-x-2 border-gray-200 main-content min-h-screen flex-1  md:mb-10 w-full">
 		

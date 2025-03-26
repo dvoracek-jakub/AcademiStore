@@ -1,0 +1,90 @@
+@import 'variables';
+
+body {
+	border: 8px solid $test-color;
+}
+
+
+/* Store */
+.product-list {
+  a.item {
+    cursor: pointer;
+    h3 {
+      font-weight: bold;
+      font-size: 1rem;
+      margin-bottom: 3px;
+      text-align: center;
+    }
+    img {
+      width: 100%;
+    }
+  }
+}
+.cart-list {
+  input {
+    border: 1px solid #e1cccc;
+  }
+}
+
+main.product-detail {
+
+}
+main.category-detail {
+  .content-area {
+    h3 {
+      @apply text-base mb-3
+    }
+  }
+}
+
+form {
+  .radios {
+    label {
+      cursor: pointer;
+    }
+    input[type="radio"] {
+      margin-right: 5px;
+    }
+  }
+  input {
+    border: 1px solid #c1c1d8;
+  }
+}
+
+/* Nette */
+.flash {
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: bold;
+}
+.flash.info {
+  background-color: #5bc0de;
+}
+.flash.success {
+  background-color: #5cb85c;
+}
+.flash.error {
+  background-color: #d9534f;
+}
+
+/* Datagrid */
+.datagrid {
+  .col-name, .col-url, .col-categories {
+    min-width: 200px;
+  }
+  .col-price {
+    max-width: 130px;
+  }
+}
+
+/* Misc */
+.select2-results, .select2-results__options {
+  min-height: 400px;
+}
+
+/* Base */
+p {
+  margin: 15px 0;
+}

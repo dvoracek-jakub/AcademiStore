@@ -35,7 +35,6 @@
 	.infobox {
 		@apply bg-gradient-to-b border-b-4 rounded-lg shadow-xl p-5;
 	}
-
 	.button-xl {
 		@apply text-xl px-8 py-2 border border-2 rounded cursor-pointer;
 		text-transform: uppercase;
@@ -47,29 +46,9 @@
 		min-width: 300px;
 		img {
 			@apply mr-2;
-
 		}
 	}
-
 	.col-price {
 		width: 150px;
 	}
-}
-
-/* Nette */
-.flash {
-	padding: 10px;
-	margin-bottom: 15px;
-	border-radius: 4px;
-	color: #fff;
-	font-weight: bold;
-}
-.flash.info {
-	background-color: #5bc0de;
-}
-.flash.success {
-	background-color: #75bf4c;
-}
-.flash.error {
-	background-color: #d9534f;
 }

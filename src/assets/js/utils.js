@@ -1,0 +1,3 @@
+function bravo () {
+	return 'bravo'
+}

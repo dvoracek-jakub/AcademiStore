@@ -1,4 +1,4 @@
-mod ule.exports = {
+module.exports = {
   plugins: {
   	'postcss-nesting': {},
     tailwindcss: {},
